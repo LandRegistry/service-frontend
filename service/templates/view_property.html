@@ -2,11 +2,25 @@
 
 {% block content %}
 
-        <p>Details for the following title number {{ title_number }}</p>
-        <p>House number: {{ house_number }}</p>
-        <p>Road: {{ road }}</p>
-        <p>Town: {{ town }}</p>
-        <p>Postcode: {{ postcode }}</p>
-        <p>Price paid: {{ price_paid }}</p>
+        <p>Title number: {{ title_number }} </p>
+
+        <br>
+
+        <p>Proprietors: </p>
+
+        {% for proprietor in proprietors %}
+          <p> First name: {{ proprietor.first_name }} </p>
+          <p> Second name: {{ proprietor.last_name }} </p>
+        {% endfor %}
+
+        <br>
+
+        <p>Tenure: {{ tenure  }} </p>
+        <p>Class of title: {{ class_of_title }} </p>
+        <p>House number: {{ house_number }} </p>
+        <p>Road: {{ road }} </p>
+        <p>Town: {{ town }} </p>
+        <p>Postcode: {{ postcode }} </p>
+        <p>Price paid: {{ price_paid }} </p>
 
 {% endblock %}
