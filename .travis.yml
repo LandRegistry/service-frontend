@@ -7,3 +7,4 @@ install:
 script: py.test
 env:
 - SETTINGS=config.TestConfig
+- SECRET_KEY='this is a secret'
