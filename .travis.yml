@@ -6,4 +6,12 @@ install:
 - pip install pytest
 script: py.test
 env:
-- SECRET_KEY='this is a secret' SETTINGS='config.TestConfig' SECURITY_PASSWORD_SALT = 'a random salt'
+- SECRET_KEY='this is a secret' SETTINGS='config.TestConfig' SECURITY_PASSWORD_SALT
+  = 'a random salt'
+deploy:
+  provider: heroku
+  api_key:
+    secure: CM1YAgIGFy9V3srMO9yFuZUn9fZj4jzMxMtr/P3zHG6SOFyiOogAxPtiDgqJjOj8A8w+OonoHcwbyc7VoYgoqMuhtQmhXT4coBRa99sVAN46ug5jZgOaRW1vP2Vt4dqQEkZGynDYwQ2pXzSpJZLSZj4PVxbdszB6aaSE22SnLWQ=
+  app: lr-service-frontend
+  on:
+    repo: LandRegistry/service-frontend
