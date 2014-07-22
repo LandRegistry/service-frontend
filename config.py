@@ -5,8 +5,8 @@ class Config(object):
     SEARCH_API = os.environ.get('AUTHENTICATED_SEARCH_API')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    SECURITY_PASSWORD_HASH = 'bcrypt'
     SECURITY_PASSWORD_SALT = SECRET_KEY
+    SECURITY_PASSWORD_HASH = 'bcrypt'
 
 class DevelopmentConfig(Config):
     DEBUG = True

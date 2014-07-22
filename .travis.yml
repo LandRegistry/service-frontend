@@ -6,5 +6,6 @@ install:
 - pip install pytest
 script: py.test
 env:
-- SETTINGS='config.TestConfig'
 - SECRET_KEY='this is a secret'
+- SETTINGS='config.TestConfig'
+- SECURITY_PASSWORD_SALT = 'a random salt'
