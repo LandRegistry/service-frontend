@@ -51,12 +51,12 @@ class ViewProperyTestCase(unittest.TestCase):
       self.logout()
       self._login('landowner@mail.com', 'password')
       rv = self.logout()
-      assert 'Please log in to access this page.' in rv.data
+      assert 'Login' in rv.data
 
     def test_login_required(self):
       rv = self.logout()
       self.app.get('/')
-      assert 'Please log in to access this page.' in rv.data
+      assert 'Login' in rv.data
 
     def test_404(self):
       rv = self.app.get('/pagedoesnotexist')
