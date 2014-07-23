@@ -25,42 +25,39 @@ class ViewProperyTestCase(unittest.TestCase):
 
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
-    #
-    # @mock.patch('requests.get')
-    # def test_get_property_calls_search_api(self, mock_get):
-    #     self._login('landowner@mail.com', 'password')
-    #     title_number = "TN1234567"
-    #     self.app.get('/property/%s' % title_number)
-    #     self.assertTrue(mock_get.called)
-    #     mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, title_number))
-    #
-    # def test_login(self):
-    #   self.logout()
-    #   rv = self._login('landowner@mail.com', 'password')
-    #   assert 'No content' in rv.data
-    #   assert rv.status == '200 OK'
-    #   #assert current_user.email == 'landowner@mail.com'
-    #
-    # def test_login_fail(self):
-    #   self.logout()
-    #   rv = self._login('********@mail.com', 'password')
-    #   assert 'Specified user does not exist' in rv.data
-    #   assert rv.status == '200 OK'
-    #
-    def test_logout(self):
+
+    @mock.patch('requests.get')
+    def test_get_property_calls_search_api(self, mock_get):
+        self._login('landowner@mail.com', 'password')
+        title_number = "TN1234567"
+        self.app.get('/property/%s' % title_number)
+        self.assertTrue(mock_get.called)
+        mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, title_number))
+
+    def test_login(self):
       self.logout()
+      rv = self._login('landowner@mail.com', 'password')
+      assert 'No content' in rv.data
+      assert rv.status == '200 OK'
+
+    def test_login_fail(self):
+      self.logout()
+      rv = self._login('********@mail.com', 'password')
+      assert 'Specified user does not exist' in rv.data
+      assert rv.status == '200 OK'
+
+    def test_logout(self):
       self._login('landowner@mail.com', 'password')
       rv = self.logout()
-      assert 'No content' in rv.data
+      assert 'Login' in rv.data
 
     def test_login_required(self):
-      rv = self.logout()
-      self.app.get('/')
-      assert 'No content' in rv.data
+      rv = self.app.get('/', follow_redirects=True)
+      assert 'Login' in rv.data
 
-    # def test_404(self):
-    #   rv = self.app.get('/pagedoesnotexist')
-    #   assert rv.status == '404 NOT FOUND'
+    def test_404(self):
+      rv = self.app.get('/pagedoesnotexist')
+      assert rv.status == '404 NOT FOUND'
 
     def tearDown(self):
       self.logout()
