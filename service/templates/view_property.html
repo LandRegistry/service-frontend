@@ -2,25 +2,34 @@
 
 {% block content %}
 
-        <p>Title number: {{ title_number }}</p>
+<main id="wrapper" role="main">
+    <div id="content">
 
-        <br>
+        <div class="inner-block">
 
-        <p>Proprietors: </p>
+            <p>Title number: {{ title_number }}</p>
 
-        {% for proprietor in proprietors %}
-          <p> First name: {{ proprietor.first_name }} </p>
-          <p> Second name: {{ proprietor.last_name }} </p>
-        {% endfor %}
+            <br>
 
-        <br>
+            <p>Proprietors: </p>
 
-        <p>Tenure: {{ tenure  }} </p>
-        <p>Class of title: {{ class_of_title }} </p>
-        <p>House number: {{ house_number }} </p>
-        <p>Road: {{ road }} </p>
-        <p>Town: {{ town }} </p>
-        <p>Postcode: {{ postcode }} </p>
-        <p>Price paid: {{ price_paid }} </p>
+            {% for proprietor in proprietors %}
+              <p> First name: {{ proprietor.first_name }} </p>
+              <p> Second name: {{ proprietor.last_name }} </p>
+            {% endfor %}
+
+            <br>
+
+            <p>Tenure: {{ tenure  }} </p>
+            <p>Class of title: {{ class_of_title }} </p>
+            <p>House number: {{ house_number }} </p>
+            <p>Road: {{ road }} </p>
+            <p>Town: {{ town }} </p>
+            <p>Postcode: {{ postcode }} </p>
+            <p>Price paid: {{ price_paid }} </p>
+        </div>
+    </div>
+</main>
+
 
 {% endblock %}
