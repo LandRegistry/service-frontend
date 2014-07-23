@@ -81,25 +81,8 @@ b, strong {
 
 .login-user-form {
 
-  p:not(:nth-of-type(3)) {
-    @extend .form-group;
-  }
-
-  p:nth-of-type(3) {
-    @extend .block-label;
-  }
-
-  label {
-    @extend .form-label;
-  }
-
-  input[type=password],
-  input[type=text] {
-    @extend .form-control;
-  }
-
-  input[type=submit] {
-    @extend .button;
+  .errors {
+    color: $red;
   }
 
 }
