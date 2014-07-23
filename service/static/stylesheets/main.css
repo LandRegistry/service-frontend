@@ -533,17 +533,17 @@ code {
   margin-left: 0;
   margin-right: 0; }
 
-.form-group {
+.form-group, .login-user-form p:not(:nth-of-type(3)) {
   float: left;
   width: 100%;
   clear: both;
   margin-bottom: 15px; }
-  .form-group:after {
+  .form-group:after, .login-user-form p:not(:nth-of-type(3)):after {
     content: "";
     display: block;
     clear: both; }
   @media (min-width: 641px) {
-    .form-group {
+    .form-group, .login-user-form p:not(:nth-of-type(3)) {
       margin-bottom: 30px; } }
 
 .form-group-related {
@@ -566,7 +566,7 @@ fieldset {
     .form-title {
       margin-bottom: 45px; } }
 
-.form-label {
+.form-label, .login-user-form label {
   font-family: "nta", Arial, sans-serif;
   font-size: 19px;
   line-height: 1.31579;
@@ -575,7 +575,7 @@ fieldset {
   display: block;
   margin-bottom: 5px; }
   @media (max-width: 640px) {
-    .form-label {
+    .form-label, .login-user-form label {
       font-size: 16px;
       line-height: 1.25; } }
 
@@ -619,7 +619,8 @@ fieldset {
     .form-hint {
       margin-top: 8px; } }
 
-.form-control {
+.form-control, .login-user-form input[type=password],
+.login-user-form input[type=text] {
   font-family: "nta", Arial, sans-serif;
   font-size: 19px;
   line-height: 1.31579;
@@ -635,11 +636,13 @@ fieldset {
   -webkit-appearance: none;
   border-radius: 0; }
   @media (max-width: 640px) {
-    .form-control {
+    .form-control, .login-user-form input[type=password],
+    .login-user-form input[type=text] {
       font-size: 16px;
       line-height: 1.25; } }
   @media (min-width: 641px) {
-    .form-control {
+    .form-control, .login-user-form input[type=password],
+    .login-user-form input[type=text] {
       width: 50%; } }
 
 .form-control-3-4 {
@@ -677,7 +680,7 @@ fieldset {
   margin: -2px 5px 0 0; }
 
 @media (max-width: 640px) {
-  .form .button {
+  .form .button, .form .login-user-form input[type=submit], .login-user-form .form input[type=submit] {
     width: 100%; } }
 
 .js-enabled .toggle-content {
@@ -731,7 +734,7 @@ fieldset {
   display: block;
   margin-bottom: 5px; }
 
-.date-of-birth .form-group {
+.date-of-birth .form-group, .date-of-birth .login-user-form p:not(:nth-of-type(3)), .login-user-form .date-of-birth p:not(:nth-of-type(3)) {
   width: 50px;
   float: left;
   margin-right: 20px;
@@ -740,7 +743,7 @@ fieldset {
 .date-of-birth .form-group-year {
   width: 70px; }
 
-.date-of-birth .form-group input {
+.date-of-birth .form-group input, .date-of-birth .login-user-form p:not(:nth-of-type(3)) input, .login-user-form .date-of-birth p:not(:nth-of-type(3)) input {
   width: 100%; }
 
 .touch .date-of-birth {
@@ -755,7 +758,7 @@ fieldset {
 .touch input[type="date"] {
   min-height: 36px; }
 
-.block-label {
+.block-label, .login-user-form p:nth-of-type(3) {
   display: block;
   float: none;
   clear: left;
@@ -767,28 +770,28 @@ fieldset {
   margin-bottom: 10px;
   cursor: pointer; }
   @media (min-width: 641px) {
-    .block-label {
+    .block-label, .login-user-form p:nth-of-type(3) {
       float: left;
       margin-top: 5px;
       margin-bottom: 5px; } }
 
-.block-label:hover {
+.block-label:hover, .login-user-form p:hover:nth-of-type(3) {
   border-color: #0b0c0c; }
 
-.block-label input {
+.block-label input, .login-user-form p:nth-of-type(3) input {
   position: absolute;
   top: 18px;
   left: 15px;
   cursor: pointer; }
 
-.inline .block-label {
+.inline .block-label, .inline .login-user-form p:nth-of-type(3), .login-user-form .inline p:nth-of-type(3) {
   clear: none;
   margin-right: 15px; }
 
 .js-enabled .add-focus {
   outline: 3px solid #ffbf47; }
 
-.js-enabled .block-label input:focus {
+.js-enabled .block-label input:focus, .js-enabled .login-user-form p:nth-of-type(3) input:focus, .login-user-form .js-enabled p:nth-of-type(3) input:focus {
   outline: none; }
 
 .js-enabled .selected {
@@ -820,7 +823,7 @@ table td {
 table th {
   font-weight: 700; }
 
-.button {
+.button, .login-user-form input[type=submit] {
   background-color: #00823b;
   position: relative;
   display: -moz-inline-stack;
@@ -843,30 +846,30 @@ table th {
   margin: 0 15px 15px 0;
   padding: 0.52632em 0.78947em 0.26316em 0.78947em;
   vertical-align: top; }
-  .button:visited {
+  .button:visited, .login-user-form input[type=submit]:visited {
     background-color: #00823b; }
-  .button:hover, .button:focus {
+  .button:hover, .login-user-form input[type=submit]:hover, .button:focus, .login-user-form input[type=submit]:focus {
     background-color: #00692f; }
-  .button:active {
+  .button:active, .login-user-form input[type=submit]:active {
     top: 2px;
     -webkit-box-shadow: 0 0 0 #00823b;
     -moz-box-shadow: 0 0 0 #00823b;
     box-shadow: 0 0 0 #00823b; }
-  .button.disabled, .button[disabled="disabled"], .button[disabled] {
+  .button.disabled, .login-user-form input.disabled[type=submit], .button[disabled="disabled"], .login-user-form input[disabled="disabled"][type=submit], .button[disabled], .login-user-form input[disabled][type=submit] {
     zoom: 1;
     filter: alpha(opacity=50);
     opacity: 0.5; }
-    .button.disabled:hover, .button[disabled="disabled"]:hover, .button[disabled]:hover {
+    .button.disabled:hover, .login-user-form input.disabled[type=submit]:hover, .button[disabled="disabled"]:hover, .login-user-form input[disabled="disabled"][type=submit]:hover, .button[disabled]:hover, .login-user-form input[disabled][type=submit]:hover {
       cursor: default;
       background-color: #00823b; }
-    .button.disabled:active, .button[disabled="disabled"]:active, .button[disabled]:active {
+    .button.disabled:active, .login-user-form input.disabled[type=submit]:active, .button[disabled="disabled"]:active, .login-user-form input[disabled="disabled"][type=submit]:active, .button[disabled]:active, .login-user-form input[disabled][type=submit]:active {
       top: 0;
       -webkit-box-shadow: 0 2px 0 #003518;
       -moz-box-shadow: 0 2px 0 #003518;
       box-shadow: 0 2px 0 #003518; }
-  .button:link, .button:hover, .button:focus, .button:visited {
+  .button:link, .login-user-form input[type=submit]:link, .button:hover, .login-user-form input[type=submit]:hover, .button:focus, .login-user-form input[type=submit]:focus, .button:visited, .login-user-form input[type=submit]:visited {
     color: white; }
-  .button:before {
+  .button:before, .login-user-form input[type=submit]:before {
     content: "";
     height: 110%;
     width: 100%;
@@ -875,22 +878,22 @@ table th {
     position: absolute;
     top: 0;
     left: 0; }
-  .button:active:before {
+  .button:active:before, .login-user-form input[type=submit]:active:before {
     top: -10%;
     height: 120%; }
-  .button[rel="external"]:after {
+  .button[rel="external"]:after, .login-user-form input[rel="external"][type=submit]:after {
     display: none;
     content: none;
     margin-left: 0;
     margin-right: 0; }
 
-.button:focus {
+.button:focus, .login-user-form input[type=submit]:focus {
   outline: 3px solid #ffbf47; }
 
-.button[disabled="disabled"] {
+.button[disabled="disabled"], .login-user-form input[disabled="disabled"][type=submit] {
   background: #00823b; }
 
-.button[disabled="disabled"]:focus {
+.button[disabled="disabled"]:focus, .login-user-form input[disabled="disabled"][type=submit]:focus {
   outline: none; }
 
 .button-get-started {
@@ -978,7 +981,7 @@ ol li {
 .panel-indent p:last-child {
   margin-bottom: 0; }
 
-.panel-indent .form-group:last-child {
+.panel-indent .form-group:last-child, .panel-indent .login-user-form p:last-child:not(:nth-of-type(3)), .login-user-form .panel-indent p:last-child:not(:nth-of-type(3)) {
   margin-bottom: 0; }
 
 .icon {
