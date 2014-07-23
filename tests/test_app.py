@@ -1,5 +1,6 @@
 from service.server import app, db, user_datastore
 from flask_security.utils import encrypt_password
+from flask_security import current_user
 from service.models import User
 
 import mock
@@ -32,3 +33,34 @@ class ViewProperyTestCase(unittest.TestCase):
         self.app.get('/property/%s' % title_number)
         self.assertTrue(mock_get.called)
         mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, title_number))
+
+    def test_login(self):
+      self.logout()
+      rv = self._login('landowner@mail.com', 'password')
+      assert 'No content' in rv.data
+      assert rv.status == '200 OK'
+      #assert current_user.email == 'landowner@mail.com'
+
+    def test_login_fail(self):
+      self.logout()
+      rv = self._login('********@mail.com', 'password')
+      assert 'Specified user does not exist' in rv.data
+      assert rv.status == '200 OK'
+
+    def test_logout(self):
+      self.logout()
+      self._login('landowner@mail.com', 'password')
+      rv = self.logout()
+      assert 'Please log in to access this page.' in rv.data
+
+    def test_login_required(self):
+      rv = self.logout()
+      self.app.get('/')
+      assert 'Please log in to access this page.' in rv.data
+
+    def test_404(self):
+      rv = self.app.get('/pagedoesnotexist')
+      assert rv.status == '404 NOT FOUND'
+
+    def tearDown(self):
+      self.logout()
