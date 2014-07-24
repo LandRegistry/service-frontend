@@ -48,7 +48,7 @@ class ViewProperyTestCase(unittest.TestCase):
     def test_logout(self):
       self._login('landowner@mail.com', 'password')
       rv = self.logout()
-      self.app.get('/property/%s' % TITLE_NUMBER)
+      self.app.get('/')
       assert 'Login' in rv.data
     #
     # def test_login_required(self):
