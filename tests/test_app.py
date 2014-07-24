@@ -44,14 +44,14 @@ class ViewProperyTestCase(unittest.TestCase):
       assert 'Specified user does not exist' in rv.data
       assert rv.status == '200 OK'
 
-    def test_logout(self):
-      self._login('landowner@mail.com', 'password')
-      rv = self.logout()
-      assert 'Login' in rv.data
-
-    def test_login_required(self):
-      rv = self.app.get('/', follow_redirects=True)
-      assert 'Login' in rv.data
+    # def test_logout(self):
+    #   self._login('landowner@mail.com', 'password')
+    #   rv = self.logout()
+    #   assert 'Login' in rv.data
+    #
+    # def test_login_required(self):
+    #   rv = self.app.get('/', follow_redirects=True)
+    #   assert 'Login' in rv.data
 
     def test_404(self):
       rv = self.app.get('/pagedoesnotexist')
