@@ -30,29 +30,34 @@ def property(title_number):
     title_url = "%s/%s/%s" % (app.config['SEARCH_API'], 'auth/titles', title_number)
     app.logger.info("Requesting title url : %s" % title_url)
 
-    #TODO - put error handling around request
-    response = requests.get(title_url)
-    app.logger.info("Status code %s" % response.status_code)
-    if response.status_code == 400:
-            return render_template('404.html'), 404
-    else:
-        title_json = response.json()
+    try:
 
-        property_ = title_json.get('property', '')
-        address = property_.get('address','')
-        payment = title_json.get('payment','')
+      response = requests.get(title_url)
+      app.logger.info("Status code %s" % response.status_code)
 
-        app.logger.info("Found the following title: %s" % title_json)
-        return render_template('view_property.html',
-                proprietors = title_json.get('proprietors',''),
-                title_number = title_json.get('title_number',''),
-                tenure = property_.get('tenure',''),
-                class_of_title = property_.get('class_of_title',''),
-                house_number = address.get('house_number',''),
-                road = address.get('road',''),
-                town = address.get('town',''),
-                postcode = address.get('postcode',''),
-                price_paid = payment.get('price_paid',''))
+      if response.status_code == 400:
+              return render_template('404.html'), 404
+      else:
+          title_json = response.json()
+
+          property_ = title_json.get('property', '')
+          address = property_.get('address','')
+          payment = title_json.get('payment','')
+
+          app.logger.info("Found the following title: %s" % title_json)
+          return render_template('view_property.html',
+                  proprietors = title_json.get('proprietors',''),
+                  title_number = title_json.get('title_number',''),
+                  tenure = property_.get('tenure',''),
+                  class_of_title = property_.get('class_of_title',''),
+                  house_number = address.get('house_number',''),
+                  road = address.get('road',''),
+                  town = address.get('town',''),
+                  postcode = address.get('postcode',''),
+                  price_paid = payment.get('price_paid',''))
+
+    except requests.exceptions.RequestException as e:
+      print "Request to call the search_api has failed with: %s" % e
 
 
 @app.after_request

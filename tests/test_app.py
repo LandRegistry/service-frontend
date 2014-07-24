@@ -28,20 +28,18 @@ class ViewProperyTestCase(unittest.TestCase):
 
     @mock.patch('requests.get')
     def test_get_property_calls_search_api(self, mock_get):
-        self._login('landowner@mail.com', 'password')
+        self._login('landowner@mail.com', 'password') #need to log in in order to get to property page
         title_number = "TN1234567"
         self.app.get('/property/%s' % title_number)
         self.assertTrue(mock_get.called)
         mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, title_number))
 
     def test_login(self):
-      self.logout()
       rv = self._login('landowner@mail.com', 'password')
       assert 'No content' in rv.data
       assert rv.status == '200 OK'
 
     def test_login_fail(self):
-      self.logout()
       rv = self._login('********@mail.com', 'password')
       assert 'Specified user does not exist' in rv.data
       assert rv.status == '200 OK'
@@ -60,4 +58,4 @@ class ViewProperyTestCase(unittest.TestCase):
       assert rv.status == '404 NOT FOUND'
 
     def tearDown(self):
-      self.logout()
+      self.logout() #to ensure no-one is logged in after a test is run
