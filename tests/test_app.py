@@ -6,6 +6,8 @@ from service.models import User
 import mock
 import unittest
 
+TITLE_NUMBER = "TN1234567"
+
 class ViewProperyTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -29,10 +31,9 @@ class ViewProperyTestCase(unittest.TestCase):
     @mock.patch('requests.get')
     def test_get_property_calls_search_api(self, mock_get):
         self._login('landowner@mail.com', 'password') #need to log in in order to get to property page
-        title_number = "TN1234567"
-        self.app.get('/property/%s' % title_number)
+        self.app.get('/property/%s' % TITLE_NUMBER)
         self.assertTrue(mock_get.called)
-        mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, title_number))
+        mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER))
 
     def test_login(self):
       rv = self._login('landowner@mail.com', 'password')
@@ -44,10 +45,11 @@ class ViewProperyTestCase(unittest.TestCase):
       assert 'Specified user does not exist' in rv.data
       assert rv.status == '200 OK'
 
-    # def test_logout(self):
-    #   self._login('landowner@mail.com', 'password')
-    #   rv = self.logout()
-    #   assert 'Login' in rv.data
+    def test_logout(self):
+      self._login('landowner@mail.com', 'password')
+      rv = self.logout()
+      self.app.get('/property/%s' % TITLE_NUMBER)
+      assert 'Login' in rv.data
     #
     # def test_login_required(self):
     #   rv = self.app.get('/', follow_redirects=True)
