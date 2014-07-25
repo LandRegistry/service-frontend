@@ -18,3 +18,4 @@ class TestConfig(DevelopmentConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     WTF_CSRF_ENABLED = False
+    SEARCH_API = 'http://localhost:8003'
