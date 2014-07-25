@@ -1,26 +1,59 @@
-{% extends "base.html" %}
+{% extends "landregistry_base.html" %}
 
 {% block content %}
 
-        <p>Title number: {{ title_number }}</p>
+<main id="wrapper" role="main">
+    <div id="content">
+    {% include "inc_alpha_banner.html" %}
 
-        <br>
+        <div class="inner-block">
 
-        <p>Proprietors: </p>
+            <h1 class="heading-xlarge">
+              Details for title <span class="title_id">{{ title_number }}</span>
+            </h1>
 
-        {% for proprietor in proprietors %}
-          <p> First name: {{ proprietor.first_name }} </p>
-          <p> Second name: {{ proprietor.last_name }} </p>
-        {% endfor %}
+            <h2 class="heading-large">Property Address</h2>
 
-        <br>
+            <div class="adr">   
+                <div class="street-address">{{ house_number }}<br/>{{ road }}</div>
+                <div class="locality">{{ town }}</div>
+                <div class="postal-code">{{ postcode }}</div>
+            </div>
 
-        <p>Tenure: {{ tenure  }} </p>
-        <p>Class of title: {{ class_of_title }} </p>
-        <p>House number: {{ house_number }} </p>
-        <p>Road: {{ road }} </p>
-        <p>Town: {{ town }} </p>
-        <p>Postcode: {{ postcode }} </p>
-        <p>Price paid: {{ price_paid }} </p>
+            <h2 class="heading-large">Proprietors</h2>
+
+                <div class="proprietor">
+                    <ul>
+                         {% for proprietor in proprietors %}
+                        <li>{{ proprietor.first_name }} {{ proprietor.last_name }} </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+
+            <h2 class="heading-large">Tenure</h2>
+            <div class="tenure">
+                <p>Tenure: <b><span id="tenure">{{ tenure }}</span></b></p>
+            </div>
+
+            <h2 class="heading-large">Class of title</h2>
+            <div class="class-of-title">
+                <p>Class of title: <b><span id="class-of-title">{{ class_of_title }}</span></b></p>
+            </div>
+
+            <h2 class="heading-large">Price paid</h2>
+            <div class="price_paid">
+                <p>Price paid: <b>&pound;<span id="price-paid">{{ price_paid }}</span></b></p>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+  
+
+
+
+
 
 {% endblock %}

@@ -3,3 +3,4 @@
 dev
 htmlcov
 .coverage
+.sass-cache
