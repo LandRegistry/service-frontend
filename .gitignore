@@ -1,6 +1,6 @@
 .DS_Store
 *.pyc
 dev
-.sass-cache
 htmlcov
 .coverage
+.sass-cache
