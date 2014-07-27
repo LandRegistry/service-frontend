@@ -9,9 +9,6 @@ class Config(object):
     SECURITY_PASSWORD_HASH = 'bcrypt'
     BASIC_AUTH_USERNAME = os.environ.get('BASIC_AUTH_USERNAME')
     BASIC_AUTH_PASSWORD = os.environ.get('BASIC_AUTH_PASSWORD')
-    TEST_USERNAME = os.environ.get('TEST_USERNAME')
-    TEST_PASSWORD = os.environ.get('TEST_PASSWORD')
-
 
 class DevelopmentConfig(Config):
     DEBUG = True

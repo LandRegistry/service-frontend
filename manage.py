@@ -1,7 +1,6 @@
 import os
 
 from flask.ext.script import Manager
-from flask.ext.script import Command
 from flask.ext.migrate import Migrate
 from flask.ext.migrate import MigrateCommand
 from flask_security.utils import encrypt_password
