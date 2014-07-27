@@ -4,6 +4,7 @@ from service import user_datastore
 
 from flask_security.utils import encrypt_password
 
+import requests
 import responses
 import mock
 import unittest
@@ -36,7 +37,6 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
     @mock.patch('requests.get', returns=response_json)
     def test_get_property_calls_search_api(self, mock_get):
-        mock_get.raise_for_status.return_value = None
 
         self._login('landowner@mail.com', 'password') #need to log in in order to get to property page
         self.app.get('/property/%s' % TITLE_NUMBER)
@@ -66,6 +66,29 @@ class ViewFullTitleTestCase(unittest.TestCase):
     def test_404(self):
         rv = self.app.get('/pagedoesnotexist')
         assert rv.status == '404 NOT FOUND'
+
+    @mock.patch('requests.get')
+    @mock.patch('requests.Response')
+    def test_500(self, mock_response, mock_get):
+
+        mock_response.status_code = 500
+        mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError
+
+        mock_get.return_value = mock_response
+
+        self._login('landowner@mail.com', 'password')
+        response = self.app.get('/property/%s' % TITLE_NUMBER)
+
+        assert response.status_code == 500
+
+    @mock.patch('requests.get', side_effect=requests.exceptions.ConnectionError)
+    def test_requests_connection_error_returns_500_to_client(self, mock_get):
+
+        self._login('landowner@mail.com', 'password')
+        response = self.app.get('/property/%s' % TITLE_NUMBER)
+
+        assert response.status_code == 500
+
 
     @responses.activate
     def test_multiple_proprietors(self):

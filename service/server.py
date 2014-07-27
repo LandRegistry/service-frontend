@@ -6,6 +6,7 @@ from flask.ext.security import login_required
 
 from service import app
 
+
 def get_or_log_error(url):
     try:
         response = requests.get(url)
@@ -34,11 +35,11 @@ def property_by_title(title_number):
     return render_template('view_property.html', title=title)
 
 @app.errorhandler(404)
-def page_not_found(error):
+def page_not_found(err):
     return render_template('404.html'), 404
 
 @app.errorhandler(500)
-def error(error):
+def error(err):
     return render_template('500.html'), 500
 
 @app.after_request
