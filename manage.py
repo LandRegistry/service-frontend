@@ -18,8 +18,8 @@ manager = Manager(app)
 
 manager.add_command('db', MigrateCommand)
 
-@manager.option('-e', '--email', dest='email')
-@manager.option('-p', '--password', dest='password')
+@manager.option('--email', dest='email')
+@manager.option('--password', dest='password')
 def create_user(email, password):
     if not user_datastore.find_user(email=email):
         user_datastore.create_user(email=email,
