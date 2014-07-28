@@ -46,4 +46,10 @@ Otherwise with foreman
 ./run.sh
 ```
 
+### Create a user
+
+```
+heroku run python manage.py create_user --email=auser@gmail.com --password=apassword --app lr-service-frontend
+```
+
 ** This app runs on PORT 8007
