@@ -27,4 +27,3 @@ py-bcrypt==0.4
 requests==2.3.0
 webassets==0.10.1
 wsgiref==0.1.2
-responses==0.2.2

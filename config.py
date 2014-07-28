@@ -19,3 +19,5 @@ class TestConfig(DevelopmentConfig):
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     WTF_CSRF_ENABLED = False
     SEARCH_API = 'http://localhost:8003'
+    SECRET_KEY = 'testing-so-not-secret'
+    SECURITY_PASSWORD_SALT = SECRET_KEY
