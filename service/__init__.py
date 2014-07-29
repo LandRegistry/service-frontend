@@ -4,10 +4,14 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
 from flask.ext.security import Security
 from flask.ext.security import SQLAlchemyUserDatastore
+from flask.ext.login import LoginManager
 
 app = Flask(__name__)
 
 app.config.from_object(os.environ.get('SETTINGS'))
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 if not app.debug:
     app.logger.addHandler(logging.StreamHandler())

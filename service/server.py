@@ -1,11 +1,21 @@
 import requests
 
-from flask import render_template
+from flask import render_template, request_started, request
 from flask import abort
+from flask.ext.login import current_user
 from flask.ext.security import login_required
 
 from service import app
 
+
+def audit(sender, **extra):
+    id = current_user.get_id()
+    if id:
+        sender.logger.debug('Audit: user=[%s], request=[%s]' % (id, request))
+    else:
+        sender.logger.debug('Audit: user=[anon], request=[%s]' % request)
+
+request_started.connect(audit, app)
 
 def get_or_log_error(url):
     try:
