@@ -28,26 +28,42 @@ py.test
 ### Environment variables needed
 
 ```
-export SETTINGS='conig.Config'
+SETTINGS
+AUTHENTICATED_SEARCH_API
+SECRET_KEY
 ```
 
+Local development config:
+
+```
+export SETTINGS='config.DevelopmentConfig'
+export AUTHENTICATED_SEARCH_API='http://localhost:8003'
+export SECRET_KEY='local-dev-not-secret'
+```
 
 ### Run the app
 
 Run in dev mode to enable app reloading
 
 ```
-./run.sh dev
+dev/run-app
 ```
 
-Otherwise with foreman
+Run tests
 
 ```
-./run.sh
+dev/run-unit-tests
 ```
 
 ### Create a user
 
+Locally:
+```
+python manage.py create_user --email=auser@gmail.com --password=apassword
+
+```
+
+On Heroku:
 ```
 heroku run python manage.py create_user --email=auser@gmail.com --password=apassword --app lr-service-frontend
 ```
