@@ -41,10 +41,12 @@
                 <p><span id="class-of-title">{{ title.property.class_of_title }}</span></p>
             </div>
 
-            <h2 class="heading-large">Price paid</h2>
-            <div class="price_paid">
-                <p>&pound;<span id="price-paid">{{ title.payment.price_paid }}</span></p>
-            </div>
+            {% if title.payment.price_paid %}
+              <h2 class="heading-large">Price paid</h2>
+              <div class="price_paid">
+                <p>Price paid: <b>&pound;<span id="price-paid">{{ title.payment.price_paid | currency }}</span></b></p>
+              </div>
+            {% endif %}
 
         </div>
     </div>

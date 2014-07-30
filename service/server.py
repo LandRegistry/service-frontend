@@ -19,6 +19,11 @@ def get_or_log_error(url):
         app.logger.error("Error %s", e)
         abort(500)
 
+@app.template_filter()
+def currency(value):
+    """Format a comma separated  currency to 2 decimal places."""
+    return "{:,.2f}".format(float(value))
+
 @app.route('/')
 @login_required
 def index():
