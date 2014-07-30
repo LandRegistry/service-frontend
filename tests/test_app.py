@@ -110,3 +110,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         test_user = user_datastore.find_user(email='landowner@mail.com')
         user_datastore.delete_user(test_user)
         db.session.commit()
+
+    def test_health(self):
+        response = self.app.get('/health')
+        assert response.status == '200 OK'
