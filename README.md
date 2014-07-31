@@ -55,7 +55,9 @@ Run tests
 dev/run-unit-tests
 ```
 
-### Create a user
+### To create a user
+
+First activate the virualenv for this project
 
 Locally:
 ```
