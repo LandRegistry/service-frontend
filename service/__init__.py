@@ -49,4 +49,7 @@ security = Security(app, user_datastore)
 
 @app.context_processor
 def asset_path_context_processor():
-    return {'asset_path': '/static/govuk_template/'}
+    return {
+      'asset_path': '/static/build/',
+      'landregistry_asset_path': '/static/build/'
+    }
