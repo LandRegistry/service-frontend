@@ -1,4 +1,4 @@
-{% extends "landregistry_base.html" %}
+{% extends "servicefrontend_base.html" %}
 
 {% block content %}
   <main id="wrapper" role="main">
@@ -12,7 +12,7 @@
         {% include "security/_messages.html" %}
 
         <div class="full-width">
-        
+
           <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form" class="login-user-form">
 
             <h1 class="form-title heading-large">Login</h1>
