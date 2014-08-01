@@ -17,7 +17,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
     def setUp(self):
         db.create_all()
-        self.search_api = app.config['SEARCH_API']
+        self.search_api = app.config['AUTHENTICATED_SEARCH_API']
         self.app = app.test_client()
 
         with app.test_request_context():

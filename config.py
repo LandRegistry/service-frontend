@@ -2,22 +2,21 @@ import os
 
 class Config(object):
     DEBUG = False
-    SEARCH_API = os.environ.get('AUTHENTICATED_SEARCH_API')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    AUTHENTICATED_SEARCH_API = os.environ['AUTHENTICATED_SEARCH_API']
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SECRET_KEY = os.environ['SECRET_KEY']
     SECURITY_PASSWORD_SALT = SECRET_KEY
     SECURITY_PASSWORD_HASH = 'bcrypt'
+    WTF_CSRF_ENABLED = True
+
+    # optional and only needed on heroku so get
+    # safely
     BASIC_AUTH_USERNAME = os.environ.get('BASIC_AUTH_USERNAME')
     BASIC_AUTH_PASSWORD = os.environ.get('BASIC_AUTH_PASSWORD')
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/landregistry_users'
+    WTF_CSRF_ENABLED=False
 
 class TestConfig(DevelopmentConfig):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "sqlite://"
-    WTF_CSRF_ENABLED = False
-    SEARCH_API = 'http://localhost:8003'
-    SECRET_KEY = 'testing-so-not-secret'
-    SECURITY_PASSWORD_SALT = SECRET_KEY
