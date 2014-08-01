@@ -16,7 +16,7 @@ class AuditTestCase(unittest.TestCase):
     will report too.
     """
     LOGGER = 'logging.Logger.info'
-    ANON_GET_TEMPLATE = "Audit: user=[1], request=[<Request 'http://localhost%s' [GET]>]"
+    ANON_GET_TEMPLATE = "Audit: user=[{'id': '1', 'email': 'landowner@mail.com'}], request=[<Request 'http://localhost%s' [GET]>]"
 
     def setUp(self):
         app.config["TESTING"] = True,
