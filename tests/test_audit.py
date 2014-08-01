@@ -43,7 +43,7 @@ class AuditTestCase(unittest.TestCase):
         path = '/'
         self.client.get(path)
         mock_logger.assert_called_with(self.ANON_GET_TEMPLATE % path)
-    
+
 
     @mock.patch(LOGGER)
     def test_audit_get_registration(self, mock_logger):

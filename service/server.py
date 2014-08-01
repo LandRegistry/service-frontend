@@ -51,7 +51,7 @@ def index():
 @login_required
 def property_by_title(title_number):
     title_url = "%s/%s/%s" % (
-        app.config['SEARCH_API'],
+        app.config['AUTHENTICATED_SEARCH_API'],
         'auth/titles',
         title_number)
     app.logger.info("Requesting title url : %s" % title_url)
