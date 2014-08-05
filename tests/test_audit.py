@@ -47,11 +47,11 @@ class AuditTestCase(unittest.TestCase):
 
 
     @mock.patch(LOGGER)
-    def test_audit_get_registration_user(self, mock_logger):
+    def test_audit_get_property_user(self, mock_logger):
         self._login('landowner@mail.com', 'password')
-        path = '/registration'
+        path = '/property/TEST123'
         self.client.get(path)
-        mock_logger.assert_called_with(self.USER_GET_TEMPLATE % path)
+        mock_logger.assert_any_call(self.USER_GET_TEMPLATE % path)
 
     @mock.patch(LOGGER)
     def test_audit_get_index_anon(self, mock_logger):
@@ -60,7 +60,7 @@ class AuditTestCase(unittest.TestCase):
         mock_logger.assert_called_with(self.ANON_GET_TEMPLATE % path)
 
     @mock.patch(LOGGER)
-    def test_audit_get_registration_anon(self, mock_logger):
-        path = '/registration'
+    def test_audit_get_property_anon(self, mock_logger):
+        path = '/property/TEST123'
         self.client.get(path)
-        mock_logger.assert_called_with(self.ANON_GET_TEMPLATE % path)
+        mock_logger.assert_any_call(self.ANON_GET_TEMPLATE % path)
