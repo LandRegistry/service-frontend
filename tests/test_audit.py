@@ -16,7 +16,8 @@ class AuditTestCase(unittest.TestCase):
     will report too.
     """
     LOGGER = 'logging.Logger.info'
-    ANON_GET_TEMPLATE = "Audit: user=[{'id': '1', 'email': 'landowner@mail.com'}], request=[<Request 'http://localhost%s' [GET]>]"
+    USER_GET_TEMPLATE = "Audit: user=[{'id': '1', 'email': 'landowner@mail.com'}], request=[<Request 'http://localhost%s' [GET]>]"
+    ANON_GET_TEMPLATE = "Audit: user=[anon], request=[<Request 'http://localhost%s' [GET]>]"
 
     def setUp(self):
         app.config["TESTING"] = True,
@@ -38,16 +39,28 @@ class AuditTestCase(unittest.TestCase):
 
 
     @mock.patch(LOGGER)
-    def test_audit_get_index(self, mock_logger):
+    def test_audit_get_index_user(self, mock_logger):
         self._login('landowner@mail.com', 'password')
+        path = '/'
+        self.client.get(path)
+        mock_logger.assert_called_with(self.USER_GET_TEMPLATE % path)
+
+
+    @mock.patch(LOGGER)
+    def test_audit_get_registration_user(self, mock_logger):
+        self._login('landowner@mail.com', 'password')
+        path = '/registration'
+        self.client.get(path)
+        mock_logger.assert_called_with(self.USER_GET_TEMPLATE % path)
+
+    @mock.patch(LOGGER)
+    def test_audit_get_index_anon(self, mock_logger):
         path = '/'
         self.client.get(path)
         mock_logger.assert_called_with(self.ANON_GET_TEMPLATE % path)
 
-
     @mock.patch(LOGGER)
-    def test_audit_get_registration(self, mock_logger):
-        self._login('landowner@mail.com', 'password')
+    def test_audit_get_registration_anon(self, mock_logger):
         path = '/registration'
         self.client.get(path)
         mock_logger.assert_called_with(self.ANON_GET_TEMPLATE % path)
