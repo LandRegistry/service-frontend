@@ -7,19 +7,11 @@ from flask.ext.security import login_required
 
 from service import app, db
 from .health import Health
+from audit import Audit
 
 
 Health(app, checks=[db.health])
-
-
-def audit(sender, **extra):
-    id = current_user.get_id()
-    if id:
-        sender.logger.info('Audit: user=[%s], request=[%s]' % (current_user, request))
-    else:
-        sender.logger.info('Audit: user=[anon], request=[%s]' % request)
-
-request_started.connect(audit, app)
+Audit(app)
 
 
 def get_or_log_error(url):
