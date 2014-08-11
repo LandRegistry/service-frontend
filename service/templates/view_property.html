@@ -52,7 +52,7 @@
             <div class="charges">
               <ul>
                    {% for charge in title.charges %}
-                  <li>{{ charge.charge_date }} <br> {{ charge.chargee_address }} </li>
+                  <li>{{ charge.charge_date | format_datetime }} <br> {{ charge.chargee_address }} </li>
                   {% endfor %}
               </ul>
             </div>

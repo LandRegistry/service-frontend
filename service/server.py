@@ -8,6 +8,7 @@ from flask.ext.security import login_required
 from service import app, db
 from .health import Health
 from audit import Audit
+from datetime import datetime
 
 
 Health(app, checks=[db.health])
@@ -25,6 +26,11 @@ def get_or_log_error(url):
     except requests.exceptions.ConnectionError as e:
         app.logger.error("Error %s", e)
         abort(500)
+
+@app.template_filter()
+def format_datetime(value):
+  new_date = datetime.strptime(value,'%Y-%m-%d')
+  return new_date.strftime('%d %B %Y')
 
 
 @app.template_filter()
