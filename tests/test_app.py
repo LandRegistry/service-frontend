@@ -116,7 +116,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         rv = self.app.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'trp ltd' in rv.data
-        assert '2014-08-11' in rv.data
+        assert '11 August 2014' in rv.data
         assert 'a house' in rv.data
         assert '12345' in rv.data
 

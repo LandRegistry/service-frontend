@@ -48,11 +48,15 @@
               </div>
             {% endif %}
 
-            <h2 class="heading-large">Charges</h2>
+            <h2 class="heading-large">Charges Register</h2>
             <div class="charges">
+              <h3>This register contains any charges and other matters that affect the land.</h3>
               <ul>
                    {% for charge in title.charges %}
-                  <li>{{ charge.charge_date | format_datetime }} <br> {{ charge.chargee_address }} </li>
+                  <li>Registered charge dated {{ charge.charge_date | format_datetime }}.<br>
+                  Proprietor: {{ charge.chargee_name }}
+                  (Company registration number {{ charge.chargee_registration_number }})
+                  of {{ charge.chargee_address }}.
                   {% endfor %}
               </ul>
             </div>
