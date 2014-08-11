@@ -8,6 +8,7 @@ from flask.ext.security import login_required
 from service import app, db
 from .health import Health
 from audit import Audit
+from forms import ChangeForm
 
 
 Health(app, checks=[db.health])
@@ -52,6 +53,35 @@ def property_by_title(title_number):
     app.logger.info("Found the following title: %s" % title)
     return render_template('view_property.html', title=title)
 
+
+# Sticking to convention, "/property/<title_number>" will show the resource, and
+# "/property/<title_number>/edit" will show a form to edit said resource.
+# Here we go a step further, and limit the form to a section on the resource, e.g.
+# "proprietor".
+@app.route('/property/<title_number>/edit')
+@login_required
+def property_by_title_edit_proprietor(title_number):
+    form = ChangeForm(request.form)
+
+    if request.method == 'GET':
+        title_url = "%s/%s/%s" % (
+            app.config['AUTHENTICATED_SEARCH_API'],
+            'auth/titles',
+            title_number)
+        app.logger.info("Requesting title url : %s" % title_url)
+        response = get_or_log_error(title_url)
+        title = response.json()
+        app.logger.info("Found the following title: %s" % title)
+        prepopulate_form(form, title)
+
+    if request.method == 'POST' and form.validate():
+        print 'XXX', 'form posted', form
+
+    return render_template('edit_property.html', form=form)
+
+
+def prepopulate_form(form, title):
+    form.proprietor_new_name.data = 'My new name'
 
 @app.errorhandler(404)
 def page_not_found(err):

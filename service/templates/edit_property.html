@@ -1,0 +1,48 @@
+{% from "_form_helpers.html" import render_field %}
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+    <div id="content">
+    {% include "inc_alpha_banner.html" %}
+
+        <div class="inner-block">
+
+            <h1 class="heading-xlarge">
+              Change register
+            </h1>
+
+            <h2 class="heading-large">Change proprietor name by way of marriage</h2>
+
+            <form action='' method='POST'>
+              {{ form.csrf_token }}{{form.hidden_tag()}}
+
+              <fieldset>
+
+{{ render_field(form.title_number) }}
+{{ render_field(form.proprietor_new_name) }}
+{{ render_field(form.partner_full_name) }}
+{{ render_field(form.date_of_marriage) }}
+{{ render_field(form.location_of_marriage_ceremony) }}
+{{ render_field(form.marriage_certificate_number) }}
+{{ render_field(form.witness_full_name) }}
+{{ render_field(form.witness_house_number) }}
+
+                <em>I hereby certify that...</em>
+
+                <button type="submit" id="submit" class="btn btn-default btn-primary">Submit</button>
+              </fieldset>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+
+
+
+
+
+
+{% endblock %}
