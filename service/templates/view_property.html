@@ -48,6 +48,15 @@
               </div>
             {% endif %}
 
+            <h2 class="heading-large">Charges</h2>
+            <div class="charges">
+              <ul>
+                   {% for charge in title.charges %}
+                  <li>{{ charge.charge_date }} <br> {{ charge.chargee_address }} </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
         </div>
     </div>
 </main>

@@ -9,7 +9,7 @@ import responses
 import mock
 import unittest
 
-from test_json import response_json
+from test_json import response_json, response_without_charge
 
 TITLE_NUMBER = "TN1234567"
 
@@ -104,6 +104,34 @@ class ViewFullTitleTestCase(unittest.TestCase):
         assert 'Bob Test' in rv.data
         assert 'Betty Tanker' in rv.data
 
+    @responses.activate
+    def test_charges_appear(self):
+        #Mock a response, as though JSON is coming back from SEARCH_API
+        responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
+              body = response_json, status = 200, content_type='application/json')
+
+        #Now call the usual Service frontend for the same title.  Redirects
+        #to the mocked response in HTML.
+        self._login('landowner@mail.com', 'password')
+        rv = self.app.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
+        assert rv.status_code == 200
+        assert 'trp ltd' in rv.data
+        assert '2014-08-11' in rv.data
+        assert 'a house' in rv.data
+        assert '12345' in rv.data
+
+    @responses.activate
+    def test_no_charges_header(self):
+      #Mock a response, as though JSON is coming back from SEARCH_API
+      responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
+            body = response_without_charge, status = 200, content_type='application/json')
+
+      #Now call the usual Service frontend for the same title.  Redirects
+      #to the mocked response in HTML.
+      self._login('landowner@mail.com', 'password')
+      rv = self.app.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
+      assert rv.status_code == 200
+      assert 'Charges' not in rv.data
 
     def tearDown(self):
         self.logout() #to ensure no-one is logged in after a test is run
