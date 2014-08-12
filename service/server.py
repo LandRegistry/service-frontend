@@ -8,7 +8,7 @@ from flask.ext.security import login_required
 from service import app, db
 from .health import Health
 from audit import Audit
-from forms import ChangeForm
+from forms import ChangeForm, ConfirmForm
 from datetime import datetime
 
 
@@ -82,10 +82,10 @@ def property_by_title_edit_proprietor(title_number):
         form.title_number.data = title['title_number']
 
     if request.method == 'POST' and form.validate():
-        if form.confirm.data:
+        if 'confirm' in form and form.confirm.data:
             return render_template('acknowledgement.html', form=form)
         else:
-            return render_template('confirm.html', form=form)
+            return render_template('confirm.html', form=ConfirmForm(obj=form.data))
 
 
     return render_template('edit_property.html', form=form)
