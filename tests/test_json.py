@@ -31,11 +31,17 @@ title = {
       "charges": [
           {
               "charge_date": "2014-08-11",
-              "chargee_address": "a house",
-              "chargee_name": "trp ltd",
+              "chargee_address": "a warehouse",
+              "chargee_name": "compone",
               "chargee_registration_number": "12345"
+          },
+          {
+              "charge_date": "2014-08-12",
+              "chargee_address": "a barn",
+              "chargee_name": "comptwo",
+              "chargee_registration_number": "56666"
           }
-    ]
+      ]
   }
 
 title_no_charge = {

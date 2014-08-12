@@ -115,10 +115,15 @@ class ViewFullTitleTestCase(unittest.TestCase):
         self._login('landowner@mail.com', 'password')
         rv = self.app.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
-        assert 'trp ltd' in rv.data
-        assert '11 August 2014' in rv.data
-        assert 'a house' in rv.data
-        assert '12345' in rv.data
+        assert 'Charges Register' in rv.data
+        assert 'Registered charge dated 11 August 2014.' in rv.data
+        assert 'Proprietor: compone' in rv.data
+        assert '(Co. Regn. No. 12345)' in rv.data
+        assert 'of a warehouse.' in rv.data
+        assert 'Registered charge dated 12 August 2014.' in rv.data
+        assert 'Proprietor: comptwo' in rv.data
+        assert '(Co. Regn. No. 56666)' in rv.data
+        assert 'of a barn.' in rv.data
 
     @responses.activate
     def test_no_charges_header(self):
@@ -131,7 +136,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
       self._login('landowner@mail.com', 'password')
       rv = self.app.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
       assert rv.status_code == 200
-      assert 'Charges' not in rv.data
+      assert 'Charges Register' not in rv.data
 
     def tearDown(self):
         self.logout() #to ensure no-one is logged in after a test is run
