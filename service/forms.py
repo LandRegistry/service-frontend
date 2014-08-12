@@ -1,16 +1,19 @@
 from flask_wtf import Form
-from wtforms import StringField, DateField, HiddenField, TextAreaField
+from wtforms import StringField, DateField, HiddenField, TextAreaField, BooleanField
 from wtforms.validators import DataRequired
 
 class ChangeForm(Form):
 
     title_number = HiddenField('Title Number')
+
+    confirm = BooleanField('Confirm')
+
     proprietor_new_name = StringField('New name', validators=[DataRequired()])
-    partner_full_name = StringField('Partner\'s full name', validators=[DataRequired()])
-    date_of_marriage = DateField('Date of marriage', format='%Y-%m-%d', validators=[DataRequired()])
-    location_of_marriage_ceremony = StringField('Location of marriage ceremony', validators=[DataRequired()])
+    partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
+    marriage_date = DateField('Date of marriage', format='%Y-%m-%d', validators=[DataRequired()])
+    marriage_place = StringField('Location of marriage ceremony', validators=[DataRequired()])
     marriage_certificate_number = StringField('Marriage certificate number', validators=[DataRequired()])
-    witness_full_name = StringField('Full name of witness', validators=[DataRequired()])
-
-    witness_house_number = TextAreaField('Address of witness', validators=[DataRequired()])
-
+    witness_name = StringField('Full name of witness', validators=[DataRequired()])
+    witness_address = TextAreaField('Address of witness', validators=[DataRequired()])
+    witness2_name = StringField('Full name of second witness', validators=[DataRequired()])
+    witness2_address = TextAreaField('Address of second witness', validators=[DataRequired()])

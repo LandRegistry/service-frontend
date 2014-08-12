@@ -8,6 +8,9 @@
               </label>
             </div>
           {% endfor %}
+        {% elif field.type == 'BooleanField' %}
+          {{ field.label(class_="control-label") }}
+          {{ field(**kwargs) }}
         {% elif field.type == 'HiddenField' %}
           {{ field(class_="form-control", **kwargs) }}
         {% else %}

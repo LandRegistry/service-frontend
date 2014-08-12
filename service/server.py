@@ -75,8 +75,11 @@ def property_by_title_edit_proprietor(title_number):
         form.title_number.data = title['title_number']
 
     if request.method == 'POST' and form.validate():
-        print 'XXX', 'form posted', form
-        return render_template('acknowledgement.html', form=form)
+        if form.confirm.data:
+            return render_template('acknowledgement.html', form=form)
+        else:
+            return render_template('confirm.html', form=form)
+
 
     return render_template('edit_property.html', form=form)
 
