@@ -9,6 +9,7 @@ from service import app, db
 from .health import Health
 from audit import Audit
 from forms import ChangeForm
+from datetime import datetime
 
 
 Health(app, checks=[db.health])
@@ -26,6 +27,12 @@ def get_or_log_error(url):
     except requests.exceptions.ConnectionError as e:
         app.logger.error("Error %s", e)
         abort(500)
+
+#todo - add a reference to a custom date module when it exists.
+@app.template_filter()
+def format_datetime(value):
+  new_date = datetime.strptime(value,'%Y-%m-%d')
+  return new_date.strftime('%d %B %Y')
 
 
 @app.template_filter()
