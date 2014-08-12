@@ -27,6 +27,7 @@ def get_or_log_error(url):
         app.logger.error("Error %s", e)
         abort(500)
 
+#todo - add a reference to a custom date module when it exists.
 @app.template_filter()
 def format_datetime(value):
   new_date = datetime.strptime(value,'%Y-%m-%d')
