@@ -58,7 +58,7 @@ def property_by_title(title_number):
 # "/property/<title_number>/edit" will show a form to edit said resource.
 # Here we go a step further, and limit the form to a section on the resource, e.g.
 # "proprietor".
-@app.route('/property/<title_number>/edit')
+@app.route('/property/<title_number>/edit', methods=['GET','POST'])
 @login_required
 def property_by_title_edit_proprietor(title_number):
     form = ChangeForm(request.form)
@@ -72,16 +72,15 @@ def property_by_title_edit_proprietor(title_number):
         response = get_or_log_error(title_url)
         title = response.json()
         app.logger.info("Found the following title: %s" % title)
-        prepopulate_form(form, title)
+        form.title_number.data = title['title_number']
 
     if request.method == 'POST' and form.validate():
         print 'XXX', 'form posted', form
+        return render_template('acknowledgement.html', form=form)
 
     return render_template('edit_property.html', form=form)
 
 
-def prepopulate_form(form, title):
-    form.proprietor_new_name.data = 'My new name'
 
 @app.errorhandler(404)
 def page_not_found(err):

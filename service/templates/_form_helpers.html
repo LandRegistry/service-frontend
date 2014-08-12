@@ -8,6 +8,8 @@
               </label>
             </div>
           {% endfor %}
+        {% elif field.type == 'HiddenField' %}
+          {{ field(class_="form-control", **kwargs) }}
         {% else %}
           {{ field.label(class_="control-label") }}
           {{ field(class_="form-control", **kwargs) }}
