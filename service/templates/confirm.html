@@ -18,16 +18,16 @@
             <form action='' method='POST'>
               {{ form.csrf_token }}{{form.hidden_tag()}}
 
-              {{ render_field(form.title_number) }}
-              {{ render_field(form.proprietor_new_name) }}
-              {{ render_field(form.partner_name) }}
-              {{ render_field(form.marriage_date) }}
-              {{ render_field(form.marriage_place) }}
-              {{ render_field(form.marriage_certificate_number) }}
-              {{ render_field(form.witness_name) }}
-              {{ render_field(form.witness_address) }}
-              {{ render_field(form.witness2_name) }}
-              {{ render_field(form.witness2_address) }}
+              {{ form.title_number }} 
+              {{ form.proprietor_new_name}}
+              {{ form.partner_name }}
+              {{ form.marriage_date }}
+              {{ form.marriage_place }}
+              {{ form.marriage_certificate_number }}
+              {{ form.witness_name }}
+              {{ form.witness_address }}
+              {{ form.witness2_name }}
+              {{ form.witness2_address }}
 
 
               <fieldset>
