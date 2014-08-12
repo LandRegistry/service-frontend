@@ -8,6 +8,7 @@ from flask.ext.security import login_required
 from service import app, db
 from .health import Health
 from audit import Audit
+from forms import ChangeForm, ConfirmForm
 from datetime import datetime
 
 
@@ -58,6 +59,37 @@ def property_by_title(title_number):
     title = response.json()
     app.logger.info("Found the following title: %s" % title)
     return render_template('view_property.html', title=title)
+
+
+# Sticking to convention, "/property/<title_number>" will show the resource, and
+# "/property/<title_number>/edit" will show a form to edit said resource.
+# Here we go a step further, and limit the form to a section on the resource, e.g.
+# "proprietor".
+@app.route('/property/<title_number>/edit', methods=['GET','POST'])
+@login_required
+def property_by_title_edit_proprietor(title_number):
+    form = ChangeForm(request.form)
+
+    if request.method == 'GET':
+        title_url = "%s/%s/%s" % (
+            app.config['AUTHENTICATED_SEARCH_API'],
+            'auth/titles',
+            title_number)
+        app.logger.info("Requesting title url : %s" % title_url)
+        response = get_or_log_error(title_url)
+        title = response.json()
+        app.logger.info("Found the following title: %s" % title)
+        form.title_number.data = title['title_number']
+
+    if request.method == 'POST' and form.validate():
+        if 'confirm' in form and form.confirm.data:
+            return render_template('acknowledgement.html', form=form)
+        else:
+            return render_template('confirm.html', form=ConfirmForm(obj=form.data))
+
+
+    return render_template('edit_property.html', form=form)
+
 
 
 @app.errorhandler(404)
