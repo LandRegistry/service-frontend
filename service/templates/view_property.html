@@ -49,6 +49,7 @@
               </div>
             {% endif %}
 
+            {% if title.extent is defined %}
             <h2 clas="heading-large">Title extent</h2>
 
             <div id="map" style="width: 600px; height: 600px">
@@ -57,6 +58,7 @@
               </script>
               <script src="{{asset_path}}/javascripts/map.js"></script>
             </div>
+            {% endif %}
 
             {% if title.charges %}
             <h2 class="heading-large">Charges Register</h2>
