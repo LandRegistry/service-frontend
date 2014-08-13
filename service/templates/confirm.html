@@ -1,0 +1,74 @@
+{% from "_form_helpers.html" import render_field %}
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+    <div id="content">
+    {% include "inc_alpha_banner.html" %}
+
+        <div class="inner-block">
+
+            <h1 class="heading-xlarge">
+              Confirm
+            </h1>
+
+            <h2 class="heading-large">Change proprietor name by way of marriage</h2>
+
+            <form action='' method='POST'>
+              {{ form.csrf_token }}{{form.hidden_tag()}}
+
+              {{ form.title_number }} 
+              {{ form.proprietor_new_name}}
+              {{ form.partner_name }}
+              {{ form.marriage_date }}
+              {{ form.marriage_place }}
+              {{ form.marriage_certificate_number }}
+              {{ form.witness_name }}
+              {{ form.witness_address }}
+              {{ form.witness2_name }}
+              {{ form.witness2_address }}
+
+
+              <fieldset>
+
+
+                <div>
+                  I hereby certify that I, 
+                  <span>{{form.proprietor_new_name.data}}</span>
+                  , was married on
+                  <span>{{form.marriage_date.data}}</span>
+                  at
+                  <span>{{form.marriage_place.data}}</span>
+                  to
+                  <span>{{form.partner_name.data}}</span>
+                  , which was witnessed by
+                  <span>{{form.witness_name.data}}</span>
+                  of
+                  <span>{{form.witness_address.data}}</span>
+                  and
+                  <span>{{form.witness2_name.data}}</span>
+                  of
+                  <span>{{form.witness2_address.data}}</span>
+                  . I understand that providing false information could lead to
+                  prosecution under Section 124 of the Land Registration Act 2002.
+
+                </div>
+
+                {{ render_field(form.confirm) }}
+
+                <button type="submit" id="submit" class="button">Submit</button>
+              </fieldset>
+            </form>
+
+        </div>
+    </div>
+</main>
+
+
+
+
+
+
+
+{% endblock %}
