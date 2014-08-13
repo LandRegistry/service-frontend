@@ -14,7 +14,7 @@ env:
 - SECRET_KEY='this is a secret'
 - SETTINGS='config.TestConfig'
 - SECURITY_PASSWORD_SALT= 'a random salt'
-  secure: "nM6uJUmLVjNzdU4ofv37z/qbi98QInJr8F+uraY/3xTE7D2gjUb8i9gGgiek1Gl2bZ6cz82qoCefD6pa4XeooExcFnEST/yb4jPBtauBLSN+FacUn55dMjP9qGewFvZyZ/CgKrpzugjZzlt3B3+/JjF6cmgscCNDcQWowKnZpW0="
+- secure: "nM6uJUmLVjNzdU4ofv37z/qbi98QInJr8F+uraY/3xTE7D2gjUb8i9gGgiek1Gl2bZ6cz82qoCefD6pa4XeooExcFnEST/yb4jPBtauBLSN+FacUn55dMjP9qGewFvZyZ/CgKrpzugjZzlt3B3+/JjF6cmgscCNDcQWowKnZpW0="
 
 deploy:
   provider: heroku
