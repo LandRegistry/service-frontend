@@ -8,8 +8,9 @@ import requests
 import responses
 import mock
 import unittest
+import json
 
-from test_json import response_json, response_without_charge
+from test_json import title, response_json, response_without_charge
 
 TITLE_NUMBER = "TN1234567"
 
@@ -35,8 +36,9 @@ class ViewFullTitleTestCase(unittest.TestCase):
     def logout(self):
         return self.app.get('/logout', follow_redirects=True)
 
-    @mock.patch('requests.get', returns=response_json)
+    @mock.patch('requests.get')
     def test_get_property_calls_search_api(self, mock_get):
+        mock_get.return_value.json.return_value = title
 
         self._login('landowner@mail.com', 'password') #need to log in in order to get to property page
         self.app.get('/property/%s' % TITLE_NUMBER)

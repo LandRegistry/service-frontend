@@ -1,4 +1,5 @@
 {% extends "servicefrontend_base.html" %}
+{% include "global/map_includes.html" %}
 
 {% block content %}
 
@@ -46,6 +47,17 @@
               <div class="price_paid">
                 <p>Price paid: <b>&pound;<span id="price-paid">{{ title.payment.price_paid | currency }}</span></b></p>
               </div>
+            {% endif %}
+
+            {% if title.extent is defined %}
+            <h2 clas="heading-large">Title extent</h2>
+
+            <div id="map" style="width: 600px; height: 600px">
+              <script type='text/javascript'>
+                var extentData = {{ title.extent | tojson}};
+              </script>
+              <script src="{{asset_path}}/javascripts/map.js"></script>
+            </div>
             {% endif %}
 
             {% if title.charges %}

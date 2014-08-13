@@ -28,6 +28,45 @@ title = {
           }
       ],
       "title_number": "TEST198",
+      "extent": {
+          "crs": {
+              "properties": {
+                  "name": "urn:ogc:def:crs:EPSG:27700"
+              },
+              "type": "name"
+          },
+          "geometry": {
+              "coordinates": [
+                  [
+                      [
+                          [
+                              530857.01,
+                              181500
+                          ],
+                          [
+                              530857,
+                              181500
+                          ],
+                          [
+                              530857,
+                              181500
+                          ],
+                          [
+                              530857,
+                              181500
+                          ],
+                          [
+                              530857.01,
+                              181500
+                          ]
+                      ]
+                  ]
+              ],
+              "type": "MultiPolygon"
+          },
+          "properties": {},
+          "type": "Feature"
+      },
       "charges": [
           {
               "charge_date": "2014-08-11",
@@ -71,7 +110,46 @@ title_no_charge = {
               "last_name": "Tanker"
           }
       ],
-      "title_number": "TEST198"
+      "title_number": "TEST198",
+      "extent": {
+          "crs": {
+              "properties": {
+                  "name": "urn:ogc:def:crs:EPSG:27700"
+              },
+              "type": "name"
+          },
+          "geometry": {
+              "coordinates": [
+                  [
+                      [
+                          [
+                              530857.01,
+                              181500
+                          ],
+                          [
+                              530857,
+                              181500
+                          ],
+                          [
+                              530857,
+                              181500
+                          ],
+                          [
+                              530857,
+                              181500
+                          ],
+                          [
+                              530857.01,
+                              181500
+                          ]
+                      ]
+                  ]
+              ],
+              "type": "MultiPolygon"
+          },
+          "properties": {},
+          "type": "Feature"
+      },
   }
 
 response_json = json.dumps(title)
