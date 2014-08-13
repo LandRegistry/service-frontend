@@ -1,4 +1,4 @@
-import requests
+import os, requests
 
 from flask import render_template, request_started, request
 from flask import abort
@@ -58,7 +58,7 @@ def property_by_title(title_number):
     response = get_or_log_error(title_url)
     title = response.json()
     app.logger.info("Found the following title: %s" % title)
-    return render_template('view_property.html', title=title)
+    return render_template('view_property.html', title=title, apiKey=os.environ['OS_API_KEY'])
 
 
 # Sticking to convention, "/property/<title_number>" will show the resource, and
