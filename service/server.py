@@ -107,7 +107,7 @@ def after_request(response):
     # can we get some guidance on this?
     response.headers.add(
         'Content-Security-Policy',
-        "default-src 'self' 'unsafe-inline' data:")
+        "default-src 'self' 'unsafe-inline' data: ; img-src *")
     response.headers.add('X-Frame-Options', 'deny')
     response.headers.add('X-Content-Type-Options', 'nosniff')
     response.headers.add('X-XSS-Protection', '1; mode=block')
