@@ -1,16 +1,13 @@
 from service.server import app
 from service import db
 from service import user_datastore
-from service.forms import ChangeForm
 
 from flask_security.utils import encrypt_password
 
-import requests
 import responses
-import mock
 import unittest
 
-from test_json import response_json, response_without_charge
+from test_json import response_json
 
 TITLE_NUMBER = "TN1234567"
 
@@ -42,11 +39,13 @@ class ChangeTitleTestCase(unittest.TestCase):
         with app.test_request_context():
             form = {}
             form['title_number'] = TITLE_NUMBER
-            form['proprietor_new_name'] = 'Proprietor New Name'
+            form['proprietor_firstname'] = 'Proprietor Firstname'
+            form['proprietor_previous_surname'] = 'Proprietor Previous Surame'
+            form['proprietor_new_surname'] = 'Proprietor New Surame'
             form['partner_name'] = 'Partner Name'
             form['marriage_date'] = '2014-01-01'
             form['marriage_place'] = 'Testville'
-            form['marriage_country'] = 'United Kingdom'
+            form['marriage_country'] = 'GB'
             form['marriage_certificate_number'] = '00000000'
             return form
 
@@ -60,7 +59,7 @@ class ChangeTitleTestCase(unittest.TestCase):
         # load the form
 
         self._login('landowner@mail.com', 'password')
-        rv = self.client.get('/property/%s/edit' % TITLE_NUMBER, follow_redirects=True)
+        rv = self.client.get('/property/%s/edit/title.proprietor.1' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Change register' in rv.data
 
@@ -68,21 +67,21 @@ class ChangeTitleTestCase(unittest.TestCase):
 
         form = self.get_unconfirmed_change_form()
         rv_post = self.client.post(
-            '/property/%s/edit' % TITLE_NUMBER,
+            '/property/%s/edit/title.proprietor.1' % TITLE_NUMBER,
             follow_redirects=True,
             data=DummyPostData(form))
         assert rv_post.status_code == 200
-        assert 'I hereby certify that I' in rv_post.data
+        assert 'I confirm that I' in rv_post.data
 
         # confirm
 
         form['confirm'] = True
         rv_post_confirm = self.client.post(
-            '/property/%s/edit' % TITLE_NUMBER,
+            '/property/%s/edit/title.proprietor.1' % TITLE_NUMBER,
             follow_redirects=True,
             data=DummyPostData(form))
         assert rv_post_confirm.status_code == 200
-        assert 'Acknowledgement' in rv_post_confirm.data
+        assert 'Application complete' in rv_post_confirm.data
 
 
     def tearDown(self):
