@@ -23,11 +23,8 @@
               {{ form.partner_name }}
               {{ form.marriage_date }}
               {{ form.marriage_place }}
+              {{ form.marriage_country }}
               {{ form.marriage_certificate_number }}
-              {{ form.witness_name }}
-              {{ form.witness_address }}
-              {{ form.witness2_name }}
-              {{ form.witness2_address }}
 
 
               <fieldset>
@@ -40,16 +37,9 @@
                   <span>{{form.marriage_date.data}}</span>
                   at
                   <span>{{form.marriage_place.data}}</span>
+                  , <span>{{form.marriage_country.data}}</span>
                   to
                   <span>{{form.partner_name.data}}</span>
-                  , which was witnessed by
-                  <span>{{form.witness_name.data}}</span>
-                  of
-                  <span>{{form.witness_address.data}}</span>
-                  and
-                  <span>{{form.witness2_name.data}}</span>
-                  of
-                  <span>{{form.witness2_address.data}}</span>
                   . I understand that providing false information could lead to
                   prosecution under Section 124 of the Land Registration Act 2002.
 

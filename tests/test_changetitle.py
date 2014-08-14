@@ -46,11 +46,8 @@ class ChangeTitleTestCase(unittest.TestCase):
             form['partner_name'] = 'Partner Name'
             form['marriage_date'] = '2014-01-01'
             form['marriage_place'] = 'Testville'
+            form['marriage_country'] = 'United Kingdom'
             form['marriage_certificate_number'] = '00000000'
-            form['witness_name'] = 'Witness Name'
-            form['witness_address'] = 'Witness Address'
-            form['witness2_name'] = 'Second Witness Name'
-            form['witness2_address'] = 'Second Witness Address'
             return form
 
 
