@@ -29,10 +29,12 @@
                 <div class="proprietor">
                     <ul>
                          {% for proprietor in title.proprietors %}
-                         <li>
-                         {{ proprietor.first_name }} {{ proprietor.last_name }}
-                         <span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>
+                          {% if  proprietor.first_name and proprietor.last_name %}
+                            <li>
+                              {{ proprietor.first_name }} {{ proprietor.last_name }}
+                              <span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>
                            </li>
+                           {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
