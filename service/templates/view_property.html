@@ -10,40 +10,37 @@
 <main id="wrapper" role="main">
     <div id="content">
     {% include "inc_alpha_banner.html" %}
+        <div class="inner-block">
 
-        <a href='#proprietors' class='button' id='makeChange'>Report to change a name on this title</a>
-        <div class="grid-wrapper">
-            <div class="grid">
-                <div class="inner-block">
-                    <h1 class="heading-large">{{ title.title_number }}</h1>
+            <a href='#proprietors' class='button' id='makeChange'>Report to change a name on this title</a>
+            <div class="summary">
+                <h1 class="heading-large">Details for title <span class="title-flag">{{ title.title_number }}</span></h1>
 
-                    <div itemscope itemtype ="http://schema.org/PostalAddress" class="adr">
-                        <div itemprop="streetAddress">{{ title.property.address.house_number }}<br/>{{ title.property.address.road }}</div>
-                        <div itemprop="addressLocality">{{ title.property.address.town }}</div>
-                        <div itemprop="postalCode">{{ title.property.address.postcode }}</div>
-                    </div>
-
-                    <dl class="inline">
-                        <a name='proprietors'></a>
-                        <dt>Proprietor(s)</dt>
-                        <dd>{% for proprietor in title.proprietors %}
-                                {% if  proprietor.first_name and proprietor.last_name %}
-                                    {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>{% if not loop.last %}, {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </dd>
-                        <dt>Tenure</dt>
-                        <dd>{{ title.property.tenure }}</dd>
-                        <dt>Class of title</dt>
-                        <dd>{{ title.property.class_of_title }}</dd>
-                        {% if title.payment.price_paid %}
-                        <dt>Price paid</dt>
-                        <dd>&pound; {{ title.payment.price_paid | currency }}</dd>
-                        {% endif %}
-                    </dl>
+                <div itemscope itemtype ="http://schema.org/PostalAddress" class="adr lede">
+                    <div itemprop="streetAddress">{{ title.property.address.house_number }}<br/>{{ title.property.address.road }}</div>
+                    <div itemprop="addressLocality">{{ title.property.address.town }}</div>
+                    <div itemprop="postalCode">{{ title.property.address.postcode }}</div>
                 </div>
-            </div>
-        </div><!-- end grid-wrapper -->
+
+                <dl class="inline">
+                    <a name='proprietors'></a>
+                    <dt>Proprietor(s)</dt>
+                    <dd>{% for proprietor in title.proprietors %}
+                            {% if  proprietor.first_name and proprietor.last_name %}
+                                {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>{% if not loop.last %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </dd>
+                    <dt>Tenure</dt>
+                    <dd>{{ title.property.tenure }}</dd>
+                    <dt>Class of title</dt>
+                    <dd>{{ title.property.class_of_title }}</dd>
+                    {% if title.payment.price_paid %}
+                    <dt>Price paid</dt>
+                    <dd>&pound; {{ title.payment.price_paid | currency }}</dd>
+                    {% endif %}
+                </dl>
+            </div><!-- end summary -->
 
             {% if title.extent is defined %}
             <h2 clas="heading-large">Title extent</h2>
