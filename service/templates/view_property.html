@@ -7,55 +7,39 @@
     <div id="content">
     {% include "inc_alpha_banner.html" %}
 
-        <div class="inner-block">
+        <a href='#proprietors' class='button' id='makeChange'>Report to change a name on this title</a>
+        <div class="grid-wrapper">
+            <div class="grid">
+                <div class="inner-block">
+                    <h1 class="heading-large">{{ title.title_number }}</h1>
 
-            <h1 class="heading-xlarge">
-              Details for title <span class="title_id">{{ title.title_number }}</span>
-            </h1>
+                    <div itemscope itemtype ="http://schema.org/PostalAddress" class="adr">
+                        <div itemprop="streetAddress">{{ title.property.address.house_number }}<br/>{{ title.property.address.road }}</div>
+                        <div itemprop="addressLocality">{{ title.property.address.town }}</div>
+                        <div itemprop="postalCode">{{ title.property.address.postcode }}</div>
+                    </div>
 
-            <a href='#proprietors' class='button' id='makeChange'>Report to change a name on this title</a>
-
-            <h2 class="heading-large">Property Address</h2>
-
-            <div class="adr">
-            <div class="street-address">{{ title.property.address.house_number }}<br/>{{ title.property.address.road }}</div>
-            <div class="locality">{{ title.property.address.town }}</div>
-            <div class="postal-code">{{ title.property.address.postcode }}</div>
-            </div>
-
-            <a name='proprietors'></a>
-            <h2 class="heading-large">Proprietors</h2>
-
-                <div class="proprietor">
-                    <ul>
-                         {% for proprietor in title.proprietors %}
-                          {% if  proprietor.first_name and proprietor.last_name %}
-                            <li>
-                              {{ proprietor.first_name }} {{ proprietor.last_name }}
-                              <span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>
-                           </li>
-                           {% endif %}
-                        {% endfor %}
-                    </ul>
+                    <dl class="inline">
+                        <a name='proprietors'></a>
+                        <dt>Proprietor(s)</dt>
+                        <dd>{% for proprietor in title.proprietors %}
+                                {% if  proprietor.first_name and proprietor.last_name %}
+                                    {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>, 
+                                {% endif %}
+                            {% endfor %}
+                        </dd>
+                        <dt>Tenure</dt>
+                        <dd>{{ title.property.tenure }}</dd>
+                        <dt>Class of title</dt>
+                        <dd>{{ title.property.class_of_title }}</dd>
+                        {% if title.payment.price_paid %}
+                        <dt>Price paid</dt>
+                        <dd>&pound; {{ title.payment.price_paid | currency }}</dd>
+                        {% endif %}
+                    </dl>
                 </div>
-
-
-            <h2 class="heading-large">Tenure</h2>
-            <div class="tenure">
-                <p><span id="tenure">{{ title.property.tenure }}</span></p>
             </div>
-
-            <h2 class="heading-large">Class of title</h2>
-            <div class="class-of-title">
-                <p><span id="class-of-title">{{ title.property.class_of_title }}</span></p>
-            </div>
-
-            {% if title.payment.price_paid %}
-              <h2 class="heading-large">Price paid</h2>
-              <div class="price_paid">
-                <p>Price paid: <b>&pound;<span id="price-paid">{{ title.payment.price_paid | currency }}</span></b></p>
-              </div>
-            {% endif %}
+        </div><!-- end grid-wrapper -->
 
             {% if title.extent is defined %}
             <h2 clas="heading-large">Title extent</h2>
@@ -84,8 +68,7 @@
             </div>
             {% endif %}
 
-        </div>
-    </div>
+    </div><!-- end content -->
 
     <script>
       $(document).ready(function() {
@@ -96,11 +79,5 @@
       });
     </script>
 </main>
-
-
-
-
-
-
 
 {% endblock %}
