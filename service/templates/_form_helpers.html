@@ -11,8 +11,49 @@
         {% elif field.type == 'BooleanField' %}
           {{ field.label(class_="control-label") }}
           {{ field(**kwargs) }}
-        {% elif field.type == 'HiddenField' %}
-          {{ field(class_="form-control", **kwargs) }}
+        {% elif field.type == 'CountriesField' %}
+
+          {{ field.label(class_="control-label") }}
+
+          <ul>
+            {% for value, label, selected in field.iter_top_choices() %}
+            <li>
+              <div class="radio">
+                <label>
+                  <input type="radio" id="{{value}}" name="{{ field.id }}" value="{{ value }}" {% if checked %}checked="true"{% endif %}>{{ label }}
+                </label>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          <select name='{{field.id}}'>
+            {% for value, label, selected in field.iter_choices() %}
+            <option value='{{value}}'>{{label}}</option>
+            {% endfor %}
+          </select>
+
+          <script>
+            $(document).ready(function() {
+              {% if not field.errors %}
+              $('select[name="{{field.id}}"]').hide();
+              {% endif %}
+
+              $("input[name='{{field.id}}'][type='radio']").click(function() {
+                var test = $(this).val();
+                if (test === 'other') {
+                  $('select[name="{{field.id}}"]').show();
+                } else {
+                  $('select[name="{{field.id}}"]').hide();
+                }
+              });
+
+              $('select[name="{{field.id}}"]').click(function () {
+                var val = $('select[name="{{field.id}}"]').val();
+                $('input[name="{{field.id}}"]').val(val);
+              });
+            });
+
+          </script>
         {% else %}
           {{ field.label(class_="control-label") }}
           {{ field(class_="form-control", **kwargs) }}

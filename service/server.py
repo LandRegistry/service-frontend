@@ -1,16 +1,15 @@
-import os, requests
-
-from flask import render_template, request_started, request
-from flask import abort
-from flask.ext.login import current_user
-from flask.ext.security import login_required
-
-from service import app, db
 from .health import Health
 from audit import Audit
-from forms import ChangeForm, ConfirmForm
 from datetime import datetime
-
+from flask import abort
+from flask import render_template
+from flask import request
+from flask.ext.security import login_required
+from forms import ChangeForm
+from forms import ConfirmForm
+from service import app, db
+import os
+import requests
 
 Health(app, checks=[db.health])
 Audit(app)
@@ -28,11 +27,12 @@ def get_or_log_error(url):
         app.logger.error("Error %s", e)
         abort(500)
 
+
 #todo - add a reference to a custom date module when it exists.
 @app.template_filter()
 def format_datetime(value):
-  new_date = datetime.strptime(value,'%Y-%m-%d')
-  return new_date.strftime('%d %B %Y')
+    new_date = datetime.strptime(value, '%Y-%m-%d')
+    return new_date.strftime('%d %B %Y')
 
 
 @app.template_filter()
@@ -58,16 +58,19 @@ def property_by_title(title_number):
     response = get_or_log_error(title_url)
     title = response.json()
     app.logger.info("Found the following title: %s" % title)
-    return render_template('view_property.html', title=title, apiKey=os.environ['OS_API_KEY'])
+    return render_template(
+        'view_property.html',
+        title=title,
+        apiKey=os.environ['OS_API_KEY'])
 
 
-# Sticking to convention, "/property/<title_number>" will show the resource, and
-# "/property/<title_number>/edit" will show a form to edit said resource.
-# Here we go a step further, and limit the form to a section on the resource, e.g.
-# "proprietor".
-@app.route('/property/<title_number>/edit', methods=['GET','POST'])
+# Sticking to convention, "/property/<title_number>" will show the
+# resource, and "/property/<title_number>/edit" will show a form
+# to edit said resource. Here we go a step further, and limit
+# the form to a section on the resource, e.g. "proprietor".
+@app.route('/property/<title_number>/edit/title.proprietor.<int:proprietor_index>', methods=['GET', 'POST'])
 @login_required
-def property_by_title_edit_proprietor(title_number):
+def property_by_title_edit_proprietor(title_number, proprietor_index):
     form = ChangeForm(request.form)
 
     if request.method == 'GET':
@@ -80,16 +83,26 @@ def property_by_title_edit_proprietor(title_number):
         title = response.json()
         app.logger.info("Found the following title: %s" % title)
         form.title_number.data = title['title_number']
+        proprietor = title['proprietors'][proprietor_index-1]
+        form.proprietor_firstname.data = proprietor['first_name']
+        form.proprietor_previous_surname.data = proprietor['last_name']
+        
 
     if request.method == 'POST' and form.validate():
         if 'confirm' in form and form.confirm.data:
+            # 'decision' box TODO
+            # steps 3 and 4
+            #rv = requests.post('/decision/api', form.data)
+
+            # step 5
+            #url_to_post_to = rv.json['url_to_post_to']
+            #requests.post(url_to_post_to, form.data)
             return render_template('acknowledgement.html', form=form)
         else:
             return render_template('confirm.html', form=ConfirmForm(obj=form.data))
 
 
     return render_template('edit_property.html', form=form)
-
 
 
 @app.errorhandler(404)

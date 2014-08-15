@@ -13,6 +13,8 @@
               Details for title <span class="title_id">{{ title.title_number }}</span>
             </h1>
 
+            <a href='#proprietors' class='button' id='makeChange'>Report to change a name on this title</a>
+
             <h2 class="heading-large">Property Address</h2>
 
             <div class="adr">
@@ -21,12 +23,16 @@
             <div class="postal-code">{{ title.property.address.postcode }}</div>
             </div>
 
+            <a name='proprietors'></a>
             <h2 class="heading-large">Proprietors</h2>
 
                 <div class="proprietor">
                     <ul>
                          {% for proprietor in title.proprietors %}
-                        <li>{{ proprietor.first_name }} {{ proprietor.last_name }} </li>
+                         <li>
+                         {{ proprietor.first_name }} {{ proprietor.last_name }}
+                         <span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>
+                           </li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -76,10 +82,17 @@
             </div>
             {% endif %}
 
-            <a href='{{request.path}}/edit' class='button'>Report a change a name on this title</a>
-
         </div>
     </div>
+
+    <script>
+      $(document).ready(function() {
+        $('.change').hide();
+        $('#makeChange').click(function() {
+          $('.change').show();
+        });
+      });
+    </script>
 </main>
 
 

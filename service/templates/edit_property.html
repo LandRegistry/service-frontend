@@ -19,9 +19,19 @@
               {{ form.csrf_token }}{{form.hidden_tag()}}
 
               <fieldset>
+                {{ form.title_number }}
+                {{form.proprietor_firstname}}
+                {{form.proprietor_previous_surname}}
 
-                {{ render_field(form.title_number) }}
-                {{ render_field(form.proprietor_new_name) }}
+                <div class="form-group ">
+                  <label class="control-label" for="proprietor_previous_name">Previous name</label>
+                  <span  id="proprietor_previous_name" name="proprietor_previous_name">
+                    {{form.proprietor_firstname.data}}
+                    {{form.proprietor_previous_surname.data}}
+                  </span>
+                </div>
+
+                {{ render_field(form.proprietor_new_surname) }}
                 {{ render_field(form.partner_name) }}
                 {{ render_field(form.marriage_date) }}
                 {{ render_field(form.marriage_place) }}

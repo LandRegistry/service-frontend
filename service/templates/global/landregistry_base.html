@@ -3,6 +3,7 @@
 
 {% block head %}
   <link href="{{ landregistry_asset_path }}stylesheets/landregistry-main.css" media="screen" rel="stylesheet" type="text/css">
+  <script src="{{ url_for("static", filename="build/javascripts/vendor/jquery-1.11.1.min.js") }}"></script>
 
   {% block head_additionals %}{% endblock %}
 
