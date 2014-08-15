@@ -24,7 +24,7 @@
                         <dt>Proprietor(s)</dt>
                         <dd>{% for proprietor in title.proprietors %}
                                 {% if  proprietor.first_name and proprietor.last_name %}
-                                    {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>, 
+                                    {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>{% if not loop.last %}, {% endif %}
                                 {% endif %}
                             {% endfor %}
                         </dd>
