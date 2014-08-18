@@ -9,11 +9,11 @@
             </div>
           {% endfor %}
         {% elif field.type == 'BooleanField' %}
-          {{ field.label(class_="control-label") }}
+          {{ field.label(class_="form-label") }}
           {{ field(**kwargs) }}
         {% elif field.type == 'CountriesField' %}
 
-          {{ field.label(class_="control-label") }}
+          {{ field.label(class_="form-label") }}
 
           <ul>
             {% for value, label, selected in field.iter_top_choices() %}
@@ -55,7 +55,7 @@
 
           </script>
         {% else %}
-          {{ field.label(class_="control-label") }}
+          {{ field.label(class_="form-label") }}
           {{ field(class_="form-control", **kwargs) }}
         {% endif%}
         {% if field.errors %}
