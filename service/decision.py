@@ -2,25 +2,34 @@ import requests
 import json
 from service import app
 
+headers = {'content-type': 'application/json'}
 
 class Decision(object):
+
 
     def __init__(self, decision_url):
         self.api = '%s/decisions' % decision_url
 
-        #signed_token
-        #transaction_id
-
     def post(self, data):
-        json_data = self._payload(data)
-        headers = {'content-type': 'application/json'}
-        app.logger.info("Sending data %s to the decision at %s" % (json_data, self.api))
+        decision_response = self._post_decision(data).json()
+        url = decision_response['url']
+        downstream_response = self._post_downstream(url, data)
+        return (decision_response, downstream_response)
+
+    def _post_decision(self, data):
         try:
-            decision_response = requests.post(self.api, data=json_data, headers=headers).json()
-            url = decision_response['url']
-            app.logger.info('Sending data to the chosen url at %s' % url)
-            downstream_response = requests.post(url, data)
-            return (decision_response, downstream_response)
+            json_data = self._payload_decision(data)
+            app.logger.info("Sending data %s to the decision at %s" % (json_data, self.api))
+            return requests.post(self.api, data=json_data, headers=headers)
+        except requests.exceptions.RequestException as e:
+            app.logger.error("Could not effect decision at %s: Error %s" % (self.api, e))
+            raise RuntimeError
+
+    def _post_downstream(self, url, data):
+        try:
+            json_data = self._payload_downstream(data)
+            app.logger.info("Sending data %s to the downstream at %s" % (json_data, self.api))
+            return requests.post(url, data=json_data, headers=headers)
         except requests.exceptions.RequestException as e:
             app.logger.error("Could not effect decision at %s: Error %s" % (self.api, e))
             raise RuntimeError
@@ -28,7 +37,7 @@ class Decision(object):
     def __repr__(self):
         return self.api
 
-    def _payload(self, data):
+    def _payload_decision(self, data):
         return json.dumps({
                "action": "change-name-marriage",
                "data": {
@@ -39,3 +48,11 @@ class Decision(object):
                    "transaction-id": "ABCDEFG"
                }
            })
+
+    def _payload_downstream(self, data):
+        # date hack until we can settle on data formats/handling/ser/deser
+        dt = data.pop('marriage_date')
+        data['marriage_date'] = long(dt.strftime("%s"))
+
+        data['application_type'] = 'change-name-marriage'
+        return json.dumps(data)
