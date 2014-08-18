@@ -18,17 +18,6 @@
             <form action='' method='POST'>
               {{ form.csrf_token }}{{form.hidden_tag()}}
 
-              {{ form.title_number }} 
-              {{ form.proprietor_firstname}}
-              {{ form.proprietor_previous_surname}}
-              {{ form.proprietor_new_surname}}
-              {{ form.partner_name }}
-              {{ form.marriage_date }}
-              {{ form.marriage_place }}
-              {{ form.marriage_country }}
-              {{ form.marriage_certificate_number }}
-
-
               <fieldset>
                 <p>
                   The information I provide in this application will be used to change the name on title register number {{form.title_number.data}}.
