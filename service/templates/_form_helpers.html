@@ -32,16 +32,17 @@
           </fieldset>
           <script>
             $(document).ready(function() {
+              var $optionalEl = $('.optional-section');
               {% if not field.errors %}
-              $('.optional-section').hide();
+              $optionalEl.hide();
               {% endif %}
 
               $("input[name='{{field.id}}'][type='radio']").click(function() {
                 var test = $(this).val();
                 if (test === 'other') {
-                  $('.optional-section').show();
+                  $optionalEl.show();
                 } else {
-                  $('.optional-section').hide();
+                  $optionalEl.hide();
                 }
               });
 
