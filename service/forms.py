@@ -29,7 +29,8 @@ class ChangeForm(Form):
     partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
     marriage_date = DateField('Date of marriage', format='%Y-%m-%d', validators=[DataRequired(), ValidateDateNotInFuture()])
     marriage_place = StringField('Location of marriage ceremony', validators=[DataRequired()])
-    marriage_country = CountriesField('Country of marriage ceremony', validators=[DataRequired()], top_countries=['GB'])
+    #marriage_country = CountriesField('Country of marriage ceremony', validators=[DataRequired()], top_countries=['GB'])
+    marriage_country = StringField('Country of marriage ceremony', validators=[DataRequired()])
     marriage_certificate_number = StringField('Marriage certificate number', validators=[DataRequired()])
 
 
