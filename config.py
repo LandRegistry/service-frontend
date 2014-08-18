@@ -4,6 +4,7 @@ class Config(object):
     DEBUG = False
     AUTHENTICATED_SEARCH_API = os.environ['AUTHENTICATED_SEARCH_API']
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    DECISION_URL = os.environ['DECISION_URL']
     SECRET_KEY = os.environ['SECRET_KEY']
     SECURITY_PASSWORD_SALT = SECRET_KEY
     SECURITY_PASSWORD_HASH = 'bcrypt'
@@ -16,7 +17,8 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    WTF_CSRF_ENABLED=False
+    WTF_CSRF_ENABLED = False
+    DECISION_URL = 'http://localhost:8009'
 
 class TestConfig(DevelopmentConfig):
     TESTING = True

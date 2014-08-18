@@ -10,9 +10,11 @@ from forms import ConfirmForm
 from service import app, db
 import os
 import requests
+from decision import Decision
 
 Health(app, checks=[db.health])
 Audit(app)
+decision = Decision(app.config['DECISION_URL'])
 
 
 def get_or_log_error(url):
@@ -90,13 +92,8 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
     if request.method == 'POST' and form.validate():
         if 'confirm' in form and form.confirm.data:
-            # 'decision' box TODO
-            # steps 3 and 4
-            #rv = requests.post('/decision/api', form.data)
-
-            # step 5
-            #url_to_post_to = rv.json['url_to_post_to']
-            #requests.post(url_to_post_to, form.data)
+            decision.post(form.data)
+            # TODO handle non-200 responses, and ack accordingly.
             return render_template('acknowledgement.html', form=form)
         else:
             return render_template('confirm.html', form=ConfirmForm(obj=form.data))
