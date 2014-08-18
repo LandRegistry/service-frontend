@@ -12,7 +12,10 @@
     {% include "inc_alpha_banner.html" %}
         <div class="inner-block">
 
-            <a href='#proprietors' class='button' id='makeChange'>Report to change a name on this title</a>
+            <div class="notification edit-mode">
+                <h2 class="heading-medium">Edit mode</h2>
+            </div>
+
             <div class="summary">
                 <h1 class="heading-large">Details for title <span class="title-flag">{{ title.title_number }}</span></h1>
 
@@ -23,11 +26,10 @@
                 </div>
 
                 <dl class="inline">
-                    <a name='proprietors'></a>
                     <dt>Proprietor(s)</dt>
                     <dd>{% for proprietor in title.proprietors %}
                             {% if  proprietor.first_name and proprietor.last_name %}
-                                {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>{% if not loop.last %}, {% endif %}
+                                {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change edit-mode'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>{% if not loop.last %}, {% endif %}
                             {% endif %}
                         {% endfor %}
                     </dd>
@@ -69,13 +71,19 @@
             </div>
             {% endif %}
 
+            <div class="divider">
+                <a class='button' id='makeChange'>Edit the register</a>
+            </div>
+        </div><!-- end inner-block -->
     </div><!-- end content -->
 
     <script>
       $(document).ready(function() {
-        $('.change').hide();
+        var $editMode = $('.edit-mode');
+        $editMode.hide();
         $('#makeChange').click(function() {
-          $('.change').show();
+          $editMode.show();
+          $('html, body').animate({ scrollTop: 0 }, 0);
         });
       });
     </script>
