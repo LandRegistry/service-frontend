@@ -28,7 +28,7 @@ class Decision(object):
     def _post_downstream(self, url, data):
         try:
             json_data = self._payload_downstream(data)
-            app.logger.info("Sending data %s to the downstream at %s" % (json_data, self.api))
+            app.logger.info("Sending data %s to the downstream at %s" % (json_data, url))
             return requests.post(url, data=json_data, headers=headers)
         except requests.exceptions.RequestException as e:
             app.logger.error("Could not effect decision at %s: Error %s" % (self.api, e))

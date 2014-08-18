@@ -18,7 +18,7 @@ class Config(object):
 class DevelopmentConfig(Config):
     DEBUG = True
     WTF_CSRF_ENABLED = False
-    DECISION_URL = 'http://localhost:8009'
+    DECISION_URL = 'http://decision.landregistry.local'
 
 class TestConfig(DevelopmentConfig):
     TESTING = True
