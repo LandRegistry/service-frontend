@@ -54,6 +54,9 @@
           </script>
         {% else %}
           {{ field.label(class_="form-label") }}
+          {% if field.description %}
+            <span class="form-hint">{{field.description}}</span>
+          {% endif %}
           {{ field(class_="form-control", **kwargs) }}
         {% endif%}
         {% if field.errors %}
