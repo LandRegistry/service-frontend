@@ -10,38 +10,34 @@
         <div class="inner-block">
 
             <h1 class="heading-xlarge">
-              Confirm
+              Confirmation
             </h1>
 
-            <h2 class="heading-large">Change owner name due to marriage</h2>
+            <h2 class="heading-large">Change owner name on marriage</h2>
 
             <form action='' method='POST'>
               {{ form.csrf_token }}{{form.hidden_tag()}}
 
               <fieldset>
                 <p>
-                  The information I provide in this application will be used to change the name on title register number {{form.title_number.data}}.
-                </p>
 
-                <p>
-                  If I knowingly give false information I could be fined up to £xxxx or go to prison for up to xx years.
-                </p>
-
-                <p>
-
-                  I confirm that I, 
+                  I confirm that I,
                   <span>{{form.proprietor_firstname.data}}</span>
                   <span>{{form.proprietor_new_surname.data}}</span>
-                  , was married on
-                  <span>{{form.marriage_date.data}}</span>
+                  , was married to <span>{{form.partner_name.data}}</span> on
+                    <span>{{form.marriage_date.data | format_datetime_2}}</span>
                   in
                   <span>{{form.marriage_place.data}}</span>
                   , <span>{{form.marriage_country.data}}</span>
-                  to
-                  <span>{{form.partner_name.data}}</span>
                   .
-
                 </p>
+                <p>
+                  The information I provide in this application will be used to change the name on registered title number {{form.title_number.data}}.
+                </p>
+                <p>
+                  If I knowingly give false information this could lead to a criminal prosecution resulting in a fine or prison sentence.
+                </p>
+
 
                 {{ render_field(form.confirm) }}
 

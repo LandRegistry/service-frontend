@@ -36,6 +36,11 @@ def format_datetime(value):
     new_date = datetime.strptime(value, '%Y-%m-%d')
     return new_date.strftime('%d %B %Y')
 
+@app.template_filter()
+def format_datetime_2(value):
+    new_date = datetime.strptime(value, '%d-%m-%Y')
+    return new_date.strftime('%d %B %Y')
+
 
 @app.template_filter()
 def currency(value):
