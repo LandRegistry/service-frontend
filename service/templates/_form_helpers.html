@@ -9,41 +9,40 @@
             </div>
           {% endfor %}
         {% elif field.type == 'BooleanField' %}
-          {{ field.label(class_="control-label") }}
+          {{ field.label(class_="form-label") }}
           {{ field(**kwargs) }}
         {% elif field.type == 'CountriesField' %}
+          <fieldset>
+            <legend class="form-label-bold">{{field.label.text}}</legend>
 
-          {{ field.label(class_="control-label") }}
-
-          <ul>
             {% for value, label, selected in field.iter_top_choices() %}
-            <li>
-              <div class="radio">
-                <label>
-                  <input type="radio" id="{{value}}" name="{{ field.id }}" value="{{ value }}" {% if checked %}checked="true"{% endif %}>{{ label }}
-                </label>
-              </div>
-            </li>
+            <label for="{{value}}" class="block-label">
+              <input type="radio" id="{{value}}" name="{{ field.id }}" value="{{ value }}" {% if checked %}checked="true"{% endif %}>{{ label }}
+            </label>
             {% endfor %}
-          </ul>
-          <select name='{{field.id}}'>
-            {% for value, label, selected in field.iter_choices() %}
-            <option value='{{value}}'>{{label}}</option>
-            {% endfor %}
-          </select>
 
+            <div class="panel-indent optional-section">
+              <label class="form-label" for="">Which country?</label>
+              <select name='{{field.id}}'>
+                {% for value, label, selected in field.iter_choices() %}
+                <option value='{{value}}'>{{label}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </fieldset>
           <script>
             $(document).ready(function() {
+              var $optionalEl = $('.optional-section');
               {% if not field.errors %}
-              $('select[name="{{field.id}}"]').hide();
+              $optionalEl.hide();
               {% endif %}
 
               $("input[name='{{field.id}}'][type='radio']").click(function() {
                 var test = $(this).val();
                 if (test === 'other') {
-                  $('select[name="{{field.id}}"]').show();
+                  $optionalEl.show();
                 } else {
-                  $('select[name="{{field.id}}"]').hide();
+                  $optionalEl.hide();
                 }
               });
 
@@ -55,7 +54,10 @@
 
           </script>
         {% else %}
-          {{ field.label(class_="control-label") }}
+          {{ field.label(class_="form-label") }}
+          {% if field.description %}
+            <span class="form-hint">{{field.description}}</span>
+          {% endif %}
           {{ field(class_="form-control", **kwargs) }}
         {% endif%}
         {% if field.errors %}
