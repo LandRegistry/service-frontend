@@ -1,6 +1,7 @@
 import requests
 import json
 from service import app
+from requests.auth import HTTPBasicAuth
 
 headers = {'content-type': 'application/json'}
 
@@ -20,7 +21,13 @@ class Decision(object):
         try:
             json_data = self._payload_decision(data)
             app.logger.info("Sending data %s to the decision at %s" % (json_data, self.api))
-            return requests.post(self.api, data=json_data, headers=headers)
+            return requests.post(
+                    self.api,
+                    data=json_data,
+                    headers=headers,
+                    auth=HTTPBasicAuth(
+                        app.config['BASIC_AUTH_USERNAME'],
+                        app.config['BASIC_AUTH_PASSWORD']))
         except requests.exceptions.RequestException as e:
             app.logger.error("Could not effect decision at %s: Error %s" % (self.api, e))
             raise RuntimeError
@@ -29,7 +36,13 @@ class Decision(object):
         try:
             json_data = self._payload_downstream(data)
             app.logger.info("Sending data %s to the downstream at %s" % (json_data, url))
-            return requests.post(url, data=json_data, headers=headers)
+            return requests.post(
+                    url,
+                    data=json_data,
+                    headers=headers,
+                    auth=HTTPBasicAuth(
+                        app.config['BASIC_AUTH_USERNAME'],
+                        app.config['BASIC_AUTH_PASSWORD']))
         except requests.exceptions.RequestException as e:
             app.logger.error("Could not effect decision at %s: Error %s" % (self.api, e))
             raise RuntimeError

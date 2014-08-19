@@ -43,7 +43,7 @@ class ChangeTitleTestCase(unittest.TestCase):
             form['proprietor_previous_surname'] = 'Proprietor Previous Surame'
             form['proprietor_new_surname'] = 'Proprietor New Surame'
             form['partner_name'] = 'Partner Name'
-            form['marriage_date'] = '2014-01-01'
+            form['marriage_date'] = '01-01-2014'
             form['marriage_place'] = 'Testville'
             form['marriage_country'] = 'GB'
             form['marriage_certificate_number'] = '00000000'
