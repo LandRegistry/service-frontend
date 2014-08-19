@@ -9,8 +9,10 @@
             </div>
           {% endfor %}
         {% elif field.type == 'BooleanField' %}
-          {{ field.label(class_="form-label") }}
+        <label for="{{field.name}}" class="block-label">
           {{ field(**kwargs) }}
+          {{field.label.text}}
+        </label>
         {% elif field.type == 'CountriesField' %}
           <fieldset>
             <legend class="form-label-bold">{{field.label.text}}</legend>
