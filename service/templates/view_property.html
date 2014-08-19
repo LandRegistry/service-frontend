@@ -75,7 +75,7 @@
               <h3>This register contains any charges and other matters that affect the land.</h3>
               <ul>
                    {% for charge in title.charges %}
-                  <li>Registered charge dated {{ charge.charge_date | format_datetime }}.<br>
+                  <li>Registered charge dated {{ charge.charge_date | format_date_YMD }}.<br>
                   Proprietor: {{ charge.chargee_name }}
                   (Co. Regn. No. {{ charge.chargee_registration_number }})
                   of {{ charge.chargee_address }}.</li>

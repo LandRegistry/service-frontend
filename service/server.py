@@ -32,12 +32,12 @@ def get_or_log_error(url):
 
 #todo - add a reference to a custom date module when it exists.
 @app.template_filter()
-def format_datetime(value):
+def format_date_YMD(value):
     new_date = datetime.strptime(value, '%Y-%m-%d')
     return new_date.strftime('%d %B %Y')
 
 @app.template_filter()
-def format_datetime_2(value):
+def format_date_DMY(value):
     new_date = datetime.strptime(value, '%d-%m-%Y')
     return new_date.strftime('%d %B %Y')
 
