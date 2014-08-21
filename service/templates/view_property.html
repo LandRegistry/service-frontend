@@ -71,14 +71,11 @@
                         {% endfor %}
                     </dd>
 
-                    <dt>Mortgage lender</dt>
-                    <dd>General UK PLC</dd>
-
                     <dt>Tenure</dt>
-                    <dd>{{ title.property.tenure }}</dd>
+                    <dd>{{ title.property.tenure | capitalize }}</dd>
 
                     <dt>Quality of title</dt>
-                    <dd>{{ title.property.class_of_title }}</dd>
+                    <dd>{{ title.property.class_of_title | capitalize }}</dd>
                     
                     {% if title.payment.price_paid %}
                     <dt>Price paid</dt>
