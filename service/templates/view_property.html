@@ -16,45 +16,77 @@
                 <h2 class="heading-medium">Edit mode</h2>
             </div>
 
-            <div class="summary">
-                <h1 class="heading-large">Details for title <span class="title-flag">{{ title.title_number }}</span></h1>
+            <div class="callout callout--summary">
 
-                <div itemscope itemtype ="http://schema.org/PostalAddress" class="adr lede">
-                    <div itemprop="streetAddress">{{ title.property.address.house_number }}<br/>{{ title.property.address.road }}</div>
-                    <div itemprop="addressLocality">{{ title.property.address.town }}</div>
-                    <div itemprop="postalCode">{{ title.property.address.postcode }}</div>
+                <h1 class="heading-large first-heading">
+                    Official register of title <span class="title-flag">{{ title.title_number }}</span>
+                </h1>
+
+                <!--
+                <p>
+                    This register was last changed on <b>7 August 2013</b> at <b>16:46:28</b>
+                </p>
+                -->
+
+                <div class="lede">
+
+                    <div class="grid grid-1-3">
+
+                        <div itemscope itemtype="http://schema.org/PostalAddress">
+                            <span itemprop="streetAddress">
+                                {{ title.property.address.house_number }}<br>
+                                {{ title.property.address.road }}
+                            </span>
+                            <span itemprop="addressLocality">{{ title.property.address.town }}</span><br>
+                            <span itemprop="postalCode">{{ title.property.address.postcode }}</span>
+                        </div>
+
+                    </div>
+
+                    <figure class="grid grid-1-3">
+                        {% if title.extent is defined %}
+                        <div id="map" style="width: 600px; height: 600px" class="title-plan">
+                          <script type='text/javascript'>
+                            var extentData = {{ title.extent | tojson}};
+                            var apiKey = "{{ apiKey }}";
+                          </script>
+                          <script src="{{asset_path}}/javascripts/map.js"></script>
+                        </div>
+                        {% endif %}
+                    </figure>
+
                 </div>
 
                 <dl class="inline">
-                    <dt>Proprietor(s)</dt>
-                    <dd>{% for proprietor in title.proprietors %}
+                    <dt>Registered owner(s)</dt>
+                    <dd>
+                        {% for proprietor in title.proprietors %}
                             {% if  proprietor.first_name and proprietor.last_name %}
-                                {{ proprietor.first_name }} {{ proprietor.last_name }}<span class='change edit-mode'>(<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)</span>{% if not loop.last %}, {% endif %}
+                                {{ proprietor.first_name }} {{ proprietor.last_name }}
+                                <span class='change edit-mode'>
+                                    (<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)
+                                </span>
+                                {% if not loop.last %}, {% endif %}
                             {% endif %}
                         {% endfor %}
                     </dd>
+
+                    <dt>Mortgage lender</dt>
+                    <dd>General UK PLC</dd>
+
                     <dt>Tenure</dt>
                     <dd>{{ title.property.tenure }}</dd>
-                    <dt>Class of title</dt>
+
+                    <dt>Quality of title</dt>
                     <dd>{{ title.property.class_of_title }}</dd>
+                    
                     {% if title.payment.price_paid %}
                     <dt>Price paid</dt>
                     <dd>&pound; {{ title.payment.price_paid | currency }}</dd>
                     {% endif %}
                 </dl>
-            </div><!-- end summary -->
 
-            {% if title.extent is defined %}
-            <h2 clas="heading-large">Title extent</h2>
-
-            <div id="map" style="width: 600px; height: 600px">
-              <script type='text/javascript'>
-                var extentData = {{ title.extent | tojson}};
-                var apiKey = "{{ apiKey }}";
-              </script>
-              <script src="{{asset_path}}/javascripts/map.js"></script>
             </div>
-            {% endif %}
 
             {% if title.charges %}
             <h2 class="heading-large">Charges Register</h2>
