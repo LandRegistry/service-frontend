@@ -23,8 +23,7 @@
               {{ form.csrf_token }}{{form.hidden_tag()}}
 
               <fieldset>
-                <p>
-
+                <p class="lede">
                   I confirm that I,
                   <span>{{form.proprietor_firstname.data}}</span>
                   <span>{{form.proprietor_new_surname.data}}</span>, was married to
@@ -33,13 +32,8 @@
                   <span>{{form.marriage_place.data}}</span>,
                   <span>{{form.marriage_country.data}}</span>.
                 </p>
-                <p>
-                  The information I provide in this application will be used to change the name on registered title number {{form.title_number.data}}.
-                </p>
-                <p>
-                  If I knowingly give false information this could lead to a criminal prosecution resulting in a fine or prison sentence.
-                </p>
-
+                <p>The information I provide in this application will be used to change the name on registered title number {{form.title_number.data}}.</p>
+                <p class="panel-indent">If I knowingly give false information this could lead to a criminal prosecution resulting in a fine or prison sentence.</p>
 
                 {{ render_field(form.confirm) }}
 
