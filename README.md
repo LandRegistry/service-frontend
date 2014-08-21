@@ -41,6 +41,21 @@ export AUTHENTICATED_SEARCH_API='http://localhost:8003'
 export SECRET_KEY='local-dev-not-secret'
 ```
 
+#### Create/Update database
+
+There's an intial migration script in the project created using Flask-Migrate so you just need to call the following
+
+```
+python manage.py db upgrade
+```
+
+On heroku run this
+```
+heroku run python manage.py db upgrade --app lr-service-frontend
+```
+
+Run the upgrade command whenever you have additional migrations
+
 ### Run the app
 
 Run in dev mode to enable app reloading
