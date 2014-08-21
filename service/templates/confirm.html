@@ -48,3 +48,15 @@
 </main>
 
 {% endblock %}
+
+{% block body_end %}
+  <script src="{{ landregistry_asset_path }}javascripts/land-registry-scripts.js"></script>
+  <script>
+    (function($) {
+      $(function() {
+        var $buttons = $("label input[type='radio'], label input[type='checkbox']");
+        GOVUK.selectionButtons($buttons);
+      });
+    }(jQuery));
+  </script>
+{% endblock %}
