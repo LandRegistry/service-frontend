@@ -1,6 +1,6 @@
-from service.server import app
-from service import db
-from service import user_datastore
+from application.frontend.server import app
+from application import db
+from application import user_datastore
 
 from flask_security.utils import encrypt_password
 
@@ -8,9 +8,8 @@ import requests
 import responses
 import mock
 import unittest
-import json
 
-from test_json import title, response_json, response_without_charge, response_without_easement
+from stub_json import title, response_json, response_without_charge, response_without_easement
 
 TITLE_NUMBER = "TN1234567"
 

@@ -5,11 +5,10 @@ from flask.ext.migrate import Migrate
 from flask.ext.migrate import MigrateCommand
 from flask_security.utils import encrypt_password
 
-from service.models import *
-from service import app
-from service import db
-from service import user_datastore
-
+from application.auth.models import *
+from application import app
+from application import db
+from application import user_datastore
 
 app.config.from_object(os.environ['SETTINGS'])
 

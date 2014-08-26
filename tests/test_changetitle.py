@@ -1,13 +1,13 @@
-from service.server import app
-from service import db
-from service import user_datastore
+from application.frontend.server import app
+from application import db
+from application import user_datastore
 
 from flask_security.utils import encrypt_password
 import mock
 import responses
 import unittest
 
-from test_json import response_json
+from stub_json import response_json
 
 TITLE_NUMBER = "TN1234567"
 
@@ -50,9 +50,10 @@ class ChangeTitleTestCase(unittest.TestCase):
             return form
 
 
-    @mock.patch('service.decision.Decision.post')
+    #TODO - have a look at this test again
+    @mock.patch('requests.post')
     @responses.activate
-    def test_change_register(self, mock_decision):
+    def test_change_register(self, mock_post):
         #Mock a response, as though JSON is coming back from SEARCH_API
         responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
