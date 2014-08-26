@@ -1,19 +1,38 @@
 import os
 import logging
+
 from flask import Flask
+from flask import render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
+
 from flask.ext.security import Security
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask.ext.login import LoginManager
+
+
+from health import Health
+from audit import Audit
+
 from raven.contrib.flask import Sentry
 
-app = Flask(__name__)
+app = Flask('application.frontend')
 
 app.config.from_object(os.environ.get('SETTINGS'))
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+db = SQLAlchemy(app)
+SQLAlchemy.health = health
+
+from auth.models import User, Role
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
+
+Health(app, checks=[db.health])
+Audit(app)
 
 if not app.debug:
     app.logger.addHandler(logging.StreamHandler())
@@ -38,14 +57,27 @@ def health(self):
     except:
         return False, 'DB'
 
-db = SQLAlchemy(app)
-SQLAlchemy.health = health
 
-from .models import User, Role
+@app.errorhandler(404)
+def page_not_found(err):
+    return render_template('404.html'), 404
 
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
 
+@app.errorhandler(500)
+def error(err):
+    return render_template('500.html'), 500
+
+
+@app.after_request
+def after_request(response):
+    # can we get some guidance on this?
+    response.headers.add(
+        'Content-Security-Policy',
+        "default-src 'self' 'unsafe-inline' data: ; img-src *")
+    response.headers.add('X-Frame-Options', 'deny')
+    response.headers.add('X-Content-Type-Options', 'nosniff')
+    response.headers.add('X-XSS-Protection', '1; mode=block')
+    return response
 
 @app.context_processor
 def asset_path_context_processor():
