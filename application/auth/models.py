@@ -1,30 +1,40 @@
-from flask.ext.security import UserMixin, RoleMixin
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 from application import db
 
-roles_users = db.Table('roles_users',
-        db.Column('users_id', db.Integer(), db.ForeignKey('users.id')),
-        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
-
-class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
-
-class User(db.Model, UserMixin):
+class User(db.Model):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.String(255))
-    active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
-    roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))
+    email = db.Column(db.String(255), primary_key=True)
+    _password = db.Column(db.String(255))
+    authenticated = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return str({
-            'id': str(self.id),
-            'email': str(self.email)
+            'email': self.email
         })
+
+    def is_authenticated(self):
+        return self.authenticated
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.email
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, password):
+        self._password = generate_password_hash(password)
+
+    def check_password(self , password):
+        return check_password_hash(self.password, password)

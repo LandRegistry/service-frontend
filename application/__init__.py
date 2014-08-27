@@ -6,10 +6,7 @@ from flask import render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
 
-from flask.ext.security import Security
-from flask.ext.security import SQLAlchemyUserDatastore
 from flask.ext.login import LoginManager
-
 
 from health import Health
 from audit import Audit
@@ -22,14 +19,10 @@ app.config.from_object(os.environ.get('SETTINGS'))
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
 SQLAlchemy.health = health
-
-from auth.models import User, Role
-
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
 
 Health(app, checks=[db.health])
 Audit(app)

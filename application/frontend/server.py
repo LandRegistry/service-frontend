@@ -6,13 +6,27 @@ from flask import abort
 from flask import render_template
 from flask import request
 from flask import current_app
-from flask.ext.security import login_required
+from flask import redirect
+from flask import url_for
+from flask import flash
+
+from flask.ext.login import login_user
+from flask.ext.login import logout_user
+from flask.ext.login import current_user
+from flask.ext.login import login_required
+
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 from forms import ChangeForm
 from forms import ConfirmForm
+from forms import LoginForm
+
 from application.decision import post_to_decision
+from application.auth.models import User
 
 from application import app
+from application import db
 
 @app.template_filter()
 def format_date_YMD(value):
@@ -42,7 +56,6 @@ def get_or_log_error(url):
     except requests.exceptions.ConnectionError as e:
         app.logger.error("Error %s", e)
         abort(500)
-
 
 @app.route('/')
 def index():
@@ -99,4 +112,31 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
 
     return render_template('edit_property.html', form=form)
+
+@app.route('/login',methods=['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.get(form.email.data)
+        if user and user.check_password(form.password.data):
+            #TODO make call to matching service
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=form.remember.data)
+            return redirect(form.next.data)
+        else:
+            flash("Invalid login")
+    return render_template("auth/login_user.html", form=form)
+
+
+@app.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
+    logout_user()
+    return redirect(url_for('.login'))
 

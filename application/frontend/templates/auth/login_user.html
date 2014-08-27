@@ -1,0 +1,46 @@
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+  <main id="wrapper" role="main">
+    <div id="content">
+
+      {% include "inc_alpha_banner.html" %}
+
+      <div class="inner-block">
+
+        {% from "auth/_macros.html" import render_field_with_errors, render_field %}
+
+
+        <div class="full-width">
+
+          {%- with messages = get_flashed_messages(with_categories=true) -%}
+          {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+{%- endwith %}
+
+          <form action="/login" method="POST" name="form" class="login-user-form">
+
+            <h1 class="form-title heading-large">Login</h1>
+
+            {{ render_field_with_errors(form.email, class_='form-control') }}
+            {{ render_field_with_errors(form.password, class_='form-control') }}
+            {{ render_field_with_errors(form.remember) }}
+            {{ render_field(form.submit, class_='button') }}
+            {{ form.hidden_tag() }}
+
+          </form>
+
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+{% endblock %}

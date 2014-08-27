@@ -6,8 +6,6 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     DECISION_URL = os.environ['DECISION_URL']
     SECRET_KEY = os.environ['SECRET_KEY']
-    SECURITY_PASSWORD_SALT = SECRET_KEY
-    SECURITY_PASSWORD_HASH = 'bcrypt'
     WTF_CSRF_ENABLED = True
 
     # optional and only needed on heroku so get
@@ -17,7 +15,7 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    WTF_CSRF_ENABLED = False
+    WTF_CSRF_ENABLED = True
     DECISION_URL = 'http://decision.landregistry.local'
 
 class TestConfig(DevelopmentConfig):
