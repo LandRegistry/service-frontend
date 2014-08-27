@@ -48,6 +48,8 @@
                         <div id="map" class="title-plan" style="width:300px; height:200px;">
                             <script type='text/javascript'>
                                 var extentData = {{ title.extent | tojson}};
+                                <!-- This is only for sprint 4, just one easement allowed, left as an array for future enhancement -->
+                                var easementData = {{ title.easements[0].easement_geometry | tojson}};
                                 var apiKey = "{{ apiKey }}";
                             </script>
                             <script src="{{asset_path}}/javascripts/map.js"></script>
