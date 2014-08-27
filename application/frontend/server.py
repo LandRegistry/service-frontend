@@ -1,36 +1,19 @@
-from .health import Health
-from audit import Audit
+import os
+import requests
 from datetime import datetime
+
 from flask import abort
 from flask import render_template
 from flask import request
+from flask import current_app
 from flask.ext.security import login_required
+
 from forms import ChangeForm
 from forms import ConfirmForm
-from service import app, db
-import os
-import requests
-from decision import Decision
+from application.decision import post_to_decision
 
-Health(app, checks=[db.health])
-Audit(app)
-decision = Decision(app.config['DECISION_URL'])
+from application import app
 
-
-def get_or_log_error(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return response
-    except requests.exceptions.HTTPError as e:
-        app.logger.error("HTTP Error %s", e)
-        abort(response.status_code)
-    except requests.exceptions.ConnectionError as e:
-        app.logger.error("Error %s", e)
-        abort(500)
-
-
-#todo - add a reference to a custom date module when it exists.
 @app.template_filter()
 def format_date_YMD(value):
     new_date = datetime.strptime(value, '%Y-%m-%d')
@@ -48,11 +31,22 @@ def currency(value):
     return "{:,.2f}".format(float(value))
 
 
+def get_or_log_error(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response
+    except requests.exceptions.HTTPError as e:
+        app.logger.error("HTTP Error %s", e)
+        abort(response.status_code)
+    except requests.exceptions.ConnectionError as e:
+        app.logger.error("Error %s", e)
+        abort(500)
+
+
 @app.route('/')
-@login_required
 def index():
     return render_template('index.html')
-
 
 @app.route('/property/<title_number>')
 @login_required
@@ -93,11 +87,12 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
         proprietor = title['proprietors'][proprietor_index-1]
         form.proprietor_firstname.data = proprietor['first_name']
         form.proprietor_previous_surname.data = proprietor['last_name']
-        
 
-    if request.method == 'POST' and form.validate():
+
+    if form.validate_on_submit():
         if 'confirm' in form and form.confirm.data:
-            decision.post(form.data)
+            decision_url = '%s/decisions' % current_app.config['DECISION_URL']
+            post_to_decision(decision_url, form.data)
             # TODO handle non-200 responses, and ack accordingly.
             return render_template('acknowledgement.html', form=form)
         else:
@@ -105,25 +100,3 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
 
     return render_template('edit_property.html', form=form)
-
-
-@app.errorhandler(404)
-def page_not_found(err):
-    return render_template('404.html'), 404
-
-
-@app.errorhandler(500)
-def error(err):
-    return render_template('500.html'), 500
-
-
-@app.after_request
-def after_request(response):
-    # can we get some guidance on this?
-    response.headers.add(
-        'Content-Security-Policy',
-        "default-src 'self' 'unsafe-inline' data: ; img-src *")
-    response.headers.add('X-Frame-Options', 'deny')
-    response.headers.add('X-Content-Type-Options', 'nosniff')
-    response.headers.add('X-XSS-Protection', '1; mode=block')
-    return response
