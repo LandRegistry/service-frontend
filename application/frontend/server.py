@@ -15,9 +15,6 @@ from flask.ext.login import logout_user
 from flask.ext.login import current_user
 from flask.ext.login import login_required
 
-from werkzeug.security import generate_password_hash
-from werkzeug.security import check_password_hash
-
 from forms import ChangeForm
 from forms import ConfirmForm
 from forms import LoginForm
@@ -101,7 +98,6 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
         form.proprietor_firstname.data = proprietor['first_name']
         form.proprietor_previous_surname.data = proprietor['last_name']
 
-
     if form.validate_on_submit():
         if 'confirm' in form and form.confirm.data:
             decision_url = '%s/decisions' % current_app.config['DECISION_URL']
@@ -110,7 +106,6 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
             return render_template('acknowledgement.html', form=form)
         else:
             return render_template('confirm.html', form=ConfirmForm(obj=form.data))
-
 
     return render_template('edit_property.html', form=form)
 
@@ -131,7 +126,7 @@ def login():
     return render_template("auth/login_user.html", form=form)
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/logout")
 @login_required
 def logout():
     user = current_user
