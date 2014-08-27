@@ -235,7 +235,7 @@ title_no_charge = {
           },
           "properties": {},
           "type": "Feature"
-      },
+      }
   }
 
 title_no_easement = {
@@ -304,7 +304,7 @@ title_no_easement = {
           },
           "properties": {},
           "type": "Feature"
-      },
+      }
   }
 
 response_json = json.dumps(title)
