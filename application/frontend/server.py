@@ -104,7 +104,8 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
     if form.validate_on_submit():
         if 'confirm' in form and form.confirm.data:
-            post_to_decision(current_app.config['DECISION_URL'], form.data)
+            decision_url = '%s/decisions' % current_app.config['DECISION_URL']
+            post_to_decision(decision_url, form.data)
             # TODO handle non-200 responses, and ack accordingly.
             return render_template('acknowledgement.html', form=form)
         else:
