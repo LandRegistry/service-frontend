@@ -19,7 +19,7 @@ from forms import ChangeForm
 from forms import ConfirmForm
 from forms import LoginForm
 
-from application.decision import post_to_decision
+from application.services import post_to_decision
 from application.auth.models import User
 
 from application import app
@@ -114,11 +114,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.get(form.email.data)
-        if user and user.check_password(form.password.data):
-            #TODO make call to matching service
-            user.authenticated = True
-            db.session.add(user)
-            db.session.commit()
+        if user and user.loggedin_and_matched():
             login_user(user, remember=form.remember.data)
             return redirect(form.next.data)
         else:
@@ -129,10 +125,6 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-    user = current_user
-    user.authenticated = False
-    db.session.add(user)
-    db.session.commit()
-    logout_user()
+    logout_user(current_user)
     return redirect(url_for('.login'))
 
