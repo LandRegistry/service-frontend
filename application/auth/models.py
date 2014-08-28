@@ -30,11 +30,11 @@ class User(db.Model):
 
     @property
     def password(self):
-        return self._password
+        raise AttributeError("Password not readable")
 
     @password.setter
     def password(self, password):
         self._password = generate_password_hash(password)
 
     def check_password(self , password):
-        return check_password_hash(self.password, password)
+        return check_password_hash(self._password, password)
