@@ -62,11 +62,11 @@
                     <dd>
                         {% for proprietor in title.proprietors %}
                             {% if  proprietor.first_name and proprietor.last_name %}
+                                {% if not loop.first %}, {% endif %}
                                 {{ proprietor.first_name }} {{ proprietor.last_name }}
                                 <span class='change edit-mode'>
                                     (<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)
                                 </span>
-                                {% if not loop.last %}, {% endif %}
                             {% endif %}
                         {% endfor %}
                     </dd>
