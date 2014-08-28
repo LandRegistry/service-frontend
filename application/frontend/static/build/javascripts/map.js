@@ -43,12 +43,14 @@ var extentGeoJson = L.Proj.geoJson(extentData, {
 extentGeoJson.addTo(map);
 
 //Add the extentGeoJson to the map
-var easementGeoJson = L.Proj.geoJson(easementData, {
-  color: 'blue',
-  fillcolor: 'blue',
-  fillOpacity: 0.5
-})
-easementGeoJson.addTo(map);
+if (easementData) {
+  var easementGeoJson = L.Proj.geoJson(easementData, {
+    color: 'blue',
+    fillcolor: 'blue',
+    fillOpacity: 0.5
+  })
+  easementGeoJson.addTo(map);
+};
 
 //Add a scale control to the map
 L.control.scale().addTo(map);
