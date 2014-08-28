@@ -1,11 +1,9 @@
 import unittest
 import mock
 
-from flask_security.utils import encrypt_password
-
-from application.frontend.server import app
 from application import db
-from application import user_datastore
+from application.frontend.server import app
+from application.auth.models import User
 
 from stub_json import title
 
@@ -27,16 +25,18 @@ class AuditTestCase(unittest.TestCase):
         self.app = app
         self.client = app.test_client()
 
-        with app.test_request_context():
-            user_datastore.create_user(email='landowner@mail.com',
-                password=encrypt_password('password'))
-            db.session.commit()
+        user = User(email='landowner@mail.com',
+                    password='password')
+        db.session.add(user)
+        db.session.commit()
 
     def _login(self, email=None, password=None):
         email = email
         password = password or 'password'
-        return self.client.post('/login', data={'email': email, 'password': password},
-                         follow_redirects=True)
+        return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
+
+    def logout(self):
+        return self.client.get('/logout', follow_redirects=True)
 
     #TODO - revisit these tests
     @mock.patch(LOGGER)
@@ -56,3 +56,9 @@ class AuditTestCase(unittest.TestCase):
         path = '/property/TEST123'
         self.client.get(path)
         assert 'Audit: ' in mock_logger.call_args_list[0][0][0]
+
+    def tearDown(self):
+        self.logout() #to ensure no-one is logged in after a test is run
+        user = User.query.get('landowner@mail.com')
+        db.session.delete(user)
+        db.session.commit()

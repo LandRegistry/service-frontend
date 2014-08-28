@@ -1,8 +1,7 @@
 from application.frontend.server import app
 from application import db
-from application import user_datastore
+from application.auth.models import User
 
-from flask_security.utils import encrypt_password
 import mock
 import responses
 import unittest
@@ -19,17 +18,16 @@ class ChangeTitleTestCase(unittest.TestCase):
         self.search_api = app.config['AUTHENTICATED_SEARCH_API']
         self.client = app.test_client()
 
-        with app.test_request_context():
-            user_datastore.create_user(email='landowner@mail.com',
-                password=encrypt_password('password'))
-            db.session.commit()
+        user = User(email='landowner@mail.com',
+                password='password')
+        db.session.add(user)
+        db.session.commit()
 
 
     def _login(self, email=None, password=None):
         email = email
         password = password or 'password'
-        return self.client.post('/login', data={'email': email, 'password': password},
-                         follow_redirects=True)
+        return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
 
     def logout(self):
         return self.client.get('/logout', follow_redirects=True)
@@ -85,11 +83,10 @@ class ChangeTitleTestCase(unittest.TestCase):
         assert rv_post_confirm.status_code == 200
         assert 'Application complete' in rv_post_confirm.data
 
-
     def tearDown(self):
-        self.logout() #to ensure no-one is logged in after a test is run
-        test_user = user_datastore.find_user(email='landowner@mail.com')
-        user_datastore.delete_user(test_user)
+        self.logout()
+        user = User.query.get('landowner@mail.com')
+        db.session.delete(user)
         db.session.commit()
 
 class DummyPostData(dict):

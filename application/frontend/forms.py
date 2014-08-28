@@ -1,9 +1,20 @@
-from flask_wtf import Form
-from wtforms import StringField, HiddenField, BooleanField, DateField
-from wtforms.validators import DataRequired
-from fields import CountriesField
 from datetime import date
+
+from flask import request
+
+from flask_wtf import Form
+
+from wtforms import StringField
+from wtforms import HiddenField
+from wtforms import BooleanField
+from wtforms import DateField
+from wtforms import PasswordField
+from wtforms import SubmitField
+
+from wtforms.validators import DataRequired
 from wtforms.validators import ValidationError
+
+from fields import CountriesField
 
 
 class ValidateDateNotInFuture(object):
@@ -16,6 +27,21 @@ class ValidateDateNotInFuture(object):
     def _validate_date_not_in_future(self, form, date_field):
         if date_field > date.today():
             raise ValidationError('Date cannot be in the future')
+
+
+class LoginForm(Form):
+    email = StringField(validators=[DataRequired()])
+    password = PasswordField(validators=[DataRequired()])
+    submit = SubmitField('Login')
+    remember = BooleanField('Remember me')
+    next = HiddenField()
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        if not self.next.data:
+            self.next.data = request.args.get('next', '')
+        self.remember.default = True
+
 
 
 class ChangeForm(Form):
