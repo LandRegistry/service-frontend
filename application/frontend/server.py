@@ -95,8 +95,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
         app.logger.info("Found the following title: %s" % title)
         form.title_number.data = title['title_number']
         proprietor = title['proprietors'][proprietor_index-1]
-        form.proprietor_firstname.data = proprietor['first_name']
-        form.proprietor_previous_surname.data = proprietor['last_name']
+        form.proprietor_previous_full_name.data = proprietor['full_name']
 
     if form.validate_on_submit():
         if 'confirm' in form and form.confirm.data:
