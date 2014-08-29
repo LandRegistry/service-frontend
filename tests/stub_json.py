@@ -19,12 +19,10 @@ title = {
       },
       "proprietors": [
           {
-              "first_name": "Bob",
-              "last_name": "Test"
+              "full_name": "Bob Test"
           },
           {
-              "first_name": "Betty",
-              "last_name": "Tanker"
+              "full_name": "Betty Tanker"
           }
       ],
       "title_number": "TEST198",
@@ -188,12 +186,10 @@ title_no_charge = {
       },
       "proprietors": [
           {
-              "first_name": "Bob",
-              "last_name": "Test"
+              "full_name": "Bob Test"
           },
           {
-              "first_name": "Betty",
-              "last_name": "Tanker"
+              "full_name": "Betty Tanker"
           }
       ],
       "title_number": "TEST198",
@@ -257,12 +253,10 @@ title_no_easement = {
       },
       "proprietors": [
           {
-              "first_name": "Bob",
-              "last_name": "Test"
+              "full_name": "Bob Test"
           },
           {
-              "first_name": "Betty",
-              "last_name": "Tanker"
+              "full_name": "Betty Tanker"
           }
       ],
       "title_number": "TEST198",
