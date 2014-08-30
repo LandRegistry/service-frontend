@@ -24,10 +24,18 @@
 
                         <div itemscope itemtype="http://schema.org/PostalAddress">
                             <span itemprop="streetAddress">
-                                {{ title.property.address.house_number }}<br>
-                                {{ title.property.address.road }}
+                                {{ title.property.address.address_line_1 }}<br>
+                                {% if title.property.address.address_line_2 %}
+                                    {{ title.property.address.address_line_2 }} <br>
+                                {% endif %}
+                                {% if title.property.address.address_line_3 %}
+                                    {{ title.property.address.address_line_3 }}<br>
+                                {% endif %}
+                                {% if title.property.address.address_line_4 %}
+                                    {{ title.property.address.address_line_4 }}<br>
+                                 {% endif %}
                             </span>
-                            <span itemprop="addressLocality">{{ title.property.address.town }}</span><br>
+                            <span itemprop="addressLocality">{{ title.property.address.city }}</span><br>
                             <span itemprop="postalCode">{{ title.property.address.postcode }}</span>
                         </div>
 
@@ -38,10 +46,12 @@
                         <div id="map" class="title-plan" style="width:300px; height:200px;">
                             <script type='text/javascript'>
                                 var extentData = {{ title.extent | tojson}};
-                                <!-- This is only for sprint 4, just one easement allowed, left as an array for future enhancement -->
-                                var easementData = {% if title.easements %}
-                                                      {{ title.easements[0].easement_geometry | tojson}};
-                                                   {% endif %}
+                                {% if title.easements %}
+                                  <!-- This is only for sprint 4, just one easement allowed, left as an array for future enhancement -->
+                                  var easementData = {{ title.easements[0].easement_geometry | tojson}};
+                                {% else %}
+                                  var easementData = null;
+                                {% endif %}
                                 var apiKey = "{{ apiKey }}";
                             </script>
                             <script src="{{asset_path}}/javascripts/map.js"></script>
@@ -55,9 +65,9 @@
                     <dt>Registered owner(s)</dt>
                     <dd>
                         {% for proprietor in title.proprietors %}
-                            {% if  proprietor.first_name and proprietor.last_name %}
+                            {% if  proprietor.full_name %}
                                 {% if not loop.first %}, {% endif %}
-                                {{ proprietor.first_name }} {{ proprietor.last_name }}
+                                {{ proprietor.full_name }}
                                 <span class='change edit-mode'>
                                     (<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)
                                 </span>
@@ -78,6 +88,52 @@
                 </dl>
 
             </div>
+
+            {% if title.property.tenure == 'Leasehold' %}
+                <h2 class="heading-large">Lease Details</h2>
+                <div class="charges">
+                    <dl class="inline">
+                    {% for lease in title.leases %}
+                        <dt>Lease Date</dt>
+                        <dd id="leaseDate">{{ lease.lease_date | format_date_YMD }}</dd>
+                        <dt>Term</dt>
+                        <dd id="leaseTerm">{{ lease.lease_term }} years from {{ lease.lease_from | format_date_YMD }}</dd>
+
+                        <dt>Parties</dt>
+                        <dd id="parties">1. {{ lease.lessor_name }}
+                            {% if lease.lessee_name %}
+                                <br/>
+                                2. {{ lease.lessee_name }}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    <h4>Clauses</h4>
+
+                    {% if lease.lease_easements == True %}
+                        <p id="easementClause">Unless otherwise mentioned the title includes any legal easements granted
+                            by the registered lease(s) but is subject to any rights that it reserves,
+                            so far as those easements and rights exist and benefit or
+                            affect the registered land.
+                        </p><br/>
+                    {% endif %}
+
+                    {% if lease.alienation_clause == True %}
+                        <p id="alienationClause">There are excepted from the effect of registration all estates. rights,
+                            interests, powers and remedies arising upon, or by reason of, any
+                            dealing made in breach of the prohibition or restriction against
+                            dealings therewith inter vivos contained in the Lease.
+                        </p><br/>
+                    {% endif %}
+
+                    {% if lease.title_registered == True %}
+                        <p id="titleRegisteredClause">The registered Lease is made pursuant to Part V of the Housing Act 1985
+                            and the land has the benefit of and is subject to the easements and rights
+                            specified in paragraph 2 of Schedule 6 of the said Act.</p><br/>
+                    {% endif %}
+                {% endfor %}
+
+                </div>
+            {% endif %}
 
             {% if title.charges %}
             <h2 class="heading-large">Charges Register</h2>

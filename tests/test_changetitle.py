@@ -44,9 +44,8 @@ class ChangeTitleTestCase(unittest.TestCase):
         with app.test_request_context():
             form = {}
             form['title_number'] = TITLE_NUMBER
-            form['proprietor_firstname'] = 'Proprietor Firstname'
-            form['proprietor_previous_surname'] = 'Proprietor Previous Surame'
-            form['proprietor_new_surname'] = 'Proprietor New Surame'
+            form['proprietor_previous_full_name'] = 'Proprietor Previous Full Name'
+            form['proprietor_new_full_name'] = 'Proprietor New full name'
             form['partner_name'] = 'Partner Name'
             form['marriage_date'] = '01-01-2014'
             form['marriage_place'] = 'Testville'

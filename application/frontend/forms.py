@@ -48,9 +48,8 @@ class ChangeForm(Form):
     title_number = HiddenField('Title Number')
 
     confirm = BooleanField('Confirm')
-    proprietor_firstname = HiddenField('First name')
-    proprietor_previous_surname = HiddenField('Previous surname')
-    proprietor_new_surname = StringField('New surname', validators=[DataRequired()])
+    proprietor_previous_full_name = HiddenField('Previous full name')
+    proprietor_new_full_name = StringField('New full name', validators=[DataRequired()])
     partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
     marriage_date = DateField('Date of marriage', format='%d-%m-%Y', validators=[DataRequired(), ValidateDateNotInFuture()], description="For example, 20-08-2011")
     marriage_place = StringField('Location of marriage ceremony', validators=[DataRequired()])
@@ -68,9 +67,8 @@ class ConfirmForm(ChangeForm):
     title_number = HiddenField('Title Number')
 
     confirm = BooleanField('Confirm')
-    proprietor_firstname = HiddenField('First name')
-    proprietor_previous_surname = HiddenField('Previous surname')
-    proprietor_new_surname = HiddenField('New surname')
+    proprietor_previous_full_name = HiddenField('Previous full name')
+    proprietor_new_full_name = HiddenField('New full name')
     partner_name = HiddenField('Partner\'s full name')
     marriage_date = HiddenField('Date of marriage')
     marriage_place = HiddenField('Location of marriage ceremony')
