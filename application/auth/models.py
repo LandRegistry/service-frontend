@@ -1,3 +1,6 @@
+import json
+from datetime import datetime
+
 from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.types import Enum
@@ -9,6 +12,8 @@ from flask.ext.login import UserMixin
 
 from application import db
 from application.services import check_user_match
+from application.services import check_user_is_owner
+
 
 class User(db.Model, UserMixin):
 
@@ -17,7 +22,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), primary_key=True)
     _password = db.Column(db.String(255))
 
-    lrid = db.Column(UUID(as_uuid=True), nullable=False, primary_key=True)
     name = db.Column(TEXT, nullable=False)
     date_of_birth = db.Column(db.Date(), nullable=False)
     gender = db.Column(Enum('F', 'M', name='gender_types'), nullable=False)
@@ -26,7 +30,12 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return str({
-            'email': self.email
+            'email': self.email,
+            'name': self.name,
+            'date of birth': self.date_of_birth,
+            'gender': self.gender,
+            'current address': self.current_address,
+            'previous address': self.previous_address
         })
 
     def get_id(self):
@@ -43,5 +52,16 @@ class User(db.Model, UserMixin):
     def check_password(self , password):
         return check_password_hash(self._password, password)
 
-    def loggedin_and_matched(self):
-        return self.check_password() and check_user_match(self)
+    def loggedin_and_matched(self, password):
+        return self.check_password(password) and check_user_match(self)
+
+    def is_owner(self, title_number):
+        return check_user_is_owner(self, title_number)
+
+    def to_json_for_match(self):
+        return json.dumps({
+            'name': self.name,
+            'date_of_birth': datetime.strftime(self.date_of_birth, '%Y-%m-%d'),
+            'gender' : self.gender,
+            'current_address': self.current_address,
+            'previous_address': self.previous_address })

@@ -18,20 +18,19 @@ manager.add_command('db', MigrateCommand)
 
 @manager.option('--email', dest='email')
 @manager.option('--password', dest='password')
-@manager.option('--lrid', dest='lrid')
 @manager.option('--name', dest='name')
 @manager.option('--dob', dest='dob')
 @manager.option('--gender', dest='gender')
 @manager.option('--current_address', dest='current_address')
 @manager.option('--previous_address', dest='previous_address')
-def create_user(email, password, lrid, name, dob, gender, current_address, previous_address):
+def create_user(email, password, name, dob, gender, current_address, previous_address):
     if not User.query.filter_by(email=email).first():
         import datetime
-        import uuid
-        lrid = uuid.UUID(lrid)
+
+        date_of_birth = datetime.datetime.strptime(dob, '%Y-%m-%d')
+
         user = User(email=email,
                     password=password,
-                    lrid=lrid,
                     name=name,
                     date_of_birth=date_of_birth,
                     gender=gender,

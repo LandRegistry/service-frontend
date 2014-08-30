@@ -43,7 +43,6 @@ class LoginForm(Form):
         self.remember.default = True
 
 
-
 class ChangeForm(Form):
 
     title_number = HiddenField('Title Number')

@@ -7,6 +7,10 @@ class Config(object):
     DECISION_URL = os.environ['DECISION_URL']
     SECRET_KEY = os.environ['SECRET_KEY']
     WTF_CSRF_ENABLED = True
+    MATCHING_URL = os.environ['MATCHING_URL']
+    OWNERSHIP_URL = os.environ['OWNERSHIP_URL']
+    OS_API_KEY = os.environ['OS_API_KEY']
+
 
     # optional and only needed on heroku so get
     # safely
