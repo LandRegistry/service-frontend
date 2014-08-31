@@ -3,6 +3,11 @@ import requests
 import uuid
 import json
 
+from requests.exceptions import (
+    HTTPError,
+    ConnectionError
+)
+
 from flask import session
 
 from application import app
@@ -15,23 +20,22 @@ logger.addHandler(logging.StreamHandler())
 
 def check_user_is_owner(user, title_number):
 
-    logger.info("Checking title number %s ownership service at %s" %(title_number,OWNERSHIP_URL))
+    logger.info("Checking title number %s ownership service at %s" %(title_number, OWNERSHIP_URL))
 
     if 'lrid' not in session:
         logger.info("LRID not known for user %s so can't check ownership" % user)
         return False
 
-    headers = {'Content-type': 'application/json'}
-    data = json.dumps({"title_number":title_number})
+    try:
+        headers = {'Content-type': 'application/json'}
+        data = json.dumps({"title_number":title_number})
+        resp = requests.post(
+                url='%s/owners' % OWNERSHIP_URL,
+                data=data,
+                headers=headers)
 
-    resp = requests.post(
-            url='%s/owners' % OWNERSHIP_URL,
-            data=data,
-            headers=headers)
+        resp.raise_for_status()
 
-    logger.info('Response status %s' % resp.status_code)
-
-    if resp.status_code == 200:
         data = resp.json()
         owners = data['owners']
         logger.info('Response owners %s' % owners)
@@ -40,6 +44,10 @@ def check_user_is_owner(user, title_number):
                 return True
         else:
             return False
-    else:
-        logger.info('Unable to establish ownership of %s by %s' % (title_number, user))
+
+    except (HTTPError, ConnectionError) as e:
+        logger.info('Unable to establish ownership of %s by %s: error %s' % (title_number, user, e))
+        return False
+    except:
+        logger.info('Unknown error checking ownership of %s by %s' % (title_number, user))
         return False

@@ -1,8 +1,11 @@
 import logging
 import requests
-import uuid
 
 from flask import session
+from requests.exceptions import (
+    HTTPError,
+    ConnectionError
+)
 
 from application import app
 
@@ -21,20 +24,26 @@ def check_user_match(user):
 
     headers = {'Content-type': 'application/json'}
     data  = user.to_json_for_match()
-    resp = requests.post(
-            url='%s/match' % MATCHING_URL,
-            data=data,
-            headers=headers)
 
-    logger.info('Response status %s' % resp.status_code)
+    try:
+        resp = requests.post(
+                url='%s/match' % MATCHING_URL,
+                data=data,
+                headers=headers)
 
-    if resp.status_code == 200:
+        response.raise_for_status()
         data = resp.json()
         logger.info('Reponse lrid %s' % data['lrid'])
+
         #NOTE session cookie might not be best place
         #for this longer term
         session['lrid'] = data['lrid']
         return True
-    else:
-        logger.info("No match found for user %s" % user)
+
+    except (HTTPError, ConnectionError) as e:
+        logger.error("Error trying to check for user match: %s", e)
         return False
+    except:
+        logger.error("Unknown error trying to check for user match")
+        return False
+

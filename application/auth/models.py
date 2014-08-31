@@ -2,7 +2,6 @@ import json
 from datetime import datetime
 
 from sqlalchemy.dialects.postgresql import TEXT
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.types import Enum
 
 from werkzeug.security import generate_password_hash

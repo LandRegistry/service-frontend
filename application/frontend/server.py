@@ -2,28 +2,38 @@ import os
 import requests
 from datetime import datetime
 
-from flask import abort
-from flask import render_template
-from flask import request
-from flask import current_app
-from flask import redirect
-from flask import url_for
-from flask import flash
+from flask import (
+    abort,
+    render_template,
+    request,
+    current_app,
+    redirect,
+    url_for,
+    flash
+)
 
-from flask.ext.login import login_user
-from flask.ext.login import logout_user
-from flask.ext.login import login_required
-from flask.ext.login import current_user
+from flask.ext.login import (
+    login_user,
+    logout_user,
+    login_required,
+    current_user
+)
 
-from forms import ChangeForm
-from forms import ConfirmForm
-from forms import LoginForm
+from forms import (
+    ChangeForm,
+    ConfirmForm,
+    LoginForm
+)
 
 from application.services import post_to_decision
 from application.auth.models import User
 
-from application import app
-from application import db
+from application import (
+    app,
+    db
+)
+
+from utils import get_or_log_error
 
 @app.template_filter()
 def format_date_YMD(value):
@@ -40,19 +50,6 @@ def format_date_DMY(value):
 def currency(value):
     """Format a comma separated  currency to 2 decimal places."""
     return "{:,.2f}".format(float(value))
-
-
-def get_or_log_error(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return response
-    except requests.exceptions.HTTPError as e:
-        app.logger.error("HTTP Error %s", e)
-        abort(response.status_code)
-    except requests.exceptions.ConnectionError as e:
-        app.logger.error("Error %s", e)
-        abort(500)
 
 
 @app.route('/')
@@ -133,4 +130,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('.login'))
-
