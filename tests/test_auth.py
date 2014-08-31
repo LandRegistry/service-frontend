@@ -39,34 +39,36 @@ class AuthenticationTestCase(unittest.TestCase):
         return self.client.get('/logout', follow_redirects=True)
 
     @mock.patch('requests.post')
-    def test_login(self, mock_post):
+    @mock.patch('application.auth.models.User.is_matched', return_value=True)
+    def test_login(self, mock_check, mock_post):
         rv = self.login('landowner@mail.com', 'password')
         assert rv.status == '200 OK'
 
     @mock.patch('requests.post')
-    def test_login_fail(self, mock_post):
+    @mock.patch('application.auth.models.User.is_matched', return_value=True)
+    def test_login_fail(self, mock_check, mock_post):
          rv = self.login('********@mail.com', 'password')
          self.assertTrue('Invalid login' in rv.data)
          self.assertEqual('200 OK', rv.status)
 
-    @mock.patch('application.auth.models.check_user_match', return_value=False)
-    def test_user_with_correct_credentials_but_not_matched_rejected(self, mock_match):
+    @mock.patch('application.auth.models.User.is_matched', return_value=False)
+    def test_user_with_correct_credentials_but_not_matched_rejected(self, mock_check):
 
         rv = self.login('landowner@mail.com', 'password')
 
-        mock_match.assert_called_once_with(self.user)
+        mock_check.assert_called_once()
         self.assertTrue('Invalid login' in rv.data)
 
 
     @mock.patch('requests.get')
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
+    @mock.patch('application.auth.models.User.is_matched', return_value=True)
     def test_viewing_property_requires_logged_in_and_matched_user(self, mock_match, mock_get):
         mock_get.return_value.json.return_value = title
 
         self.login('landowner@mail.com', 'password')
         rv = self.client.get('/property/%s' % TITLE_NUMBER)
 
-        mock_match.assert_called_once_with(self.user)
+        mock_match.assert_called_once()
         self.assertEquals(rv.status_code, 200)
         self.assertTrue(TITLE_NUMBER in rv.data)
 
