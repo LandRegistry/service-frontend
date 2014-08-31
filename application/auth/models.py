@@ -52,8 +52,8 @@ class User(db.Model, UserMixin):
     def check_password(self , password):
         return check_password_hash(self._password, password)
 
-    def loggedin_and_matched(self, password):
-        return self.check_password(password) and check_user_match(self)
+    def is_matched(self):
+        return check_user_match(self)
 
     def is_owner(self, title_number):
         return check_user_is_owner(self, title_number)

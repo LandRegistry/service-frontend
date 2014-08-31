@@ -1,17 +1,26 @@
-from application.frontend.server import app
-from application import db
-from application.auth.models import User
-
 import requests
 import responses
 import mock
 import unittest
 import datetime
 
-from stub_json import title, response_json, response_without_charge, response_without_easement
+
+from application.frontend.server import app
+from application import db
+from application.auth.models import User
+
+from stub_json import ( title,
+                        response_json,
+                        response_without_charge,
+                        response_without_easement
+)
 
 TITLE_NUMBER = "TN1234567"
 
+mock_is_matched = mock.Mock(name='is_matched')
+mock_is_matched.return_value = True
+
+@mock.patch.object(User, 'is_matched', mock_is_matched)
 class ViewFullTitleTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -41,8 +50,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
 
     @mock.patch('requests.get')
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_get_property_calls_search_api(self, mock_match, mock_get):
+    def test_get_property_calls_search_api(self, mock_get):
         mock_get.return_value.json.return_value = title
 
         self.login('landowner@mail.com', 'password')
@@ -56,8 +64,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
     @mock.patch('requests.get')
     @mock.patch('requests.Response')
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_500(self, mock_match, mock_response, mock_get):
+    def test_500(self, mock_response, mock_get):
 
         mock_response.status_code = 500
         mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError
@@ -70,8 +77,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         assert response.status_code == 500
 
     @mock.patch('requests.get', side_effect=requests.exceptions.ConnectionError)
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_requests_connection_error_returns_500_to_client(self, mock_match,mock_get):
+    def test_requests_connection_error_returns_500_to_client(self,mock_get):
 
         self.login('landowner@mail.com', 'password')
         response = self.client.get('/property/%s' % TITLE_NUMBER)
@@ -80,8 +86,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
 
     @responses.activate
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_multiple_proprietors(self, mock_match):
+    def test_multiple_proprietors(self):
         #Mock a response, as though JSON is coming back from SEARCH_API
         responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
@@ -95,8 +100,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         assert 'Betty Tanker' in rv.data
 
     @responses.activate
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_charges_appear(self, mock_match):
+    def test_charges_appear(self):
         #Mock a response, as though JSON is coming back from SEARCH_API
         responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
@@ -117,8 +121,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         assert 'of a barn.' in rv.data
 
     @responses.activate
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_no_charges_header(self, mock_match):
+    def test_no_charges_header(self):
       #Mock a response, as though JSON is coming back from SEARCH_API
       responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
             body = response_without_charge, status = 200, content_type='application/json')
@@ -131,8 +134,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
       assert 'Charges Register' not in rv.data
 
     @responses.activate
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_easements_appear(self, mock_match):
+    def test_easements_appear(self):
         #Mock a response, as though JSON is coming back from SEARCH_API
         responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
@@ -147,8 +149,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         assert 'easement two' in rv.data
 
     @responses.activate
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    def test_no_easements_header(self, mock_match):
+    def test_no_easements_header(self):
       #Mock a response, as though JSON is coming back from SEARCH_API
       responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
             body = response_without_easement, status = 200, content_type='application/json')
