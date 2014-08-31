@@ -49,5 +49,6 @@ def check_user_is_owner(user, title_number):
         logger.info('Unable to establish ownership of %s by %s: error %s' % (title_number, user, e))
         return False
     except:
-        logger.info('Unknown error checking ownership of %s by %s' % (title_number, user))
+        e = sys.exc_info()[0]
+        logger.info('Unknown error checking ownership of %s by %s: %s' % (title_number, user, e))
         return False

@@ -1,4 +1,6 @@
 import logging
+import sys
+
 import requests
 
 from flask import session
@@ -23,16 +25,16 @@ def check_user_match(user):
         return True
 
     headers = {'Content-type': 'application/json'}
-    data  = user.to_json_for_match()
+    data = user.to_json_for_match()
 
     try:
-        resp = requests.post(
+        response = requests.post(
                 url='%s/match' % MATCHING_URL,
                 data=data,
                 headers=headers)
 
         response.raise_for_status()
-        data = resp.json()
+        data = response.json()
         logger.info('Reponse lrid %s' % data['lrid'])
 
         #NOTE session cookie might not be best place
@@ -44,6 +46,7 @@ def check_user_match(user):
         logger.error("Error trying to check for user match: %s", e)
         return False
     except:
-        logger.error("Unknown error trying to check for user match")
+        e = sys.exc_info()[0]
+        logger.error("Unknown error trying to check for user match: %s" % e)
         return False
 
