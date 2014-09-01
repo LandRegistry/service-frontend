@@ -62,5 +62,7 @@ map.fitBounds(bounds, {maxZoom: 9, animate: false});
 L.control.scale().addTo(map);
 
 //Add layers to the map
-easementGeoJson.addTo(map);
+if (easementData) {
+  easementGeoJson.addTo(map);
+}
 extentGeoJson.addTo(map);
