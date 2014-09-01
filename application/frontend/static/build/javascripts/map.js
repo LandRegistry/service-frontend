@@ -35,28 +35,32 @@ map.addLayer(openspaceLayer);
 //Define name of CRS in GeoJSON using PROJ4
 proj4.defs("urn:ogc:def:crs:EPSG:27700","+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs");
 
-//Add the extentGeoJson to the map
+//Create the extent layer
 var extentGeoJson = L.Proj.geoJson(extentData, {
   color: 'red',
-  fillOpacity: 0.0
+  fillOpacity: 0.0,
+  opacity: 1
 })
-extentGeoJson.addTo(map);
 
-//Add the extentGeoJson to the map
+//Create the easement layer
 if (easementData) {
   var easementGeoJson = L.Proj.geoJson(easementData, {
     color: 'blue',
     fillcolor: 'blue',
-    fillOpacity: 0.5
+    fillOpacity: 0.5,
+    opacity: 1
   })
-  easementGeoJson.addTo(map);
 };
-
-//Add a scale control to the map
-L.control.scale().addTo(map);
 
 //Center map view on geojson polygon
 var bounds = extentGeoJson.getBounds();
 var center = bounds.getCenter();
 map.setView([center.lat, center.lng], 9)
 map.fitBounds(bounds, {maxZoom: 9, animate: false});
+
+//Add a scale control to the map
+L.control.scale().addTo(map);
+
+//Add layers to the map
+easementGeoJson.addTo(map);
+extentGeoJson.addTo(map);
