@@ -52,15 +52,15 @@ if (easementData) {
   })
 };
 
-//Add layers to the map
-easementGeoJson.addTo(map);
-extentGeoJson.addTo(map);
-
-//Add a scale control to the map
-L.control.scale().addTo(map);
-
 //Center map view on geojson polygon
 var bounds = extentGeoJson.getBounds();
 var center = bounds.getCenter();
 map.setView([center.lat, center.lng], 9)
 map.fitBounds(bounds, {maxZoom: 9, animate: false});
+
+//Add a scale control to the map
+L.control.scale().addTo(map);
+
+//Add layers to the map
+easementGeoJson.addTo(map);
+extentGeoJson.addTo(map);
