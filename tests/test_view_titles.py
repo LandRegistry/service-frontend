@@ -6,6 +6,7 @@ import datetime
 
 
 from application.frontend.server import app
+from application.frontend import server
 from application import db
 from application.auth.models import User
 
@@ -20,7 +21,7 @@ TITLE_NUMBER = "TN1234567"
 mock_is_matched = mock.Mock(name='is_matched')
 mock_is_matched.return_value = True
 
-@mock.patch.object(User, 'is_matched', mock_is_matched)
+@mock.patch.object(server, 'is_matched', mock_is_matched)
 class ViewFullTitleTestCase(unittest.TestCase):
 
     def setUp(self):

@@ -54,8 +54,8 @@ class ChangeTitleTestCase(unittest.TestCase):
             return form
 
 
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    @mock.patch('application.auth.models.User.is_owner', return_value=True)
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
+    @mock.patch('application.frontend.server.is_owner', return_value=True)
     @mock.patch('requests.post')
     @responses.activate
     def test_owner_can_change_register(self, mock_user_match, mock_owner_check, mock_post):
@@ -92,8 +92,8 @@ class ChangeTitleTestCase(unittest.TestCase):
         self.assertTrue('Application complete' in rv_post_confirm.data)
 
 
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
-    @mock.patch('application.auth.models.User.is_owner', return_value=False)
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
+    @mock.patch('application.frontend.server.is_owner', return_value=False)
     @mock.patch('requests.post')
     @responses.activate
     def test_non_proprieter_cannot_request_change_to_register(self, mock_user_match, mock_owner_check, mock_post):

@@ -25,7 +25,12 @@ from forms import (
     LoginForm
 )
 
-from application.services import post_to_decision
+from application.services import (
+    post_to_decision,
+    is_matched,
+    is_owner
+)
+
 from application.auth.models import User
 
 from application import (
@@ -68,11 +73,11 @@ def property_by_title(title_number):
     response = get_or_log_error(title_url)
     title = response.json()
     app.logger.info("Found the following title: %s" % title)
-    is_owner = current_user.is_owner(title_number)
+    owner = is_owner(current_user, title_number)
     return render_template(
         'view_property.html',
         title=title,
-        is_owner=is_owner,
+        is_owner=owner,
         apiKey=os.environ['OS_API_KEY'])
 
 
@@ -84,7 +89,7 @@ def property_by_title(title_number):
 @login_required
 def property_by_title_edit_proprietor(title_number, proprietor_index):
     form = ChangeForm(request.form)
-    if current_user.is_owner(title_number):
+    if is_owner(current_user, title_number):
         form = ChangeForm(request.form)
         if request.method == 'GET':
             title_url = "%s/%s/%s" % (
@@ -117,7 +122,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.get(form.email.data)
-        if user and user.check_password(form.password.data) and user.is_matched():
+        if user and user.check_password(form.password.data) and is_matched(user):
             login_user(user, remember=form.remember.data)
             return redirect(form.next.data or url_for('.index'))
         else:

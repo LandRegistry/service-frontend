@@ -45,7 +45,7 @@ class AuditTestCase(unittest.TestCase):
         return self.client.get('/logout', follow_redirects=True)
 
     #TODO - revisit these tests
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
     @mock.patch(LOGGER)
     def test_audit_get_index_logs_authenticated_user(self, mock_logger, mock_match):
         self._login('landowner@mail.com', 'password')
@@ -55,7 +55,7 @@ class AuditTestCase(unittest.TestCase):
         assert 'Audit: ' in args[0]
 
 
-    @mock.patch('application.auth.models.check_user_match', return_value=True)
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
     @mock.patch(LOGGER)
     @mock.patch('requests.get')
     def test_audit_get_property_page_logs_authenticated_user(self, mock_get,mock_logger, mock_match):

@@ -10,9 +10,6 @@ from werkzeug.security import check_password_hash
 from flask.ext.login import UserMixin
 
 from application import db
-from application.services import check_user_match
-from application.services import check_user_is_owner
-
 
 class User(db.Model, UserMixin):
 
@@ -50,12 +47,6 @@ class User(db.Model, UserMixin):
 
     def check_password(self , password):
         return check_password_hash(self._password, password)
-
-    def is_matched(self):
-        return check_user_match(self)
-
-    def is_owner(self, title_number):
-        return check_user_is_owner(self, title_number)
 
     def to_json_for_match(self):
         return json.dumps({
