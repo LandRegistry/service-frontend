@@ -75,6 +75,14 @@
                         {% endfor %}
                     </dd>
 
+                    <dt>Restriction</dt>
+                    <dd>
+                        {% for charge in title.charges %}
+                        No disposition of the registered estate by the proprietor of the registered estate is to be registered
+                        without a written consent signed by the proprietor for the time being of the Charge dated {{ charge.charge_date | format_date_YMD }} in favour
+                        of {{ charge.chargee_name }} referred to in the Charges Register.
+                        {% endfor %}
+                    </dd>
                     <dt>Tenure</dt>
                     <dd>{{ title.property.tenure | capitalize }}</dd>
 
