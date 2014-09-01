@@ -5,6 +5,7 @@ from application.auth.models import User
 import mock
 import responses
 import unittest
+import datetime
 
 from stub_json import response_json
 
@@ -19,7 +20,13 @@ class ChangeTitleTestCase(unittest.TestCase):
         self.client = app.test_client()
 
         user = User(email='landowner@mail.com',
-                password='password')
+                    password='password',
+                    name='noname',
+                    gender='M',
+                    date_of_birth=datetime.datetime.now(),
+                    current_address='nowhere',
+                    previous_address='nowhere')
+
         db.session.add(user)
         db.session.commit()
 
@@ -47,10 +54,11 @@ class ChangeTitleTestCase(unittest.TestCase):
             return form
 
 
-    #TODO - have a look at this test again
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
+    @mock.patch('application.frontend.server.is_owner', return_value=True)
     @mock.patch('requests.post')
     @responses.activate
-    def test_change_register(self, mock_post):
+    def test_owner_can_change_register(self, mock_user_match, mock_owner_check, mock_post):
         #Mock a response, as though JSON is coming back from SEARCH_API
         responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
@@ -59,8 +67,9 @@ class ChangeTitleTestCase(unittest.TestCase):
 
         self._login('landowner@mail.com', 'password')
         rv = self.client.get('/property/%s/edit/title.proprietor.1' % TITLE_NUMBER, follow_redirects=True)
-        assert rv.status_code == 200
-        assert 'Change register' in rv.data
+        self.assertEquals(rv.status_code, 200)
+
+        self.assertTrue('Change register' in rv.data)
 
         # post the change
 
@@ -69,18 +78,35 @@ class ChangeTitleTestCase(unittest.TestCase):
             '/property/%s/edit/title.proprietor.1' % TITLE_NUMBER,
             follow_redirects=True,
             data=DummyPostData(form))
-        assert rv_post.status_code == 200
-        assert 'I confirm that I' in rv_post.data
+        self.assertEquals(rv_post.status_code, 200)
+        self.assertTrue('I confirm that I' in rv_post.data)
 
-        # confirm
+        # # confirm
 
         form['confirm'] = True
         rv_post_confirm = self.client.post(
             '/property/%s/edit/title.proprietor.1' % TITLE_NUMBER,
             follow_redirects=True,
             data=DummyPostData(form))
-        assert rv_post_confirm.status_code == 200
-        assert 'Application complete' in rv_post_confirm.data
+        self.assertEquals(rv_post_confirm.status_code, 200)
+        self.assertTrue('Application complete' in rv_post_confirm.data)
+
+
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
+    @mock.patch('application.frontend.server.is_owner', return_value=False)
+    @mock.patch('requests.post')
+    @responses.activate
+    def test_non_proprieter_cannot_request_change_to_register(self, mock_user_match, mock_owner_check, mock_post):
+        #Mock a response, as though JSON is coming back from SEARCH_API
+        responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
+              body = response_json, status = 200, content_type='application/json')
+
+        # load the form
+
+        self._login('landowner@mail.com', 'password')
+        rv = self.client.get('/property/%s/edit/title.proprietor.1' % TITLE_NUMBER, follow_redirects=True)
+        self.assertEquals(rv.status_code, 401)
+
 
     def tearDown(self):
         self.logout()

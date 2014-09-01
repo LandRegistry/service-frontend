@@ -18,12 +18,6 @@
                     Official register of title <span class="title-flag">{{ title.title_number }}</span>
                 </h1>
 
-                <!--
-                <p>
-                    This register was last changed on <b>7 August 2013</b> at <b>16:46:28</b>
-                </p>
-                -->
-
                 <div class="lede">
 
                     <div class="grid grid-1-3">
@@ -168,9 +162,12 @@
             </div>
             {% endif %}
 
-            <div class="divider">
-                <button class='button' id='makeChange'>Edit the register</button>
-            </div>
+            {% if is_owner %}
+                <div class="divider">
+                    <button class='button' id='makeChange'>Edit the register</button>
+                </div>
+            {% endif %}
+
         </div><!-- end inner-block -->
     </div><!-- end content -->
 

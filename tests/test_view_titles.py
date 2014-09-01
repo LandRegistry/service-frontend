@@ -1,17 +1,27 @@
-from application.frontend.server import app
-from application import db
-from application.auth.models import User
-
-
 import requests
 import responses
 import mock
 import unittest
+import datetime
 
-from stub_json import title, response_json, response_without_charge, response_without_easement
+
+from application.frontend.server import app
+from application.frontend import server
+from application import db
+from application.auth.models import User
+
+from stub_json import ( title,
+                        response_json,
+                        response_without_charge,
+                        response_without_easement
+)
 
 TITLE_NUMBER = "TN1234567"
 
+mock_is_matched = mock.Mock(name='is_matched')
+mock_is_matched.return_value = True
+
+@mock.patch.object(server, 'is_matched', mock_is_matched)
 class ViewFullTitleTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -20,11 +30,18 @@ class ViewFullTitleTestCase(unittest.TestCase):
         self.app = app
         self.client = app.test_client()
 
-        user = User(email='landowner@mail.com', password='password')
-        db.session.add(user)
+        self.user = User(email='landowner@mail.com',
+                    password='password',
+                    name='noname',
+                    gender='M',
+                    date_of_birth=datetime.datetime.now(),
+                    current_address='nowhere',
+                    previous_address='nowhere')
+
+        db.session.add(self.user)
         db.session.commit()
 
-    def _login(self, email=None, password=None):
+    def login(self, email=None, password=None):
         email = email
         password = password or 'password'
         return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
@@ -32,24 +49,15 @@ class ViewFullTitleTestCase(unittest.TestCase):
     def logout(self):
         return self.client.get('/logout', follow_redirects=True)
 
+
     @mock.patch('requests.get')
     def test_get_property_calls_search_api(self, mock_get):
         mock_get.return_value.json.return_value = title
 
-        self._login('landowner@mail.com', 'password') #need to log in in order to get to property page
+        self.login('landowner@mail.com', 'password')
         self.client.get('/property/%s' % TITLE_NUMBER)
 
         mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER))
-
-    def test_login(self):
-        rv = self._login('landowner@mail.com', 'password')
-        assert 'No content' in rv.data
-        assert rv.status == '200 OK'
-
-    def test_login_fail(self):
-         rv = self._login('********@mail.com', 'password')
-         self.assertTrue('Invalid login' in rv.data)
-         self.assertEqual('200 OK', rv.status)
 
     def test_404(self):
         rv = self.client.get('/pagedoesnotexist')
@@ -64,15 +72,15 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
         mock_get.return_value = mock_response
 
-        self._login('landowner@mail.com', 'password')
+        self.login('landowner@mail.com', 'password')
         response = self.client.get('/property/%s' % TITLE_NUMBER)
 
         assert response.status_code == 500
 
     @mock.patch('requests.get', side_effect=requests.exceptions.ConnectionError)
-    def test_requests_connection_error_returns_500_to_client(self, mock_get):
+    def test_requests_connection_error_returns_500_to_client(self,mock_get):
 
-        self._login('landowner@mail.com', 'password')
+        self.login('landowner@mail.com', 'password')
         response = self.client.get('/property/%s' % TITLE_NUMBER)
 
         assert response.status_code == 500
@@ -86,7 +94,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
         #Now call the usual Service frontend for the same title.  Redirects
         #to the mocked response in HTML.
-        self._login('landowner@mail.com', 'password')
+        self.login('landowner@mail.com', 'password')
         rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Bob Test' in rv.data
@@ -100,7 +108,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
         #Now call the usual Service frontend for the same title.  Redirects
         #to the mocked response in HTML.
-        self._login('landowner@mail.com', 'password')
+        self.login('landowner@mail.com', 'password')
         rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Charges Register' in rv.data
@@ -121,7 +129,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
       #Now call the usual Service frontend for the same title.  Redirects
       #to the mocked response in HTML.
-      self._login('landowner@mail.com', 'password')
+      self.login('landowner@mail.com', 'password')
       rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
       assert rv.status_code == 200
       assert 'Charges Register' not in rv.data
@@ -134,7 +142,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
         #Now call the usual Service frontend for the same title.  Redirects
         #to the mocked response in HTML.
-        self._login('landowner@mail.com', 'password')
+        self.login('landowner@mail.com', 'password')
         rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Easements Register' in rv.data
@@ -149,14 +157,13 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
       #Now call the usual Service frontend for the same title.  Redirects
       #to the mocked response in HTML.
-      self._login('landowner@mail.com', 'password')
+      self.login('landowner@mail.com', 'password')
       rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
       assert rv.status_code == 200
       assert 'Easements Register' not in rv.data
 
     def tearDown(self):
-        user = User.query.get('landowner@mail.com')
-        db.session.delete(user)
+        db.session.delete(self.user)
         db.session.commit()
 
     def test_health(self):

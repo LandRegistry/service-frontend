@@ -1,5 +1,5 @@
 from application.frontend.server import app
-from application.decision import post_to_decision
+from application.services import post_to_decision
 import mock
 import unittest
 import datetime

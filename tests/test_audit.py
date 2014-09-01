@@ -1,5 +1,6 @@
 import unittest
 import mock
+import datetime
 
 from application import db
 from application.frontend.server import app
@@ -19,14 +20,19 @@ class AuditTestCase(unittest.TestCase):
 
     def setUp(self):
         app.config["TESTING"] = True,
-        app.config["SECRET_KEY"]="no-secret"
         db.drop_all()
         db.create_all()
         self.app = app
         self.client = app.test_client()
 
         user = User(email='landowner@mail.com',
-                    password='password')
+                    password='password',
+                    name='noname',
+                    gender='M',
+                    date_of_birth=datetime.datetime.now(),
+                    current_address='nowhere',
+                    previous_address='nowhere')
+
         db.session.add(user)
         db.session.commit()
 
@@ -39,8 +45,9 @@ class AuditTestCase(unittest.TestCase):
         return self.client.get('/logout', follow_redirects=True)
 
     #TODO - revisit these tests
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
     @mock.patch(LOGGER)
-    def test_audit_get_index_logs_authenticated_user(self, mock_logger):
+    def test_audit_get_index_logs_authenticated_user(self, mock_logger, mock_match):
         self._login('landowner@mail.com', 'password')
         path = '/'
         self.client.get(path)
@@ -48,9 +55,10 @@ class AuditTestCase(unittest.TestCase):
         assert 'Audit: ' in args[0]
 
 
+    @mock.patch('application.frontend.server.is_matched', return_value=True)
     @mock.patch(LOGGER)
     @mock.patch('requests.get')
-    def test_audit_get_property_page_logs_authenticated_user(self, mock_get, mock_logger):
+    def test_audit_get_property_page_logs_authenticated_user(self, mock_get,mock_logger, mock_match):
         mock_get.return_value.json.return_value = title
         self._login('landowner@mail.com', 'password')
         path = '/property/TEST123'
