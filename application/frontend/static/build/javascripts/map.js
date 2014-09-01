@@ -38,7 +38,8 @@ proj4.defs("urn:ogc:def:crs:EPSG:27700","+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.99
 //Create the extent layer
 var extentGeoJson = L.Proj.geoJson(extentData, {
   color: 'red',
-  fillOpacity: 0.0
+  fillOpacity: 0.0,
+  opacity: 1
 })
 
 //Create the easement layer
@@ -46,7 +47,8 @@ if (easementData) {
   var easementGeoJson = L.Proj.geoJson(easementData, {
     color: 'blue',
     fillcolor: 'blue',
-    fillOpacity: 0.5
+    fillOpacity: 0.5,
+    opacity: 1
   })
 };
 
