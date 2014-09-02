@@ -9,6 +9,8 @@ from application.auth.models import *
 from application import app
 from application import db
 
+from simplekv.db.sql import SQLAlchemyStore
+
 app.config.from_object(os.environ['SETTINGS'])
 
 migrate = Migrate(app, db)
