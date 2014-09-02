@@ -99,6 +99,7 @@
 
             {% if title.property.tenure == 'Leasehold' %}
                 <h2 class="heading-large">Lease Details</h2>
+                <dd>Short particulars of the lease(s) (or under-lease(s)) under which the land is held:</dd>   <br/>
                 <div class="charges">
                     <dl class="inline">
                     {% for lease in title.leases %}
@@ -136,9 +137,7 @@
                     {% endif %}
 
                     {% if lease.title_registered == True %}
-                        <p id="titleRegisteredClause">The registered Lease is made pursuant to Part V of the Housing Act 1985
-                            and the land has the benefit of and is subject to the easements and rights
-                            specified in paragraph 2 of Schedule 6 of the said Act.</p><br/>
+                        <p id="titleRegisteredClause">The landlord's title is registered.</p><br/>
                     {% endif %}
                 {% endfor %}
 
