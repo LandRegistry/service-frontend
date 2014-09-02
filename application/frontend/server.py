@@ -9,7 +9,8 @@ from flask import (
     current_app,
     redirect,
     url_for,
-    flash
+    flash,
+    session
 )
 
 from flask.ext.login import (
@@ -133,5 +134,6 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
+    session.pop("lrid", None)
     logout_user()
     return redirect(url_for('.login'))
