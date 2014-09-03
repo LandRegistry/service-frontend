@@ -25,3 +25,5 @@ deploy:
   app: lr-service-frontend
   on:
     repo: LandRegistry/service-frontend
+  run:
+    - "python manage.py db upgrade"
