@@ -6,6 +6,7 @@ Flask-Migrate==1.2.0
 Flask-SQLAlchemy==1.0
 Flask-Script==2.0.5
 Flask-WTF==0.10.0
+Flask-KVSession==0.6.1
 Jinja2==2.7.3
 Mako==1.0.0
 MarkupSafe==0.23
@@ -29,3 +30,4 @@ six==1.7.3
 webassets==0.10.1
 wsgiref==0.1.2
 -e git+https://github.com/LandRegistry/datatypes#egg=datatypes
+simplekv==0.9.2

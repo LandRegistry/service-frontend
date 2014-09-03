@@ -37,8 +37,8 @@ def check_user_match(user):
         data = response.json()
         logger.info('Reponse lrid %s' % data['lrid'])
 
-        #NOTE session cookie might not be best place
-        #for this longer term
+        #NOTE we are using flask-kvsession with sqlalchemy as
+        #storage so session data is not sent client
         session['lrid'] = data['lrid']
         return True
 
