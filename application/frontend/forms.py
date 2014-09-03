@@ -53,11 +53,9 @@ class ChangeForm(Form):
     partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
     marriage_date = DateField('Date of marriage', format='%d-%m-%Y', validators=[DataRequired(), ValidateDateNotInFuture()], description="For example, 20-08-2011")
     marriage_place = StringField('Location of marriage ceremony', validators=[DataRequired()])
-    #marriage_country = CountriesField('Country of marriage ceremony', validators=[DataRequired()], top_countries=['GB'])
     marriage_country = SelectField('Country',
                 validators=[DataRequired(), country_code_validator.wtform_validator()],
                 choices=countries_list_for_selector)
-    # marriage_country = StringField('Country of marriage ceremony', validators=[DataRequired()])
     marriage_certificate_number = StringField('Marriage certificate number', validators=[DataRequired()])
 
 
