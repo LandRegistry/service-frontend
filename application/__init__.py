@@ -14,7 +14,6 @@ from audit import Audit
 from raven.contrib.flask import Sentry
 
 app = Flask('application.frontend')
-
 app.config.from_object(os.environ.get('SETTINGS'))
 
 login_manager = LoginManager()
@@ -23,6 +22,11 @@ login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
 SQLAlchemy.health = health
+
+from flask_kvsession import KVSessionExtension
+from simplekv.db.sql import SQLAlchemyStore
+store = SQLAlchemyStore(db.engine, db.metadata, 'sessions')
+KVSessionExtension(store, app)
 
 Health(app, checks=[db.health])
 Audit(app)
