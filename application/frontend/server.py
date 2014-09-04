@@ -145,3 +145,7 @@ def client_start():
 @app.route('/relationship/enter-token')
 def client_enter_token():
     return render_template('client-enter-token.html')
+
+@app.route('/relationship/confirm')
+def client_confirm():
+    return render_template('client-confirm.html')
