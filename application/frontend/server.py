@@ -153,7 +153,7 @@ def client_enter_token():
 def client_confirm():
     return render_template('client-confirm.html')
 
-@app.route('/relationship/client/confirmed')
+@app.route('/relationship/client/confirmed', methods =['POST'])
 def client_confirmed():
     return render_template('client-confirmed.html')
 
