@@ -188,3 +188,7 @@ def conveyancer_add_client():
 @app.route('/relationship/conveyancer/confirm')
 def conveyancer_confirm():
     return render_template('conveyancer-confirm.html')
+
+@app.route('/relationship/conveyancer/token')
+def conveyancer_token():
+    return render_template('conveyancer-token.html')
