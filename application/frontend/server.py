@@ -160,3 +160,7 @@ def client_confirmed():
 @app.route('/relationship/conveyancer')
 def conveyancer_start():
     return render_template('conveyancer-start.html')
+
+@app.route('/relationship/conveyancer/login')
+def conveyancer_login():
+    return render_template('conveyancer-login.html')
