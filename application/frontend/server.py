@@ -176,3 +176,7 @@ def conveyancer_select_property():
 @app.route('/relationship/conveyancer/task')
 def conveyancer_select_task():
     return render_template('conveyancer-select-task.html')
+
+@app.route('/relationship/conveyancer/clients')
+def conveyancer_add_clients():
+    return render_template('conveyancer-add-clients.html')
