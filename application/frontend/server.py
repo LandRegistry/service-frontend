@@ -161,3 +161,23 @@ def client_confirmed():
 @app.route('/relationship/conveyancer')
 def conveyancer_start():
     return render_template('conveyancer-start.html')
+
+@app.route('/relationship/conveyancer/login')
+def conveyancer_login():
+    return render_template('conveyancer-login.html')
+
+@app.route('/relationship/conveyancer/search')
+def conveyancer_search():
+    return render_template('conveyancer-search.html')
+
+@app.route('/relationship/conveyancer/property')
+def conveyancer_select_property():
+    return render_template('conveyancer-select-property.html')
+
+@app.route('/relationship/conveyancer/task')
+def conveyancer_select_task():
+    return render_template('conveyancer-select-task.html')
+
+@app.route('/relationship/conveyancer/clients')
+def conveyancer_add_clients():
+    return render_template('conveyancer-add-clients.html')
