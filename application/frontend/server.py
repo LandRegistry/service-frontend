@@ -185,3 +185,7 @@ def conveyancer_add_clients():
 @app.route('/relationship/conveyancer/client')
 def conveyancer_add_client():
     return render_template('conveyancer-add-client.html')
+
+@app.route('/relationship/conveyancer/confirm')
+def conveyancer_confirm():
+    return render_template('conveyancer-confirm.html')
