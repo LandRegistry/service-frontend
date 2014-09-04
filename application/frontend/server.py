@@ -137,3 +137,7 @@ def logout():
     session.pop("lrid", None)
     logout_user()
     return redirect(url_for('.login'))
+
+@app.route('/relationship')
+def client_start():
+    return render_template('client-start.html')
