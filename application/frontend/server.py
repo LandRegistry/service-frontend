@@ -142,3 +142,19 @@ def logout():
     session.pop("lrid", None)
     logout_user()
     return redirect(url_for('.login'))
+
+@app.route('/relationship')
+def client_start():
+    return render_template('client-start.html')
+
+@app.route('/relationship/enter-token')
+def client_enter_token():
+    return render_template('client-enter-token.html')
+
+@app.route('/relationship/confirm')
+def client_confirm():
+    return render_template('client-confirm.html')
+
+@app.route('/relationship/confirmed')
+def client_confirmed():
+    return render_template('client-confirmed.html')
