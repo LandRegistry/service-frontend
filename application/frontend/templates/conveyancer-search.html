@@ -1,0 +1,37 @@
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+    <div id="content">
+    {% include "inc_alpha_banner.html" %}
+
+    <div class="outer-block">
+      <div class="inner-block">
+
+        <form class="form" action="conveyancer-select-property" method="get">
+
+          <h1 class="form-title heading-large">
+            Find property
+          </h1>
+
+          <div class="form-group">
+            <label class="form-label-bold" for="search">Search the land registry</label>
+            <p class="form-hint">Title number, postcode, city or town, street name, etc.</p>
+            <input type="text" class="form-control" id="search">
+          </div>
+
+          <div class="form-group">
+            <input type="submit" class="button" value="Search">
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+
+  </div>
+</main>
+
+{% endblock %}
