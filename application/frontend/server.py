@@ -130,9 +130,6 @@ def login():
     return render_template("auth/login_user.html", form=form)
 
 
-
-
-
 @app.route("/logout")
 @login_required
 def logout():
@@ -140,22 +137,26 @@ def logout():
     logout_user()
     return redirect(url_for('.login'))
 
-@app.route('/relationship')
+@app.route('/relationship/client')
 def client_start():
     return render_template('client-start.html')
 
-@app.route('/relationship/login',methods=['GET'])
+@app.route('/relationship/client/login',methods=['GET'])
 def client_login():
     return render_template("client-login.html")
 
-@app.route('/relationship/enter-token')
+@app.route('/relationship/client/enter-token')
 def client_enter_token():
     return render_template('client-enter-token.html')
 
-@app.route('/relationship/confirm')
+@app.route('/relationship/client/confirm')
 def client_confirm():
     return render_template('client-confirm.html')
 
-@app.route('/relationship/confirmed')
+@app.route('/relationship/client/confirmed')
 def client_confirmed():
     return render_template('client-confirmed.html')
+
+@app.route('/relationship/conveyancer')
+def conveyancer_start():
+    return render_template('conveyancer-start.html')
