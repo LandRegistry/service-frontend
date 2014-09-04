@@ -1,0 +1,39 @@
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+    <div id="content">
+    {% include "inc_alpha_banner.html" %}
+
+    <div class="outer-block">
+      <div class="inner-block">
+
+        <h1>Confirm a relationship</h1>
+
+        <div class="text">
+
+          <p class="lede">Confirm a relationship with your solicitor or conveyancer [content to come]</p>
+
+          <p>Use this service to confirm that someone is authorised to act on your behalf.</p>
+
+          <p>To use this service you’ll need:</p>
+          <ul class="list-bullet">
+            <li>To be registered with GOV.UK Verify &mdash; <a href="#">sign up here</a></li>
+            <li>Your relationship token given to you by your solicitor or conveyancer</li>
+          </ul>
+
+        </div>
+
+        <p>
+          <a href="relationship/client-login" class="button">Start now</a>
+        </p>
+
+      </div>
+    </div>
+
+
+  </div>
+</main>
+
+{% endblock %}
