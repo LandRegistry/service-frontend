@@ -1,0 +1,36 @@
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+    <div id="content">
+    {% include "inc_alpha_banner.html" %}
+
+    <div class="outer-block">
+      <div class="inner-block">
+
+        <form class="form" action="conveyancer-add-client-1" method="get">
+
+          <h1 class="form-title heading-large">
+            Number of clients
+          </h1>
+
+          <div class="form-group">
+            <label class="form-label" for="num-clients">How many clients will you act for?</label>
+            <input type="number" class="form-control field-numeric" id="num-clients" name="num-clients">
+          </div>
+
+          <div class="form-group">
+            <input type="submit" class="button" value="Next">
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+
+  </div>
+</main>
+
+{% endblock %}
