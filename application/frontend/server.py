@@ -89,9 +89,8 @@ def property_by_title(title_number):
 @app.route('/property/<title_number>/edit/title.proprietor.<int:proprietor_index>', methods=['GET', 'POST'])
 @login_required
 def property_by_title_edit_proprietor(title_number, proprietor_index):
-    form = ChangeForm(request.form)
     if is_owner(current_user, title_number):
-        form = ChangeForm(request.form)
+        form = ChangeForm(request.form, marriage_country='GB')
         if request.method == 'GET':
             title_url = "%s/%s/%s" % (
                 app.config['AUTHENTICATED_SEARCH_API'],
