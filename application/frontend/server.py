@@ -141,3 +141,7 @@ def logout():
 @app.route('/relationship')
 def client_start():
     return render_template('client-start.html')
+
+@app.route('/relationship/enter-token')
+def client_enter_token():
+    return render_template('client-enter-token.html')
