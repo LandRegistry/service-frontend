@@ -130,6 +130,11 @@ def login():
     return render_template("auth/login_user.html", form=form)
 
 
+@app.route('/relationship/client-login',methods=['GET'])
+def clientlogin():
+    return render_template("client-login.html")
+
+
 @app.route("/logout")
 @login_required
 def logout():
