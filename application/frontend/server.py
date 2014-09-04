@@ -169,3 +169,7 @@ def conveyancer_login():
 @app.route('/relationship/conveyancer/search')
 def conveyancer_search():
     return render_template('conveyancer-search.html')
+
+@app.route('/relationship/conveyancer/select-property')
+def conveyancer_select_property():
+    return render_template('conveyancer-select-property.html')
