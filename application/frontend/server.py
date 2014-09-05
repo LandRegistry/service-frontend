@@ -147,14 +147,17 @@ def client_login():
     return render_template("client-login.html")
 
 @app.route('/relationship/client/enter-token')
+@login_required
 def client_enter_token():
     return render_template('client-enter-token.html')
 
 @app.route('/relationship/client/confirm')
+@login_required
 def client_confirm():
     return render_template('client-confirm.html')
 
 @app.route('/relationship/client/confirmed', methods =['POST'])
+@login_required
 def client_confirmed():
     return render_template('client-confirmed.html')
 
