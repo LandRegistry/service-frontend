@@ -141,49 +141,10 @@ def logout():
 
 
 @app.route('/relationship/client')
-def client_start():
-    return RelationshipController.handle()
+def relationship_client():
+    return ClientController.handle()
 
 
 @app.route('/relationship/conveyancer')
-def conveyancer_start():
-    return render_template('conveyancer-start.html')
-
-@app.route('/relationship/conveyancer/login')
-def conveyancer_login():
-    return render_template('conveyancer-login.html')
-
-@app.route('/relationship/conveyancer/search')
-@login_required
-def conveyancer_search():
-    return render_template('conveyancer-search.html')
-
-@app.route('/relationship/conveyancer/property')
-@login_required
-def conveyancer_select_property():
-    return render_template('conveyancer-select-property.html')
-
-@app.route('/relationship/conveyancer/task')
-@login_required
-def conveyancer_select_task():
-    return render_template('conveyancer-select-task.html')
-
-@app.route('/relationship/conveyancer/clients')
-@login_required
-def conveyancer_add_clients():
-    return render_template('conveyancer-add-clients.html')
-
-@app.route('/relationship/conveyancer/client')
-@login_required
-def conveyancer_add_client():
-    return render_template('conveyancer-add-client.html')
-
-@app.route('/relationship/conveyancer/confirm')
-@login_required
-def conveyancer_confirm():
-    return render_template('conveyancer-confirm.html')
-
-@app.route('/relationship/conveyancer/token')
-@login_required
-def conveyancer_token():
-    return render_template('conveyancer-token.html')
+def relationship_conveyancer():
+    return ConveyancerController.handle()
