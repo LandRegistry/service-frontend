@@ -41,6 +41,8 @@ from application import (
 
 from utils import get_or_log_error
 
+from application.frontend.controllers import RelationshipController
+
 @app.template_filter()
 def format_date_YMD(value):
     new_date = datetime.strptime(value, '%Y-%m-%d')
@@ -138,28 +140,11 @@ def logout():
     logout_user()
     return redirect(url_for('.login'))
 
+
 @app.route('/relationship/client')
 def client_start():
-    return render_template('client-start.html')
+    return RelationshipController.handle()
 
-@app.route('/relationship/client/login',methods=['GET'])
-def client_login():
-    return render_template("client-login.html")
-
-@app.route('/relationship/client/enter-token')
-@login_required
-def client_enter_token():
-    return render_template('client-enter-token.html')
-
-@app.route('/relationship/client/confirm')
-@login_required
-def client_confirm():
-    return render_template('client-confirm.html')
-
-@app.route('/relationship/client/confirmed', methods =['POST'])
-@login_required
-def client_confirmed():
-    return render_template('client-confirmed.html')
 
 @app.route('/relationship/conveyancer')
 def conveyancer_start():
