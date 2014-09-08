@@ -41,7 +41,7 @@ from application import (
 
 from utils import get_or_log_error
 
-from application.frontend.controllers import RelationshipController
+from controllers import RelationshipController
 
 @app.template_filter()
 def format_date_YMD(value):

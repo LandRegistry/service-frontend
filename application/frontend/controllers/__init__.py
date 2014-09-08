@@ -1,0 +1,3 @@
+from application.frontend.controllers.relationship_controller import RelationshipController
+
+relationship_controller = RelationshipController()
