@@ -76,10 +76,10 @@ class ConveyancerController(object):
       handle_conveyancer_token]
 
     def handle():
-        if request.session['step']
+        if request.session['step']:
             current_step = request.session['step']
 
-            if current_step > len(steps)
+            if current_step > len(steps):
                 error
 
             next_step = steps[current_step + 1]
