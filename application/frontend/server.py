@@ -44,7 +44,7 @@ from utils import get_or_log_error
 
 
 from controllers import ClientController, ConveyancerController
-relationshipController = RelationshipController()
+clientController = ClientController()
 
 @app.template_filter()
 def format_date_YMD(value):
@@ -145,7 +145,7 @@ def logout():
 
 @app.route('/relationship/client')
 def relationship_client():
-    return relationshipController.handle()
+    return render_template(clientController.handle(session))
 
 
 @app.route('/relationship/conveyancer')

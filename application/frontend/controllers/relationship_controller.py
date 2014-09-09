@@ -1,33 +1,54 @@
+from flask import session
 from flask.ext.login import login_required
+from application import app
 
 class ClientController(object):
 
     def handle_client_start():
-        return render_template('client-start.html')
+        return 'client-start.html'
 
-    @login_required
     def handle_client_enter_token():
-        return render_template('client-enter-token.html')
+        return 'client-enter-token.html'
 
-    @login_required
     def handle_client_confirm():
-        return render_template('client-confirm.html')
+        return 'client-confirm.html'
 
-    @login_required
     def handle_client_confirmed():
-        return render_template('client-confirmed.html')
+        return 'client-confirmed.html'
 
+    global steps
     steps = [handle_client_start, handle_client_enter_token, handle_client_confirm, handle_client_confirmed]
 
-    def handle():
-        if request.session['step']:
-            current_step = request.session['step']
+    def handle(self, session):
+        app.logger.info(" ****** YO *******")
+        next_step_number = 0
+        next_step_function = steps[0]
 
-            if current_step > len(steps):
-                error
+        app.logger.info("session STEP: %s" % session['step'])
+        app.logger.info(" ****** YOLO *******")
+        try:
+            if 'step' in session:
+                app.logger.info("********** IN IF *******")
+                current_step_number = session['step']
+                app.logger.info(current_step_number)
+                if current_step_number + 1 > len(steps):
+                    raise Exception("Requested a step that does not exist")
 
-            next_step = steps[current_step + 1]
-
+                app.logger.info("********** IN IF step 2*******")
+                next_step_function = steps[current_step_number + 1]
+                app.logger.info("********** IN IF step 3 *******")
+                next_step_number = next_step_number + 1
+                app.logger.info("********** IN IF step 4 *******")
+                app.logger.info("next_step_number : %s" % next_step_number )
+        except KeyError:
+            app.logger.info("******** KEY ERROR ***********")
+            next_step_number = 0
+            next_step_function = steps[0]
+        finally:
+            app.logger.info(" ****** KTHNXBAI *******")
+            session['step'] = next_step_number
+            app.logger.info("session STEP: %s" % session['step'])
+            return next_step_function()
 
 class ConveyancerController(object):
 
@@ -75,7 +96,7 @@ class ConveyancerController(object):
       handle_conveyancer_confirm,
       handle_conveyancer_token]
 
-    def handle():
+    def handle(self):
         if request.session['step']:
             current_step = request.session['step']
 
