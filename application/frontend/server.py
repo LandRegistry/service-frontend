@@ -45,6 +45,7 @@ from utils import get_or_log_error
 
 from controllers import ClientController, ConveyancerController
 clientController = ClientController()
+conveyancerController = ConveyancerController()
 
 @app.template_filter()
 def format_date_YMD(value):
@@ -149,5 +150,44 @@ def relationship_client():
 
 
 @app.route('/relationship/conveyancer')
-def relationship_conveyancer():
-    return ConveyancerController.handle()
+def conveyancer_start():
+    return render_template('conveyancer-start.html')
+
+@app.route('/relationship/conveyancer/login')
+def conveyancer_login():
+    return render_template('conveyancer-login.html')
+
+@app.route('/relationship/conveyancer/search')
+@login_required
+def conveyancer_search():
+    return render_template('conveyancer-search.html')
+
+@app.route('/relationship/conveyancer/property')
+@login_required
+def conveyancer_select_property():
+    return render_template('conveyancer-select-property.html')
+
+@app.route('/relationship/conveyancer/task')
+@login_required
+def conveyancer_select_task():
+    return render_template('conveyancer-select-task.html')
+
+@app.route('/relationship/conveyancer/clients')
+@login_required
+def conveyancer_add_clients():
+    return render_template('conveyancer-add-clients.html')
+
+@app.route('/relationship/conveyancer/client')
+@login_required
+def conveyancer_add_client():
+    return render_template('conveyancer-add-client.html')
+
+@app.route('/relationship/conveyancer/confirm')
+@login_required
+def conveyancer_confirm():
+    return render_template('conveyancer-confirm.html')
+
+@app.route('/relationship/conveyancer/token')
+@login_required
+def conveyancer_token():
+    return render_template('conveyancer-token.html')
