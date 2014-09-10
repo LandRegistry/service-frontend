@@ -1,12 +1,10 @@
 import os
-import requests
 from datetime import datetime
 
 from flask import (
     abort,
     render_template,
     request,
-    current_app,
     redirect,
     url_for,
     flash,
@@ -27,7 +25,7 @@ from forms import (
 )
 
 from application.services import (
-    post_to_decision,
+    post_to_cases,
     is_matched,
     is_owner
 )
@@ -106,8 +104,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
         if form.validate_on_submit():
             if 'confirm' in form and form.confirm.data:
-                decision_url = '%s/decisions' % current_app.config['DECISION_URL']
-                post_to_decision(decision_url, form.data)
+                post_to_cases(form.data)
                 # TODO handle non-200 responses, and ack accordingly.
                 return render_template('acknowledgement.html', form=form)
             else:
