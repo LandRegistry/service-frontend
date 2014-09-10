@@ -19,14 +19,7 @@
               {{ form.csrf_token }}{{form.hidden_tag()}}
 
               <fieldset>
-                <p class="lede">
-                  I confirm that I,
-                  <span>{{form.proprietor_new_full_name.data}}</span>, was married to
-                  <span>{{form.partner_name.data}}</span> on
-                  <span>{{form.marriage_date.data | format_date_DMY}}</span> in
-                  <span>{{form.marriage_place.data}}</span>,
-                  <span>{{form.marriage_country.data}}</span>.
-                </p>
+                <p class="lede">I confirm that I, {{form.proprietor_new_full_name.data}}, was married to {{form.partner_name.data}} on {{form.marriage_date.data | format_date_DMY}} in {{form.marriage_place.data}}, {{form.marriage_country.data}}.</p>
                 <p>The information I provide in this application will be used to change the name on registered title number {{form.title_number.data}}.</p>
                 <p class="panel-indent">If I knowingly give false information this could lead to a criminal prosecution resulting in a fine or prison sentence.</p>
 

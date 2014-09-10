@@ -10,14 +10,12 @@ from wtforms import (
         BooleanField,
         DateField,
         PasswordField,
-        SubmitField
-)
+        SubmitField,
+        SelectField)
 
-from wtforms.validators import DataRequired
-from wtforms.validators import ValidationError
-
-from fields import CountriesField
-
+from wtforms.validators import DataRequired, ValidationError
+from datatypes import country_code_validator
+from application.frontend.field_helpers import countries_list_for_selector
 
 class ValidateDateNotInFuture(object):
     def __init__(self):
@@ -55,8 +53,9 @@ class ChangeForm(Form):
     partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
     marriage_date = DateField('Date of marriage', format='%d-%m-%Y', validators=[DataRequired(), ValidateDateNotInFuture()], description="For example, 20-08-2011")
     marriage_place = StringField('Location of marriage ceremony', validators=[DataRequired()])
-    #marriage_country = CountriesField('Country of marriage ceremony', validators=[DataRequired()], top_countries=['GB'])
-    marriage_country = StringField('Country of marriage ceremony', validators=[DataRequired()])
+    marriage_country = SelectField('Country',
+                validators=[DataRequired(), country_code_validator.wtform_validator()],
+                choices=countries_list_for_selector)
     marriage_certificate_number = StringField('Marriage certificate number', validators=[DataRequired()])
 
 
