@@ -1,6 +1,7 @@
 import os
 import requests
 from datetime import datetime
+import json
 
 from flask import (
     abort,
@@ -192,12 +193,9 @@ def conveyancer_confirm():
 def conveyancer_token():
     token = 'paul'
     headers = {'content-type': 'application/json'}
-    test_json = {"conveyancer_lrid":"9c0250cd-dba7-4f7e-b7f5-5d526815bd28", "title_number":"DN100","clients":["b5fafd71-0c60-4a54-b7d0-bedcc8de358c", "fc3b9a32-5887-46e7-9885-c9dd30681f30"]}
+    test_json = json.dumps({"conveyancer_lrid":"9c0250cd-dba7-4f7e-b7f5-5d526815bd28", "title_number":"DN100","clients":["b5fafd71-0c60-4a54-b7d0-bedcc8de358c", "fc3b9a32-5887-46e7-9885-c9dd30681f30"]})
     relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
-    # get token from introduction service
     app.logger.info("Sending data %s to introduction at %s" % (test_json, relationship_url))
     response = requests.post(relationship_url, data=test_json, headers=headers)
-
-    # bad syntax returned when posting to introduction like this.
-
+    app.logger.info(response.json())
     return render_template('conveyancer-token.html', token = token)
