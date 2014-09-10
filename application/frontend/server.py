@@ -175,14 +175,8 @@ def conveyancer_select_property():
     result_json = response.json()
     app.logger.info("Found for the following %s result: %s"
                     % (len(result_json['results']), result_json))
-    # one_result = len(result_json['results']) == 1
-    # if one_result:
-    #     title = result_json['results'][0]
-    #     return property_by_title_number(title['title_number'])
-    # else:
-    #     return render_template('search_results.html', results=result_json['results'])
-
-    return render_template('conveyancer-select-property.html')
+   
+    return render_template('conveyancer-select-property.html', results = result_json['results'])
 
 
 @app.route('/relationship/conveyancer/task')

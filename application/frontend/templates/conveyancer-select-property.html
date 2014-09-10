@@ -3,6 +3,38 @@
 {% block content %}
 
 <main id="wrapper" role="main">
+
+    <div class="inner-block">
+        <h1 class="heading-xlarge">Search results</h1>
+
+        {% if results %}
+
+        <ul class="results-list">
+            {% for title in results %}
+            <li class="result" itemscope itemtype="http://schema.org/PostalAddress">
+                <h2 class="grid lede" itemprop="streetAddress">{{ title.property.address.house_number }} {{ title.property.address.road }}</h2>
+                <div class="grid grid-1-4">
+                    <span itemprop="addressLocality">{{ title.property.address.town }}</span><br>
+                    <span itemprop="postalCode">{{ title.property.address.postcode }}</span>
+                    <p>
+                        <a href="/property/{{ title.title_number }}">View full details</a>
+                    </p>
+                </div>
+                <div class="grid grid-1-2">
+                    Title number: {{ title.title_number }}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {% else %}
+
+        <p>No results found</p>
+
+        {% endif %}
+
+    </div>
+
     <div id="content">
     {% include "inc_alpha_banner.html" %}
 
