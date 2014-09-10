@@ -42,16 +42,18 @@ from application import (
 
 from utils import get_or_log_error
 
-
-
 from controllers import ClientController, ConveyancerController
+
 clientController = ClientController()
 conveyancerController = ConveyancerController()
+search_api = app.config['SEARCH_API']
+
 
 @app.template_filter()
 def format_date_YMD(value):
     new_date = datetime.strptime(value, '%Y-%m-%d')
     return new_date.strftime('%d %B %Y')
+
 
 @app.template_filter()
 def format_date_DMY(value):
@@ -108,7 +110,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
             title = response.json()
             app.logger.info("Found the following title: %s" % title)
             form.title_number.data = title['title_number']
-            proprietor = title['proprietors'][proprietor_index-1]
+            proprietor = title['proprietors'][proprietor_index - 1]
             form.proprietor_previous_full_name.data = proprietor['full_name']
 
         if form.validate_on_submit():
@@ -124,7 +126,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
         abort(401)
 
 
-@app.route('/login',methods=['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -135,6 +137,7 @@ def login():
         else:
             flash("Invalid login")
     return render_template("auth/login_user.html", form=form)
+
 
 @app.route("/logout")
 @login_required
@@ -153,43 +156,68 @@ def relationship_client():
 def conveyancer_start():
     return render_template('conveyancer-start.html')
 
+
 @app.route('/relationship/conveyancer/search')
 @login_required
 def conveyancer_search():
     return render_template('conveyancer-search.html')
 
-@app.route('/relationship/conveyancer/property')
+
+@app.route('/relationship/conveyancer/property', methods=['POST'])
 @login_required
 def conveyancer_select_property():
+    app.logger.info('***************************************** ' + repr(request))
+    query = request.form['search-text']
+    search_api_url = "%s/%s" % (search_api, 'search')
+    search_url = "%s?query=%s" % (search_api_url, query)
+    app.logger.info("URL requested %s" % search_url)
+    response = get_or_log_error(search_url)
+    result_json = response.json()
+    app.logger.info("Found for the following %s result: %s"
+                    % (len(result_json['results']), result_json))
+    # one_result = len(result_json['results']) == 1
+    # if one_result:
+    #     title = result_json['results'][0]
+    #     return property_by_title_number(title['title_number'])
+    # else:
+    #     return render_template('search_results.html', results=result_json['results'])
+
     return render_template('conveyancer-select-property.html')
+
 
 @app.route('/relationship/conveyancer/task')
 @login_required
 def conveyancer_select_task():
     return render_template('conveyancer-select-task.html')
 
+
 @app.route('/relationship/conveyancer/clients')
 @login_required
 def conveyancer_add_clients():
     return render_template('conveyancer-add-clients.html')
+
 
 @app.route('/relationship/conveyancer/client')
 @login_required
 def conveyancer_add_client():
     return render_template('conveyancer-add-client.html')
 
+
 @app.route('/relationship/conveyancer/confirm')
 @login_required
 def conveyancer_confirm():
     return render_template('conveyancer-confirm.html')
 
+
 @app.route('/relationship/conveyancer/token')
 @login_required
 def conveyancer_token():
     headers = {'content-type': 'application/json'}
-    test_json = json.dumps({"conveyancer_lrid":"9c0250cd-dba7-4f7e-b7f5-5d526815bd28", "title_number":"DN100","clients":["b5fafd71-0c60-4a54-b7d0-bedcc8de358c", "fc3b9a32-5887-46e7-9885-c9dd30681f30"]})
+    test_json = json.dumps({"conveyancer_lrid": "9c0250cd-dba7-4f7e-b7f5-5d526815bd28", "title_number": "DN100",
+                            "clients": ["b5fafd71-0c60-4a54-b7d0-bedcc8de358c",
+                                        "fc3b9a32-5887-46e7-9885-c9dd30681f30"]})
     relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
     app.logger.info("Sending data %s to introduction at %s" % (test_json, relationship_url))
     response = requests.post(relationship_url, data=test_json, headers=headers)
     token = response.json()['code']
-    return render_template('conveyancer-token.html', token = token)
+    return render_template('conveyancer-token.html', token=token)

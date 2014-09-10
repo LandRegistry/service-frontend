@@ -9,7 +9,7 @@
     <div class="outer-block">
       <div class="inner-block">
 
-        <form class="form" action="/relationship/conveyancer/property" method="get">
+        <form class="form" action="/relationship/conveyancer/property" method="POST">
 
           <h1 class="form-title heading-large">
             Find property
@@ -18,7 +18,7 @@
           <div class="form-group">
             <label class="form-label-bold" for="search">Search the land registry</label>
             <p class="form-hint">Title number, postcode, city or town, street name, etc.</p>
-            <input type="text" class="form-control" id="search">
+            <input type="text" name="search-text" class="form-control"  id="search">
           </div>
 
           <div class="form-group">
