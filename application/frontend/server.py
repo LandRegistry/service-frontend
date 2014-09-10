@@ -136,7 +136,6 @@ def login():
             flash("Invalid login")
     return render_template("auth/login_user.html", form=form)
 
-
 @app.route("/logout")
 @login_required
 def logout():
@@ -191,11 +190,10 @@ def conveyancer_confirm():
 @app.route('/relationship/conveyancer/token')
 @login_required
 def conveyancer_token():
-    token = 'paul'
     headers = {'content-type': 'application/json'}
     test_json = json.dumps({"conveyancer_lrid":"9c0250cd-dba7-4f7e-b7f5-5d526815bd28", "title_number":"DN100","clients":["b5fafd71-0c60-4a54-b7d0-bedcc8de358c", "fc3b9a32-5887-46e7-9885-c9dd30681f30"]})
     relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
     app.logger.info("Sending data %s to introduction at %s" % (test_json, relationship_url))
     response = requests.post(relationship_url, data=test_json, headers=headers)
-    app.logger.info(response.json())
+    token = response.json()['code']
     return render_template('conveyancer-token.html', token = token)
