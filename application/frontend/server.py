@@ -175,12 +175,14 @@ def conveyancer_select_property():
     app.logger.info("Found for the following %s result: %s"
                     % (len(result_json['results']), result_json))
 
-    return render_template('conveyancer-select-property.html', results = result_json['results'], apiKey=os.environ['OS_API_KEY'])
+    return render_template('conveyancer-select-property.html', results=result_json['results'], apiKey=os.environ['OS_API_KEY'])
 
 
-@app.route('/relationship/conveyancer/task')
+@app.route('/relationship/conveyancer/task', methods=['POST'])
 @login_required
 def conveyancer_select_task():
+    session['title_no'] = request.form['title_no']
+
     return render_template('conveyancer-select-task.html')
 
 

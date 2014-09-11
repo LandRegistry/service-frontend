@@ -27,9 +27,13 @@
 
                             <p>Title number: {{ title.title_number }}</p>
 
-                            <p>
-                                <a href="/relationship/conveyancer/task" class="button">Select this property</a>
-                            </p>
+                            <form class="form" action="/relationship/conveyancer/task" method="POST">
+                                <input type="hidden" name="title_no" value="{{ title.title_number }}">
+                                <p>
+                                    <input type="submit" class="button" value="Select this property">
+                                </p>
+                            </form>
+
                         </div>
                         <div class="grid grid-1-4">
                             <div id="map" class="title-plan" style="width:240px; height:160px;">
