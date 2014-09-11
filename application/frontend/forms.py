@@ -76,3 +76,10 @@ class ConfirmForm(ChangeForm):
     marriage_country = HiddenField('Country of marriage ceremony')
     marriage_certificate_number = HiddenField('Marriage certificate number')
 
+
+class ConveyancerAddClientForm(Form):
+    full_name = StringField('Full name', validators=[DataRequired()])
+    date_of_birth = DateField('Date of birth', format='%d-%m-%Y', validators=[DataRequired(), ValidateDateNotInFuture()], description="For example, 20-08-2011")
+    address = StringField('Address', validators=[DataRequired()])
+    telephone = StringField('Telephone', validators=[DataRequired()])
+    email = StringField('Email address', validators=[DataRequired()])
