@@ -1,4 +1,5 @@
 {% extends "servicefrontend_base.html" %}
+{% from "_form_helpers.html" import render_field %}
 
 {% block content %}
 
@@ -16,53 +17,24 @@
           </h1>
 
           <div class="form-group">
-            <label class="form-label-bold" for="full-name">Full name</label>
-            <input type="number" class="form-control" id="full-name" name="full-name">
+            {{ render_field(form.full_name)}}
           </div>
 
           <!-- Date of birth -->
           <div class="form-group">
-            <fieldset>
-              <legend class="form-label-bold">Date of birth</legend>
-
-              <div class="date-of-birth">
-                <p class="form-hint">For example, 08 04 2014</p>
-
-                <div class="form-group form-group-day">
-                  <label for="dob-day">Day</label>
-                  <input type="text" class="form-control" id="dob-day">
-                </div>
-                <div class="form-group form-group-month">
-                  <label for="dob-month">Month</label>
-                  <input type="text" class="form-control" id="dob-month">
-                </div>
-                <div class="form-group form-group-year">
-                  <label for="dob-year">Year</label>
-                  <input type="text" class="form-control" id="dob-year">
-                </div>
-              </div>
-
-              <div class="form-date native-date-of-birth">
-                <p class="form-hint">For example, 08 April 2014</p>
-                <input type="date" class="form-control">
-              </div>
-
-            </fieldset>
+            {{ render_field(form.date_of_birth)}}
           </div>
 
           <div class="form-group">
-            <label class="form-label-bold" for="address">Address</label>
-            <textarea class="form-control" id="address" name="address" rows="6"></textarea>
+            {{ render_field(form.address)}}
           </div>
 
           <div class="form-group">
-            <label class="form-label-bold" for="tel">Telephone</label>
-            <input type="tel" pattern="[0-9]{10}" class="form-control form-control-1-2" id="tel" name="tel">
+            {{ render_field(form.telephone)}}
           </div>
 
           <div class="form-group">
-            <label class="form-label-bold" for="email">Email address</label>
-            <input type="email" class="form-control form-control-1-2" id="email" name="email">
+            {{ render_field(form.email)}}
           </div>
 
           <div class="form-group">

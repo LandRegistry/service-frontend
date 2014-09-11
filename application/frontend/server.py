@@ -1,8 +1,8 @@
 import os
-import requests
 from datetime import datetime
 import json
 
+import requests
 from flask import (
     abort,
     render_template,
@@ -20,29 +20,25 @@ from flask.ext.login import (
     login_required,
     current_user
 )
-
 from forms import (
     ChangeForm,
     ConfirmForm,
-    LoginForm
+    LoginForm,
+    SelectTaskForm,
+    ConveyancerAddClientForm
 )
-
 from application.services import (
     post_to_decision,
     is_matched,
     is_owner
 )
-
 from application.auth.models import User
-
 from application import (
-    app,
-    db
+    app
 )
-
 from utils import get_or_log_error
-
 from controllers import ClientController, ConveyancerController
+
 
 clientController = ClientController()
 conveyancerController = ConveyancerController()
@@ -159,13 +155,13 @@ def conveyancer_start():
 
 @app.route('/relationship/conveyancer/search')
 @login_required
-def conveyancer_search():
+def client_relationship_flow_step_1_search():
     return render_template('conveyancer-search.html')
 
 
 @app.route('/relationship/conveyancer/property', methods=['POST'])
 @login_required
-def conveyancer_select_property():
+def client_relationship_flow_step_2_select_property():
     query = request.form['search-text']
     search_api_url = "%s/%s" % (search_api, 'search')
     search_url = "%s?query=%s" % (search_api_url, query)
@@ -175,27 +171,32 @@ def conveyancer_select_property():
     app.logger.info("Found for the following %s result: %s"
                     % (len(result_json['results']), result_json))
 
-    return render_template('conveyancer-select-property.html', results=result_json['results'], apiKey=os.environ['OS_API_KEY'])
+    return render_template('conveyancer-select-property.html',
+                           results=result_json['results'],
+                           apiKey=os.environ['OS_API_KEY'])
 
 
 @app.route('/relationship/conveyancer/task', methods=['POST'])
 @login_required
-def conveyancer_select_task():
+def client_relationship_flow_step_3_select_task():
     session['title_no'] = request.form['title_no']
+    return render_template('conveyancer-select-task.html', form=(SelectTaskForm(request.form)))
 
-    return render_template('conveyancer-select-task.html')
 
-
-@app.route('/relationship/conveyancer/clients')
+@app.route('/relationship/conveyancer/clients', methods=['POST'])
 @login_required
-def conveyancer_add_clients():
+def client_relationship_flow_step_4_conveyancer_add_clients():
+    form = SelectTaskForm(request.form)
+    session['buying_or_selling'] = form.buying_or_selling_property.data
+    session['another_task'] = form.another_task.data
     return render_template('conveyancer-add-clients.html')
 
 
 @app.route('/relationship/conveyancer/client')
 @login_required
 def conveyancer_add_client():
-    return render_template('conveyancer-add-client.html')
+    form = ConveyancerAddClientForm()
+    return render_template('conveyancer-add-client.html', form=(ConveyancerAddClientForm()))
 
 
 @app.route('/relationship/conveyancer/confirm')

@@ -11,7 +11,7 @@ from wtforms import (
         DateField,
         PasswordField,
         SubmitField,
-        SelectField)
+        SelectField, RadioField)
 
 from wtforms.validators import DataRequired, ValidationError
 from datatypes import country_code_validator
@@ -83,3 +83,14 @@ class ConveyancerAddClientForm(Form):
     address = StringField('Address', validators=[DataRequired()])
     telephone = StringField('Telephone', validators=[DataRequired()])
     email = StringField('Email address', validators=[DataRequired()])
+
+
+class SelectTaskForm(Form):
+
+    another_task = StringField('Or another task:')
+    buying_or_selling_property = RadioField(
+        'Is your client buying or selling this property?',
+        choices=[
+            ('Buying this property', 'Buying this property'),
+            ('Selling this property', 'Selling this property')
+        ])
