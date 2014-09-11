@@ -76,7 +76,6 @@ class ConfirmForm(ChangeForm):
     marriage_country = HiddenField('Country of marriage ceremony')
     marriage_certificate_number = HiddenField('Marriage certificate number')
 
-<<<<<<< HEAD
 
 class SelectTaskForm(Form):
 
@@ -87,5 +86,4 @@ class SelectTaskForm(Form):
             ('Buying this property', 'Buying this property'),
             ('Selling this property', 'Selling this property')
         ])
-=======
->>>>>>> d0b91e10c5a04f01a051ab3d6dff8dd9648d38a5
+
