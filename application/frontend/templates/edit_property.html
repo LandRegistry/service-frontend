@@ -20,12 +20,12 @@
 
               <fieldset>
                 {{ form.title_number }}
-                {{form.proprietor_previous_full_name}}
+                {{form.proprietor_ull_name}}
 
                 <div class="form-group notification">
-                  <label class="control-label" for="proprietor_previous_name">Previous name</label>
-                  <span class="notification__highlight" id="proprietor_previous_name" name="proprietor_previous_name">
-                    {{form.proprietor_previous_full_name.data}}
+                  <label class="control-label" for="proprietor_name">Previous name</label>
+                  <span class="notification__highlight" id="proprietor_name" name="proprietor_name">
+                    {{form.proprietor_full_name.data}}
                   </span>
                 </div>
 

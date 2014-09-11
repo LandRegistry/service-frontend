@@ -17,9 +17,9 @@ class CasesTestCase(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_post(self, mock_post):
-        dummy_data = {'title_number': 'TEST123', 'proprietor_previous_full_name': 'Bob', 'marriage_country': 'GB', 'marriage_date': datetime.datetime.now()}
+        dummy_data = {'title_number': 'TEST123', 'proprietor_full_name': 'Bob', 'marriage_country': 'GB', 'marriage_date': datetime.datetime.now()}
 
         with app.test_request_context():
-            post_to_cases(dummy_data)
+            post_to_cases('the-action', dummy_data)
 
         assert len(mock_post.call_args_list) == 1
