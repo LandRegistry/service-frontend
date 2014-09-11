@@ -108,7 +108,9 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
                 # TODO handle non-200 responses, and ack accordingly.
                 return render_template('acknowledgement.html', form=form)
             else:
-                return render_template('confirm.html', form=ConfirmForm(obj=form.data))
+                from datatypes.validators.iso_country_code_validator import countries
+                country = countries.get(alpha2=form.data['marriage_country']).name
+                return render_template('confirm.html', form=ConfirmForm(obj=form.data), country=country)
         return render_template('edit_property.html', form=form)
     else:
         abort(401)
