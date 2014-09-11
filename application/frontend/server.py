@@ -166,7 +166,6 @@ def conveyancer_search():
 @app.route('/relationship/conveyancer/property', methods=['POST'])
 @login_required
 def conveyancer_select_property():
-    app.logger.info('***************************************** ' + repr(request))
     query = request.form['search-text']
     search_api_url = "%s/%s" % (search_api, 'search')
     search_url = "%s?query=%s" % (search_api_url, query)
@@ -175,8 +174,8 @@ def conveyancer_select_property():
     result_json = response.json()
     app.logger.info("Found for the following %s result: %s"
                     % (len(result_json['results']), result_json))
-   
-    return render_template('conveyancer-select-property.html', results = result_json['results'])
+
+    return render_template('conveyancer-select-property.html', results = result_json['results'], apiKey=os.environ['OS_API_KEY'])
 
 
 @app.route('/relationship/conveyancer/task')

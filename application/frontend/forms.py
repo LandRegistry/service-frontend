@@ -75,3 +75,4 @@ class ConfirmForm(ChangeForm):
     marriage_place = HiddenField('Location of marriage ceremony')
     marriage_country = HiddenField('Country of marriage ceremony')
     marriage_certificate_number = HiddenField('Marriage certificate number')
+

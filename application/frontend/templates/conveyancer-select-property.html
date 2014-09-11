@@ -1,4 +1,5 @@
 {% extends "servicefrontend_base.html" %}
+{% include "global/map_includes.html" %}
 
 {% block content %}
 
@@ -31,10 +32,11 @@
                             </p>
                         </div>
                         <div class="grid grid-1-4">
-                            <div id="map" class="title-plan" style="width:300px; height:200px;">
+                            <div id="map" class="title-plan" style="width:240px; height:160px;">
                                 <script type='text/javascript'>
-                                var extentData = {{ title.extent | tojson}};
-                                var apiKey = "{{ apiKey }}";
+                                    var extentData = {{ title.extent | tojson}};
+                                    var easementData = null;
+                                    var apiKey = "{{ apiKey }}";
                             </script>
                                 <script src="{{asset_path}}/javascripts/map.js"></script>
                             </div>
