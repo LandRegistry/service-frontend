@@ -24,8 +24,8 @@ from flask.ext.login import (
 from forms import (
     ChangeForm,
     ConfirmForm,
-    LoginForm
-)
+    LoginForm,
+    SelectTaskForm)
 
 from application.services import (
     post_to_decision,
@@ -175,19 +175,23 @@ def conveyancer_select_property():
     result_json = response.json()
     app.logger.info("Found for the following %s result: %s"
                     % (len(result_json['results']), result_json))
-   
+
     return render_template('conveyancer-select-property.html', results = result_json['results'])
 
 
 @app.route('/relationship/conveyancer/task')
 @login_required
 def conveyancer_select_task():
-    return render_template('conveyancer-select-task.html')
+    form = SelectTaskForm()
+    return render_template('conveyancer-select-task.html', form=form)
 
 
 @app.route('/relationship/conveyancer/clients')
 @login_required
 def conveyancer_add_clients():
+    # Make a new form
+    # render the form tenplates on the view
+    # save the contents of the form to a session cookie.
     return render_template('conveyancer-add-clients.html')
 
 

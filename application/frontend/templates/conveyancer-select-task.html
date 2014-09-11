@@ -1,4 +1,5 @@
 {% extends "servicefrontend_base.html" %}
+{% from "_form_helpers.html" import render_field %}
 
 {% block content %}
 
@@ -16,18 +17,13 @@
           </h1>
 
           <div class="form-group">
-            <label for="radio-inline-1" class="block-label">
-              <input id="radio-inline-1" type="radio" name="task" value="buy-property">
-              Buying this property
-            </label>
-            <label for="radio-inline-2" class="block-label">
-              <input id="radio-inline-2" type="radio" name="task" value="sell-property">
-              Selling this property
-            </label>
+            <fieldset>
+              <legend>Is your client buying or selling this property?</legend>
+              {{ render_field(form.buying_or_selling_property)}}
+            </fieldset>
           </div>
           <div class="form-group">
-            <label class="form-label" for="another-task">Or another task:</label>
-            <input type="text" class="form-control" id="another-task" name="task">
+            {{ render_field(form.another_task)}}
           </div>
 
           <div class="form-group">

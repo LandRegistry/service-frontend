@@ -11,7 +11,7 @@ from wtforms import (
         DateField,
         PasswordField,
         SubmitField,
-        SelectField)
+        SelectField, RadioField)
 
 from wtforms.validators import DataRequired, ValidationError
 from datatypes import country_code_validator
@@ -75,3 +75,14 @@ class ConfirmForm(ChangeForm):
     marriage_place = HiddenField('Location of marriage ceremony')
     marriage_country = HiddenField('Country of marriage ceremony')
     marriage_certificate_number = HiddenField('Marriage certificate number')
+
+
+class SelectTaskForm(Form):
+
+    another_task = StringField('Or another task:')
+    buying_or_selling_property = RadioField(
+        'Is your client buying or selling this property?',
+        choices=[
+            ('Buying this property', 'Buying this property'),
+            ('Selling this property', 'Selling this property')
+        ])
