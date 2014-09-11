@@ -100,11 +100,11 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
             app.logger.info("Found the following title: %s" % title)
             form.title_number.data = title['title_number']
             proprietor = title['proprietors'][proprietor_index-1]
-            form.proprietor_previous_full_name.data = proprietor['full_name']
+            form.proprietor_full_name.data = proprietor['full_name']
 
         if form.validate_on_submit():
             if 'confirm' in form and form.confirm.data:
-                post_to_cases(form.data)
+                post_to_cases('change-name-marriage', form.data)
                 # TODO handle non-200 responses, and ack accordingly.
                 return render_template('acknowledgement.html', form=form)
             else:
