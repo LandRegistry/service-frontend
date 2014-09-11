@@ -166,7 +166,6 @@ def conveyancer_search():
 @app.route('/relationship/conveyancer/property', methods=['POST'])
 @login_required
 def conveyancer_select_property():
-    app.logger.info('***************************************** ' + repr(request))
     query = request.form['search-text']
     search_api_url = "%s/%s" % (search_api, 'search')
     search_url = "%s?query=%s" % (search_api_url, query)
@@ -174,16 +173,17 @@ def conveyancer_select_property():
     response = get_or_log_error(search_url)
     result_json = response.json()
     app.logger.info("Found for the following %s result: %s"
-                    % (len(result_json['results']), result_json))
+                    % (len(result_json['results']), result_json))   
+    return render_template('conveyancer-select-property.html', results=result_json['results'], apiKey=os.environ['OS_API_KEY'])
 
-    return render_template('conveyancer-select-property.html', results = result_json['results'])
 
-
-@app.route('/relationship/conveyancer/task')
+@app.route('/relationship/conveyancer/task', methods=['POST'])
 @login_required
 def conveyancer_select_task():
     form = SelectTaskForm()
+    session['title_no'] = request.form['title_no']
     return render_template('conveyancer-select-task.html', form=form)
+
 
 
 @app.route('/relationship/conveyancer/clients')
