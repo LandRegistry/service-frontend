@@ -104,5 +104,6 @@ class SelectTaskForm(Form):
 
 class ConveyancerAddClientsForm(Form):
     num_of_clients = StringField('How many clients will you act for?',
-                                 validators=[DataRequired(),
-                                             NumberRange(1, 2, "Number of clients cannot be more than two.")])
+                                 validators=[DataRequired()])
+
+    # NumberRange(1, 2, "Number of clients cannot be more than two."

@@ -197,16 +197,18 @@ def client_relationship_flow_step_4_store_task_choices_and_render_number_of_clie
 @login_required
 def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_client_form():
     number_of_clients_form = ConveyancerAddClientsForm(request.form)
-    session['number_of_clients'] = number_of_clients_form.num_of_clients.data
-    if number_of_clients_form.num_of_clients.data == '1':
-        return render_template('conveyancer-add-client.html', add_client_heading='add client',
-                               action_path='/relationship/conveyancer/confirm',
-                               form=(ConveyancerAddClientForm(request.form)))
+    if number_of_clients_form.validate():
+        session['number_of_clients'] = number_of_clients_form.num_of_clients.data
+        if number_of_clients_form.num_of_clients.data == '1':
+            return render_template('conveyancer-add-client.html', add_client_heading='add client',
+                                   action_path='/relationship/conveyancer/confirm',
+                                   form=(ConveyancerAddClientForm(request.form)))
+        else:
+            return render_template('conveyancer-add-client.html', add_client_heading='add first client',
+                                   action_path='/relationship/conveyancer/secondclient',
+                                   form=(ConveyancerAddClientForm(request.form)))
     else:
-        return render_template('conveyancer-add-client.html', add_client_heading='add first client',
-                               action_path='/relationship/conveyancer/secondclient',
-                               form=(ConveyancerAddClientForm(request.form)))
-
+        raise Exception('test')
 
 @app.route('/relationship/conveyancer/secondclient', methods=['POST'])
 @login_required
