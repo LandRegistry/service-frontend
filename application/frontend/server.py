@@ -190,14 +190,15 @@ def client_relationship_flow_step_4_store_task_choices_and_render_number_of_clie
     form = SelectTaskForm(request.form)
     session['buying_or_selling'] = form.buying_or_selling_property.data
     session['another_task'] = form.another_task.data
-    return render_template('conveyancer-add-clients.html', form=(ConveyancerAddClientsForm()))
+    return render_template('conveyancer-add-clients.html', form=(ConveyancerAddClientsForm(request.form)))
 
 
 @app.route('/relationship/conveyancer/client', methods=['POST'])
 @login_required
 def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_client_form():
-    session['number_of_clients'] = request.form['num-clients']
-    if request.form['num-clients'] == '1':
+    number_of_clients_form = ConveyancerAddClientsForm(request.form)
+    session['number_of_clients'] = number_of_clients_form.num_of_clients.data
+    if number_of_clients_form.num_of_clients.data == '1':
         return render_template('conveyancer-add-client.html', add_client_heading='add client',
                                action_path='/relationship/conveyancer/confirm',
                                form=(ConveyancerAddClientForm(request.form)))
