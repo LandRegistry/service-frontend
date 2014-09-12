@@ -208,6 +208,7 @@ def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_cl
                                    action_path='/relationship/conveyancer/secondclient',
                                    form=(ConveyancerAddClientForm(request.form)))
     else:
+
         return render_template('conveyancer-add-clients.html', form=number_of_clients_form)
 
 
@@ -222,7 +223,11 @@ def client_relationship_flow_step_5b_show_the_add_second_client_form():
 @app.route('/relationship/conveyancer/confirm', methods=['POST'])
 @login_required
 def client_relationship_flow_step_6():
-    return render_template('conveyancer-confirm.html')
+    add_client_form = ConveyancerAddClientForm(request.form)
+    if add_client_form.validate():
+        return render_template('conveyancer-confirm.html')
+    else:
+        return render_template('conveyancer-add-client.html', form=add_client_form)
 
 
 @app.route('/relationship/conveyancer/token')
