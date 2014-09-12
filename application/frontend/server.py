@@ -90,13 +90,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
     if is_owner(current_user, title_number):
         form = ChangeForm(request.form, marriage_country='GB')
         if request.method == 'GET':
-            title_url = "%s/%s/%s" % (
-                app.config['AUTHENTICATED_SEARCH_API'],
-                'auth/titles',
-                title_number)
-            app.logger.info("Requesting title url : %s" % title_url)
-            response = get_or_log_error(title_url)
-            title = response.json()
+            title = _get_title(title_number)
             app.logger.info("Found the following title: %s" % title)
             form.title_number.data = title['title_number']
             proprietor = title['proprietors'][proprietor_index-1]
@@ -104,7 +98,16 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
         if form.validate_on_submit():
             if 'confirm' in form and form.confirm.data:
+                # the title will be persisted in its entirety when
+                # it's sent to the casework system
+
+                # HACK read title again instead of getting it from session
+                title = _get_title(title_number)
+                title['proprietors'][proprietor_index - 1] = {'full_name' : form.proprietor_new_full_name.data}
+                form.title.data = title
+
                 post_to_cases('change-name-marriage', form.data)
+                form.title.data
                 # TODO handle non-200 responses, and ack accordingly.
                 return render_template('acknowledgement.html', form=form)
             else:
@@ -115,6 +118,14 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
     else:
         abort(401)
 
+def _get_title(title_number):
+    title_url = "%s/%s/%s" % (
+    app.config['AUTHENTICATED_SEARCH_API'],
+    'auth/titles',
+    title_number)
+    app.logger.debug("Requesting title url : %s" % title_url)
+    response = get_or_log_error(title_url)
+    return response.json()
 
 @app.route('/login',methods=['GET','POST'])
 def login():
