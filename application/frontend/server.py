@@ -208,7 +208,8 @@ def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_cl
                                    action_path='/relationship/conveyancer/secondclient',
                                    form=(ConveyancerAddClientForm(request.form)))
     else:
-        raise Exception('test')
+        return render_template('conveyancer-add-clients.html', form=number_of_clients_form)
+
 
 @app.route('/relationship/conveyancer/secondclient', methods=['POST'])
 @login_required
