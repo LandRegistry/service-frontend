@@ -15,7 +15,7 @@ from wtforms import (
     IntegerField
 )
 
-from wtforms.validators import DataRequired, ValidationError, NumberRange
+from wtforms.validators import DataRequired, ValidationError, NumberRange, Email
 
 from datatypes import country_code_validator
 from application.frontend.field_helpers import countries_list_for_selector
@@ -89,7 +89,17 @@ class ConveyancerAddClientForm(Form):
                               description="For example, 20-08-2011")
     address = TextAreaField('Address', validators=[DataRequired()])
     telephone = StringField('Telephone', validators=[DataRequired()])
-    email = StringField('Email address', validators=[DataRequired()])
+    email = StringField('Email address', validators=[DataRequired(), Email()])
+
+class ConveyancerAddSecondClientForm(Form):
+    full_name = StringField('Full name', validators=[DataRequired()])
+    date_of_birth = DateField('Date of birth', format='%d-%m-%Y',
+                              validators=[DataRequired(), ValidateDateNotInFuture()],
+                              description="For example, 20-08-2011")
+    address = TextAreaField('Address', validators=[DataRequired()])
+    telephone = StringField('Telephone', validators=[DataRequired()])
+    email = StringField('Email address', validators=[DataRequired(), Email()])
+
 
 
 class SelectTaskForm(Form):
@@ -100,7 +110,8 @@ class SelectTaskForm(Form):
             ('buying', 'Buying this property'),
             ('selling', 'Selling this property'),
             ('other', 'Another task')
-        ])
+        ],
+        validators=[DataRequired()])
 
 
 class ConveyancerAddClientsForm(Form):

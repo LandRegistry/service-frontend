@@ -26,7 +26,8 @@ from forms import (
     LoginForm,
     SelectTaskForm,
     ConveyancerAddClientForm,
-    ConveyancerAddClientsForm
+    ConveyancerAddClientsForm,
+    ConveyancerAddSecondClientForm
 )
 from application.services import (
     post_to_decision,
@@ -188,18 +189,21 @@ def client_relationship_flow_step_3_store_selected_title_and_show_task_choices()
 @login_required
 def client_relationship_flow_step_4_store_task_choices_and_render_number_of_clients_form():
     form = SelectTaskForm(request.form)
-    session['buying_or_selling'] = form.buying_or_selling_property.data
-    session['another_task'] = form.another_task.data
-    return render_template('conveyancer-add-clients.html', form=(ConveyancerAddClientsForm(request.form)))
+    if form.validate():
+        session['buying_or_selling'] = form.buying_or_selling_property.data
+        session['another_task'] = form.another_task.data
+        return render_template('conveyancer-add-clients.html', form=(ConveyancerAddClientsForm(request.form)))
+    else:
+        return render_template('conveyancer-select-task.html', form=(SelectTaskForm(request.form)))
 
 
 @app.route('/relationship/conveyancer/client', methods=['POST'])
 @login_required
 def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_client_form():
     number_of_clients_form = ConveyancerAddClientsForm(request.form)
+    session['number_of_clients'] = number_of_clients_form.num_of_clients.data
     if number_of_clients_form.validate():
-        session['number_of_clients'] = number_of_clients_form.num_of_clients.data
-        if number_of_clients_form.num_of_clients.data == '1':
+        if number_of_clients_form.num_of_clients.data == 1:
             return render_template('conveyancer-add-client.html', add_client_heading='add client',
                                    action_path='/relationship/conveyancer/confirm',
                                    form=(ConveyancerAddClientForm(request.form)))
@@ -215,19 +219,44 @@ def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_cl
 @app.route('/relationship/conveyancer/secondclient', methods=['POST'])
 @login_required
 def client_relationship_flow_step_5b_show_the_add_second_client_form():
-    return render_template('conveyancer-add-client.html', add_client_heading='add second client',
-                           action_path='/relationship/conveyancer/confirm',
-                           form=(ConveyancerAddClientForm(request.form)))
+    add_client_form = ConveyancerAddClientForm(request.form)
+    if add_client_form.validate():
+        session['client_full_name'] = add_client_form.full_name.data
+        session['client_date_of_birth'] = add_client_form.date_of_birth.data
+        session['client_address'] = add_client_form.address.data
+        session['client_telephone'] = add_client_form.telephone.data
+        session['client_email'] = add_client_form.email.data
+        return render_template('conveyancer-add-client.html', add_client_heading='add second client',
+                               action_path='/relationship/conveyancer/confirm',
+                               form=(ConveyancerAddSecondClientForm(request.form)))
+    else:
+        return render_template('conveyancer-add-client.html', form=add_client_form,
+                               action_path='/relationship/conveyancer/confirm', add_client_heading='add first client')
 
 
 @app.route('/relationship/conveyancer/confirm', methods=['POST'])
 @login_required
 def client_relationship_flow_step_6():
     add_client_form = ConveyancerAddClientForm(request.form)
+    app.logger.info('************************************about to pop')
+    client_number = session.pop('number_of_clients') #breaks on second validation...key error don't know why
+    app.logger.info('************************************')
+    app.logger.info(client_number)
     if add_client_form.validate():
+        session['last_client_full_name'] = add_client_form.full_name.data
+        session['last_client_date_of_birth'] = add_client_form.date_of_birth.data
+        session['last_client_address'] = add_client_form.address.data
+        session['last_client_telephone'] = add_client_form.telephone.data
+        session['last_client_email'] = add_client_form.email.data
         return render_template('conveyancer-confirm.html')
     else:
-        return render_template('conveyancer-add-client.html', form=add_client_form)
+        if client_number == 1:
+            return render_template('conveyancer-add-client.html', form=add_client_form,
+                                   action_path='/relationship/conveyancer/confirm', add_client_heading='add client')
+        else:
+            return render_template('conveyancer-add-client.html', form=add_client_form,
+                                   action_path='/relationship/conveyancer/secondclient',
+                                   add_client_heading='add second client')
 
 
 @app.route('/relationship/conveyancer/token')
