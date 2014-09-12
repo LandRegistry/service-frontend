@@ -25,7 +25,8 @@ from forms import (
     ConfirmForm,
     LoginForm,
     SelectTaskForm,
-    ConveyancerAddClientForm
+    ConveyancerAddClientForm,
+    ConveyancerAddClientsForm
 )
 from application.services import (
     post_to_decision,
@@ -189,13 +190,12 @@ def client_relationship_flow_step_4_conveyancer_add_clients():
     form = SelectTaskForm(request.form)
     session['buying_or_selling'] = form.buying_or_selling_property.data
     session['another_task'] = form.another_task.data
-    return render_template('conveyancer-add-clients.html')
+    return render_template('conveyancer-add-clients.html', form=(ConveyancerAddClientsForm()))
 
 
 @app.route('/relationship/conveyancer/client')
 @login_required
 def conveyancer_add_client():
-    form = ConveyancerAddClientForm()
     return render_template('conveyancer-add-client.html', form=(ConveyancerAddClientForm()))
 
 
