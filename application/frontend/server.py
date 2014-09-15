@@ -266,40 +266,40 @@ def conveyancer_dict():
         clients = [
             {
                 "lrid": "",
-                "name": session['client_full_name'],
-                "address": session['client_address'],
-                "DOB": session['client_date_of_birth'],
-                "tel_no": session['client_telephone'],
-                "email": session['client_email']
+                "name": session.pop('client_full_name', None),
+                "address": session.pop('client_address', None),
+                "DOB": session.pop('client_date_of_birth', None),
+                "tel_no": session.pop('client_telephone', None),
+                "email": session.pop('client_email', None)
             },
             {
                 "lrid": "",
-                "name": session['last_client_full_name'],
-                "address": session['last_client_address'],
-                "DOB": session['last_client_date_of_birth'],
-                "tel_no": session['last_client_telephone'],
-                "email": session['last_client_email']
+                "name": session.pop('last_client_full_name', None),
+                "address": session.pop('last_client_address', None),
+                "DOB": session.pop('last_client_date_of_birth', None),
+                "tel_no": session.pop('last_client_telephone', None),
+                "email": session.pop('last_client_email', None)
             }
         ]
     else:
         clients = [
             {
                 "lrid": "",
-                "name": session['last_client_full_name'],
-                "address": session['last_client_address'],
-                "DOB": session['last_client_date_of_birth'],
-                "tel_no": session['last_client_telephone'],
-                "email": session['last_client_email']
+                "name": session.pop('last_client_full_name', None),
+                "address": session.pop('last_client_address', None),
+                "DOB": session.pop('last_client_date_of_birth', None),
+                "tel_no": session.pop('last_client_telephone', None),
+                "email": session.pop('last_client_email', None)
             }
         ]
 
     data = {
-        "conveyancer_lrid": "214b78b1-20a0-4cdb-a0f3-111b5ba21d48]",
-        "title_number": session['title_no'],
+        "conveyancer_lrid": session['lrid'],
+        "title_number": session.pop('title_no', None),
         "conveyancer_name": "Da Big Boss Company",
         "conveyancer_address": "123 High Street, Stoke, ST4 4AX",
         "clients": clients,
-        "task": session['buying_or_selling']
+        "task": session.pop('buying_or_selling', None)
     }
     return data
 
