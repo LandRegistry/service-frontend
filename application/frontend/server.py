@@ -27,7 +27,6 @@ from forms import (
     SelectTaskForm,
     ConveyancerAddClientForm,
     ConveyancerAddClientsForm,
-    ConveyancerAddSecondClientForm
 )
 from application.services import (
     post_to_decision,
@@ -228,7 +227,7 @@ def client_relationship_flow_step_5b_show_the_add_second_client_form():
         session['client_email'] = add_client_form.email.data
         return render_template('conveyancer-add-client.html', add_client_heading='add second client',
                                action_path='/relationship/conveyancer/confirm',
-                               form=(ConveyancerAddSecondClientForm(request.form)))
+                               form=(ConveyancerAddClientForm(request.form)))
     else:
         return render_template('conveyancer-add-client.html', form=add_client_form,
                                action_path='/relationship/conveyancer/confirm', add_client_heading='add first client')

@@ -91,16 +91,6 @@ class ConveyancerAddClientForm(Form):
     telephone = StringField('Telephone', validators=[DataRequired()])
     email = StringField('Email address', validators=[DataRequired(), Email()])
 
-class ConveyancerAddSecondClientForm(Form):
-    full_name = StringField('Full name', validators=[DataRequired()])
-    date_of_birth = DateField('Date of birth', format='%d-%m-%Y',
-                              validators=[DataRequired(), ValidateDateNotInFuture()],
-                              description="For example, 20-08-2011")
-    address = TextAreaField('Address', validators=[DataRequired()])
-    telephone = StringField('Telephone', validators=[DataRequired()])
-    email = StringField('Email address', validators=[DataRequired(), Email()])
-
-
 
 class SelectTaskForm(Form):
     another_task = StringField('Please specify:')
