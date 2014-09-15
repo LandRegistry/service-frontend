@@ -22,8 +22,10 @@
         <div class="inner-block">
           <p class="lede" itemscope itemtype="http://schema.org/PostalAddress">
             <span itemprop="streetAddress">
-              Flat 18 Kingman Court<br>
-              Verdant Road<br>
+              {{ property_address['house_number'] }}<br>
+              {{ property_address['road'] }}<br>
+              {{ property_address['town'] }}<br>
+              {{ property_address['postalCode'] }}
             </span>
             <span itemprop="addressLocality">London</span><br>
             <span itemprop="postalCode">SV19 9BT</span>
@@ -52,7 +54,7 @@
       </div>
       <div class="grid grid-1-4">
         <div class="inner-block">
-          <p>Sell this property</p>
+          <p>{{dict['task']}}</p>
         </div>
       </div>
       <div class="grid grid-1-4">
@@ -70,7 +72,7 @@
       </div>
       <div class="grid grid-1-4">
         <div class="inner-block">
-          <p>2</p>
+          <p>{{ client_count }}</p>
         </div>
       </div>
       <div class="grid grid-1-4">
@@ -89,11 +91,8 @@
       <div class="grid grid-1-4">
         <div class="inner-block">
           <p>
-            <b>Matthew Jameson</b><br>
-            118 Leafy Way,<br>
-            Thale,<br>
-            Berks<br>
-            RG12 9AB
+            <b>{{ dict['clients'][0]['name'] }}</b><br>
+            {{ dict['clients'][0]['address'] }}
           </p>
         </div>
       </div>
@@ -114,11 +113,8 @@
       <div class="grid grid-1-4">
         <div class="inner-block">
           <p>
-            <b>Jennifer Spencer</b><br>
-            88 Monad Road,<br>
-            Slough,<br>
-            Berks<br>
-            SL20 3JD
+              <b>{{ dict['clients'][1]['name'] }}</b><br>
+              {{ dict['clients'][1]['address'] }}
           </p>
         </div>
       </div>

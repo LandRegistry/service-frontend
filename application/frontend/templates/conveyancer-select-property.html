@@ -29,6 +29,10 @@
 
                             <form class="form" action="/relationship/conveyancer/task" method="POST">
                                 <input type="hidden" name="title_no" value="{{ title.title_number }}">
+                                <input type="hidden" name="house_number" value="{{ title.property.address.house_number }}">
+                                <input type="hidden" name="road" value="{{ title.property.address.road }}">
+                                <input type="hidden" name="town" value="{{ title.property.address.town }}">
+                                <input type="hidden" name="postalCode" value="{{ title.property.address.postcode }}">
                                 <p>
                                     <input type="submit" class="button" value="Select this property">
                                 </p>
