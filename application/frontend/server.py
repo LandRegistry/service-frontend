@@ -225,7 +225,7 @@ def client_relationship_flow_step_5b_show_the_add_second_client_form():
     add_client_form = ConveyancerAddClientForm(request.form)
     if add_client_form.validate():
         session['client_full_name'] = add_client_form.full_name.data
-        session['client_date_of_birth'] = add_client_form.date_of_birth.data
+        session['client_date_of_birth'] = str(add_client_form.date_of_birth.data)
         session['client_address'] = add_client_form.address.data
         session['client_telephone'] = add_client_form.telephone.data
         session['client_email'] = add_client_form.email.data
@@ -241,13 +241,11 @@ def client_relationship_flow_step_5b_show_the_add_second_client_form():
 @login_required
 def client_relationship_flow_step_6():
     add_client_form = ConveyancerAddClientForm(request.form)
-    app.logger.info('************************************about to pop')
-    client_number = session.pop('number_of_clients')  # breaks on second validation...key error don't know why
-    app.logger.info('************************************')
+    client_number = session['number_of_clients']
     app.logger.info(client_number)
     if add_client_form.validate():
         session['last_client_full_name'] = add_client_form.full_name.data
-        session['last_client_date_of_birth'] = add_client_form.date_of_birth.data
+        session['last_client_date_of_birth'] = str(add_client_form.date_of_birth.data)
         session['last_client_address'] = add_client_form.address.data
         session['last_client_telephone'] = add_client_form.telephone.data
         session['last_client_email'] = add_client_form.email.data
@@ -264,30 +262,44 @@ def client_relationship_flow_step_6():
 
 
 def conveyancer_dict():
-    data = {
-        "conveyancer_lrid": "214b78b1-20a0-4cdb-a0f3-111b5ba21d48",
-        "title_number": "TEST1410429781566",
-        "conveyancer_name": "Da Big Boss Company",
-        "conveyancer_address": "123 High Street, Stoke, ST4 4AX",
-        "clients": [
+    if session['number_of_clients'] > 1:
+        clients = [
             {
-                "lrid": "f55a02a0-057b-4a3f-9e34-ede5791a5874",
-                "name": "Walter White",
-                "address": "1 The house, The town, PL1 1AA",
-                "DOB": "01-01-1960",
-                "tel_no": "01752 123456",
-                "email": "citizen@example.org"
+                "lrid": "",
+                "name": session['client_full_name'],
+                "address": session['client_address'],
+                "DOB": session['client_date_of_birth'],
+                "tel_no": session['client_telephone'],
+                "email": session['client_email']
             },
             {
-                "lrid": "f55a02a0-057b-4a3f-9e34-ede5791a5874",
-                "name": "Skyler White",
-                "address": "1 The house, The town, PL1 1AA",
-                "DOB": "04-06-1970",
-                "tel_no": "01752 9999999",
-                "email": "citizen2@example.org"
+                "lrid": "",
+                "name": session['last_client_full_name'],
+                "address": session['last_client_address'],
+                "DOB": session['last_client_date_of_birth'],
+                "tel_no": session['last_client_telephone'],
+                "email": session['last_client_email']
             }
-        ],
-        "task": "sell"
+        ]
+    else:
+        clients = [
+            {
+                "lrid": "",
+                "name": session['last_client_full_name'],
+                "address": session['last_client_address'],
+                "DOB": session['last_client_date_of_birth'],
+                "tel_no": session['last_client_telephone'],
+                "email": session['last_client_email']
+            }
+        ]
+
+    data = {
+        "conveyancer_lrid": "214b78b1-20a0-4cdb-a0f3-111b5ba21d48]",
+        "title_number": session['title_no'],
+        "conveyancer_name": "Da Big Boss Company",
+        "conveyancer_address": "123 High Street, Stoke, ST4 4AX",
+        "clients": clients,
+        "task": session['buying_or_selling']
     }
     return data
 
@@ -298,10 +310,10 @@ def num_of_clients(conveyancer_dict):
 
 def property_address():
     address = {
-        "house_number": session.pop('house_number'),
-        "road": session.pop('road'),
-        "town": session.pop('town'),
-        "postalCode": session.pop('postalCode')
+        "house_number": session['house_number'],
+        "road": session['road'],
+        "town": session['town'],
+        "postalCode": session['postalCode']
     }
 
     return address
@@ -312,9 +324,7 @@ def property_address():
 def conveyancer_token():
     headers = {'content-type': 'application/json'}
 
-    test_json = json.dumps({"conveyancer_lrid": "9c0250cd-dba7-4f7e-b7f5-5d526815bd28", "title_number": "DN100",
-                            "clients": ["b5fafd71-0c60-4a54-b7d0-bedcc8de358c",
-                                        "fc3b9a32-5887-46e7-9885-c9dd30681f30"]})
+    data = json.dumps(conveyancer_dict())
     relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
     app.logger.info("Sending data %s to introduction at %s" % (data, relationship_url))
     response = requests.post(relationship_url, data=data, headers=headers)

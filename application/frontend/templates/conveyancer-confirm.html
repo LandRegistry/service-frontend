@@ -86,7 +86,11 @@
 
     <div class="grid-wrapper">
       <div class="grid grid-1-4">
-        <h2 class="inner-block heading-small">First client</h2>
+        {% if client_count == 1%}
+          <h2 class="inner-block heading-small">Client</h2>
+        {% else %}
+          <h2 class="inner-block heading-small">First client</h2>
+        {% endif %}
       </div>
       <div class="grid grid-1-4">
         <div class="inner-block">
@@ -106,6 +110,7 @@
 
     <div class="grid-divider grid-3-4"></div>
 
+    {% if client_count == 2 %}
     <div class="grid-wrapper">
       <div class="grid grid-1-4">
         <h2 class="inner-block heading-small">Second client</h2>
@@ -126,6 +131,7 @@
     </div>
 
     <div class="grid-divider grid-3-4"></div>
+    {% endif %}
 
     <div class="outer-block">
       <div class="inner-block">
