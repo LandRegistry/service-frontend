@@ -2,6 +2,14 @@
 
 {% block content %}
 
+<!--{u'property_town': u'London', u'conveyancer_address': u'123 High Street, Stoke, ST4 4AX', u'geometry': {u'geometry': {u'type': u'Polygon', u'coordinates': [[[404439.5558898761, 369899.8484076261], [404440.0558898761, 369899.8484076261], [404440.0558898761, 369900.3484076261], [404439.5558898761, 369900.3484076261], [404439.5558898761, 369899.8484076261]]]},
+<!--u'crs': {u'type': u'name', u'properties': {u'name': u'urn:ogc:def:crs:EPSG:27700'}}, u'type': u'Feature', u'properties': {u'Description': u'Polygon'}}, u'property_postcode': u'N1 4QX',
+<!--u'clients': [{u'lrid': u'', u'name': u'Bob', u'DOB': u'1970-01-01', u'address': u'aegdf', u'tel_no': u'987932845', u'email': u'b@test.com'}],
+u'property_road': u'89B Newington Green Green',
+u'conveyancer_name': u'Da Big Boss Company',
+u'property_no': u'89B Newington Green Green',
+u'title_number': u'TEST1410796409433', u'task': u'buying', u'conveyancer_lrid': u'd0aa45e7-2511-4899-938b-aca9f4a04cd2'}&ndash;&gt;&ndash;&gt;-->
+
 <main id="wrapper" role="main">
     <div id="content">
     {% include "inc_alpha_banner.html" %}
@@ -18,20 +26,11 @@
             <h2 class="heading-small">You are authorising:</h2>
 
             <p itemscope itemtype="http://schema.org/Corporation">
-              <span itemprop="name">Wall &amp; Co Solicitors</span><br>
+              <span itemprop="name">{{details.conveyancer_name}}</span><br>
               <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress" class="address-inline">
                 <span itemprop="streetAddress">
-                  32 Edinburgh Street
-                </span><br>
-                <span itemprop="addressLocality">London</span><br>
-                <span itemprop="postalCode">SW6 7TR</span>
+                  {{details.conveyancer_address}}</span>
               </span>
-              <dl class="definition-inline">
-                <dt>Company registration number</dt>
-                <dd>2347676</dd>
-                <dt>Account number</dt>
-                <dd>1007-789654</dd>
-              </dl>
             </p>
 
           </section><!-- end item -->
@@ -41,67 +40,32 @@
 
             <h2 class="heading-small">To act on your behalf on:</h2>
 
-            <div class="grid grid-1-2">
               <p class="lede" itemscope itemtype="http://schema.org/PostalAddress">
                 <span itemprop="streetAddress">
-                  Flat 18 Kingman Court<br>
-                  Verdant Road<br>
+                  {{details.property_road}}<br>
+                   <!--{{details.property_number}}-->
                 </span>
-                <span itemprop="addressLocality">London</span><br>
-                <span itemprop="postalCode">SV19 9BT</span>
+
               </p>
 
               <dl class="lede definition-inline">
                 <dt>Title number</dt>
-                <dd>GHR67834</dd>
+                <dd>{{ details.title_number }}</dd>
               </dl>
-            </div>
 
-            <div class="grid grid-1-2">
-              <img src="/static/images/dummy-title-plan.png" alt="">
-            </div>
+
+              <h3 class="heading-small">To make the following changes:</h3>
+              <p class="text">{{details.task}} property</p>
+
 
           </section><!-- end item -->
 
 
-          <section class="legal-document--item legal-document--bordered">
-
-            <h3 class="heading-small">To make the following changes:</h3>
-            <p class="text">Sell property</p>
-
-          </section><!-- end item -->
-
-
-          <section class="legal-document--item legal-document--bordered">
-
-            <h3 class="heading-small">Parties:</h3>
-
-            <div class="grid grid-1-2">
-              <p>
-                <b>Matthew Jameson</b> <span class="alert-flag">you</span><br>
-                118 Leafy Way,<br>
-                Thale,<br>
-                Berks<br>
-                RG12 9AB
-              </p>
-            </div>
-
-            <div class="grid grid-1-2">
-              <p>
-                Jennifer Spencer<br>
-                88 Monad Road,<br>
-                Slough,<br>
-                Berks<br>
-                SL20 3JD
-              </p>
-            </div>
-
-          </section><!-- end item -->
 
         </article>
 
 
-        <form action="/relationship/client" method="POST" class="form">
+        <form action="/relationship/client/confirm" method="POST" class="form">
           <div class="form-group">
             <label for="check-1" class="block-label">
               <input id="check-1" type="checkbox" name="agree-execution">
@@ -109,6 +73,7 @@
             </label>
           </div>
           <div class="form-group">
+            <input type="hidden" value="{{token}}" name="token" id="token">
             <button type="submit" class="button">Confirm relationship</button>
           </div>
         </form>

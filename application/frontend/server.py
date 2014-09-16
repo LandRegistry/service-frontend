@@ -10,8 +10,8 @@ from flask import (
     redirect,
     url_for,
     flash,
-    session
-)
+    session,
+    current_app)
 
 from flask.ext.login import (
     login_user,
@@ -158,7 +158,29 @@ def logout():
 
 @app.route('/relationship/client')
 def relationship_client():
-    return render_template(clientController.handle(session))
+    return render_template('client-enter-token.html')
+
+@app.route('/relationship/client/accept/', methods=['POST'])
+def client_get_relationship_details():
+    url = current_app.config['INTRODUCTION_URL']+'/details/' + request.form['token']
+    app.logger.info("INTRO URL: %s" % url)
+    x = get_or_log_error(url)
+    app.logger.info("INTRO resp: %s" % x)
+    app.logger.info("INTRO resp json: %s " % x.json())
+    return render_template('client-confirm.html', details = x.json(), token=request.form['token'])
+
+@app.route('/relationship/client/confirm', methods=['POST'])
+def client_confirm_relationship():
+    app.logger.info('session: %s' % session['lrid'])
+    request_json = json.dumps({'code':request.form['token']})
+    url = current_app.config['INTRODUCTION_URL'] + '/confirm'
+
+    app.logger.info("intro/confirm: " + url)
+    response = requests.post(url, data=request_json, headers={'Content-Type': 'application/json'})
+
+    app.logger.info("info/confirm response %s " % response.json())
+
+    return render_template('client-confirmed.html', conveyancer_name=response.json()['conveyancer_name'])
 
 
 @app.route('/relationship/conveyancer')

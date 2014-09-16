@@ -108,3 +108,4 @@ class ConveyancerAddClientsForm(Form):
     num_of_clients = IntegerField('How many clients will you act for?',
                                   validators=[DataRequired(),
                                               NumberRange(1, 2, "Number of clients cannot be more than two.")])
+
