@@ -7,7 +7,6 @@ from flask import (
     abort,
     render_template,
     request,
-    current_app,
     redirect,
     url_for,
     flash,
@@ -29,7 +28,7 @@ from forms import (
     ConveyancerAddClientsForm
 )
 from application.services import (
-    post_to_decision,
+    post_to_cases,
     is_matched,
     is_owner
 )
@@ -98,30 +97,43 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
     if is_owner(current_user, title_number):
         form = ChangeForm(request.form, marriage_country='GB')
         if request.method == 'GET':
-            title_url = "%s/%s/%s" % (
-                app.config['AUTHENTICATED_SEARCH_API'],
-                'auth/titles',
-                title_number)
-            app.logger.info("Requesting title url : %s" % title_url)
-            response = get_or_log_error(title_url)
-            title = response.json()
+            title = _get_title(title_number)
             app.logger.info("Found the following title: %s" % title)
             form.title_number.data = title['title_number']
-            proprietor = title['proprietors'][proprietor_index - 1]
-            form.proprietor_previous_full_name.data = proprietor['full_name']
+
+            proprietor = title['proprietors'][proprietor_index-1]
+            form.proprietor_full_name.data = proprietor['full_name']
 
         if form.validate_on_submit():
             if 'confirm' in form and form.confirm.data:
-                decision_url = '%s/decisions' % current_app.config['DECISION_URL']
-                post_to_decision(decision_url, form.data)
+                # the title will be persisted in its entirety when
+                # it's sent to the casework system
+
+                # HACK read title again instead of getting it from session
+                title = _get_title(title_number)
+                title['proprietors'][proprietor_index - 1] = {'full_name' : form.proprietor_new_full_name.data}
+                form.title.data = title
+
+                post_to_cases('change-name-marriage', form.data)
+                form.title.data
                 # TODO handle non-200 responses, and ack accordingly.
                 return render_template('acknowledgement.html', form=form)
             else:
-                return render_template('confirm.html', form=ConfirmForm(obj=form.data))
+                from datatypes.validators.iso_country_code_validator import countries
+                country = countries.get(alpha2=form.data['marriage_country']).name
+                return render_template('confirm.html', form=ConfirmForm(obj=form.data), country=country)
         return render_template('edit_property.html', form=form)
     else:
         abort(401)
 
+def _get_title(title_number):
+    title_url = "%s/%s/%s" % (
+    app.config['AUTHENTICATED_SEARCH_API'],
+    'auth/titles',
+    title_number)
+    app.logger.debug("Requesting title url : %s" % title_url)
+    response = get_or_log_error(title_url)
+    return response.json()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

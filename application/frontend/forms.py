@@ -49,9 +49,10 @@ class LoginForm(Form):
 
 class ChangeForm(Form):
     title_number = HiddenField('Title Number')
+    title = HiddenField('Title')
 
     confirm = BooleanField('Confirm')
-    proprietor_previous_full_name = HiddenField('Previous full name')
+    proprietor_full_name = HiddenField('Previous full name')
     proprietor_new_full_name = StringField('New full name', validators=[DataRequired()])
     partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
     marriage_date = DateField('Date of marriage', format='%d-%m-%Y',
@@ -71,9 +72,10 @@ class ConfirmForm(ChangeForm):
     """
 
     title_number = HiddenField('Title Number')
+    title = HiddenField('Title')
 
     confirm = BooleanField('Confirm')
-    proprietor_previous_full_name = HiddenField('Previous full name')
+    proprietor_full_name = HiddenField('Previous full name')
     proprietor_new_full_name = HiddenField('New full name')
     partner_name = HiddenField('Partner\'s full name')
     marriage_date = HiddenField('Date of marriage')

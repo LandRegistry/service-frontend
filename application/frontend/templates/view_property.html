@@ -61,7 +61,7 @@
 
                 </div>
 
-                <dl class="inline">
+                <dl class="definition-tabular">
                     <dt>Registered owner(s)</dt>
                     <dd>
                         {% for proprietor in title.proprietors %}
@@ -101,7 +101,7 @@
                 <h2 class="heading-large">Lease Details</h2>
                 <dd>Short particulars of the lease(s) (or under-lease(s)) under which the land is held:</dd>   <br/>
                 <div class="charges">
-                    <dl class="inline">
+                    <dl class="definition-tabular">
                     {% for lease in title.leases %}
                         <dt>Lease Date</dt>
                         <dd id="leaseDate">{{ lease.lease_date | format_date_YMD }}</dd>
