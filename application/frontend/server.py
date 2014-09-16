@@ -235,26 +235,7 @@ def client_relationship_flow_step_6():
 
 
 def conveyancer_dict():
-    if session['number_of_clients'] > 1:
-        clients = [
-            {
-                "lrid": "",
-                "name": session['client_full_name'],
-                "address": session['client_address'],
-                "DOB": session['client_date_of_birth'],
-                "tel_no": session['client_telephone'],
-                "email": session['client_email']
-            },
-            {
-                "lrid": "",
-                "name": session['last_client_full_name'],
-                "address": session['last_client_address'],
-                "DOB": session['last_client_date_of_birth'],
-                "tel_no": session['last_client_telephone'],
-                "email": session['last_client_email']
-            }
-        ]
-    else:
+   
         clients = [
             {
                 "lrid": "",
