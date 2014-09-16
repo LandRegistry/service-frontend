@@ -95,13 +95,11 @@ class ConveyancerAddClientForm(Form):
 
 
 class SelectTaskForm(Form):
-    another_task = StringField('Please specify:')
     buying_or_selling_property = RadioField(
         'Is your client buying or selling this property?',
         choices=[
             ('buying', 'Buying this property'),
-            ('selling', 'Selling this property'),
-            ('other', 'Another task')
+            ('selling', 'Selling this property')
         ],
         validators=[DataRequired()])
 

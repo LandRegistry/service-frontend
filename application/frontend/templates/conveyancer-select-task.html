@@ -10,7 +10,7 @@
     <div class="outer-block">
       <div class="inner-block">
 
-        <form class="form" action="/relationship/conveyancer/clients" method="POST">
+        <form class="form" action="/relationship/conveyancer/client" method="POST">
 
           <h1 class="form-title heading-large">
             Is your client buying or selling this property?
@@ -19,19 +19,9 @@
           <div class="form-group">
             <fieldset>
                 {% for subfield in form.buying_or_selling_property %}
-                    {% if subfield.label.text == "Another task" %}
-                        <p class="form-block">or</p>
-                        <ul>{{ subfield }}
-                        {{ subfield.label }}</ul>
-                    {% else %}
-                        <ul>{{ subfield }}
-                        {{ subfield.label }}</ul>
-                    {% endif %}
+                       <p> {{ subfield }}  {{ subfield.label }}</p>
                 {% endfor %}
             </fieldset>
-          </div>
-          <div class="form-group" id="taskDetail" style="display: none;">
-            {{ render_field(form.another_task)}}
           </div>
 
           <div class="form-group">
@@ -47,19 +37,7 @@
   </div>
 </main>
 
-<script type="text/javascript">
 
-    $(function() {
-      $(':radio[name="buying_or_selling_property"]').on('change', function() {
-        if ($(this).is(':checked') && $(this).val() === "other") {
-          $('#taskDetail').show();
-        } else {
-          $('#taskDetail').hide();
-        }
-      }).trigger('change');
-    });
-
-  </script>
 
 
 {% endblock %}

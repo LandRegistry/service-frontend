@@ -176,16 +176,13 @@ def client_relationship_flow_step_1_show_search():
 @login_required
 def client_relationship_flow_step_2_render_results_in_template():
     query = request.form['search-text']
-    search_api_url = "%s/%s" % (search_api, 'search')
-    search_url = "%s?query=%s" % (search_api_url, query)
+    search_url = "%s/auth/titles/%s" % (search_api, query)
     app.logger.info("URL requested %s" % search_url)
     response = get_or_log_error(search_url)
     result_json = response.json()
-    app.logger.info("Found for the following %s result: %s"
-                    % (len(result_json['results']), result_json))
-
+    app.logger.info("RESULT = %s" % result_json)
     return render_template('conveyancer-select-property.html',
-                           results=result_json['results'],
+                           title=result_json,
                            apiKey=os.environ['OS_API_KEY'])
 
 
@@ -200,54 +197,18 @@ def client_relationship_flow_step_3_store_selected_title_and_show_task_choices()
     return render_template('conveyancer-select-task.html', form=(SelectTaskForm(request.form)))
 
 
-@app.route('/relationship/conveyancer/clients', methods=['POST'])
-@login_required
-def client_relationship_flow_step_4_store_task_choices_and_render_number_of_clients_form():
-    form = SelectTaskForm(request.form)
-    if form.validate():
-        session['buying_or_selling'] = form.buying_or_selling_property.data
-        session['another_task'] = form.another_task.data
-        return render_template('conveyancer-add-clients.html', form=(ConveyancerAddClientsForm(request.form)))
-    else:
-        return render_template('conveyancer-select-task.html', form=(SelectTaskForm(request.form)))
-
-
 @app.route('/relationship/conveyancer/client', methods=['POST'])
 @login_required
 def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_client_form():
-    number_of_clients_form = ConveyancerAddClientsForm(request.form)
-    session['number_of_clients'] = number_of_clients_form.num_of_clients.data
-    if number_of_clients_form.validate():
-        if number_of_clients_form.num_of_clients.data == 1:
-            return render_template('conveyancer-add-client.html', add_client_heading='add client',
+    session['buying_or_selling'] = request.form['buying_or_selling_property']
+    client_form = ConveyancerAddClientForm()
+    if client_form.validate_on_submit():
+        return render_template('conveyancer-add-client.html', add_client_heading='add client',
                                    action_path='/relationship/conveyancer/confirm',
                                    form=(ConveyancerAddClientForm(request.form)))
-        else:
-            return render_template('conveyancer-add-client.html', add_client_heading='add first client',
-                                   action_path='/relationship/conveyancer/secondclient',
-                                   form=(ConveyancerAddClientForm(request.form)))
     else:
 
-        return render_template('conveyancer-add-clients.html', form=number_of_clients_form)
-
-
-@app.route('/relationship/conveyancer/secondclient', methods=['POST'])
-@login_required
-def client_relationship_flow_step_5b_show_the_add_second_client_form():
-    add_client_form = ConveyancerAddClientForm(request.form)
-    if add_client_form.validate():
-        session['client_full_name'] = add_client_form.full_name.data
-        session['client_date_of_birth'] = str(add_client_form.date_of_birth.data)
-        session['client_address'] = add_client_form.address.data
-        session['client_telephone'] = add_client_form.telephone.data
-        session['client_email'] = add_client_form.email.data
-        return render_template('conveyancer-add-client.html', add_client_heading='add second client',
-                               action_path='/relationship/conveyancer/confirm',
-                               form=(ConveyancerAddClientForm(request.form)))
-    else:
-        return render_template('conveyancer-add-client.html', form=add_client_form,
-                               action_path='/relationship/conveyancer/confirm', add_client_heading='add first client')
-
+        return render_template('conveyancer-add-client.html',   action_path='/relationship/conveyancer/confirm', form=client_form)
 
 @app.route('/relationship/conveyancer/confirm', methods=['POST'])
 @login_required
