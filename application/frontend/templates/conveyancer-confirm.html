@@ -1,0 +1,147 @@
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+    <div id="content">
+    {% include "inc_alpha_banner.html" %}
+
+    <div class="outer-block">
+      <div class="inner-block">
+
+        <h1 class="heading-large">Confirm</h1>
+
+      </div>
+    </div>
+
+    <div class="grid-wrapper">
+      <div class="grid grid-1-4">
+        <h2 class="inner-block heading-small">Property</h2>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <p class="lede" itemscope itemtype="http://schema.org/PostalAddress">
+            <span itemprop="streetAddress">
+              {{ property_address['house_number'] }}<br>
+              {{ property_address['road'] }}<br>
+              {{ property_address['town'] }}<br>
+              {{ property_address['postalCode'] }}
+            </span>
+            <span itemprop="addressLocality">London</span><br>
+            <span itemprop="postalCode">SV19 9BT</span>
+          </p>
+        </div>
+      </div>
+      <!--
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+            <img src="/static/images/dummy-title-plan.png" alt="">
+        </div>
+      </div>
+      -->
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> property details</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-divider grid-3-4"></div>
+
+    <div class="grid-wrapper">
+      <div class="grid grid-1-4">
+        <h2 class="inner-block heading-small">Task</h2>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <p>{{dict['task']}}</p>
+        </div>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> task</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-divider grid-3-4"></div>
+
+    <div class="grid-wrapper">
+      <div class="grid grid-1-4">
+        <h2 class="inner-block heading-small">Number of clients</h2>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <p>{{ client_count }}</p>
+        </div>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> number of clients</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-divider grid-3-4"></div>
+
+    <div class="grid-wrapper">
+      <div class="grid grid-1-4">
+        {% if client_count == 1%}
+          <h2 class="inner-block heading-small">Client</h2>
+        {% else %}
+          <h2 class="inner-block heading-small">First client</h2>
+        {% endif %}
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <p>
+            <b>{{ dict['clients'][0]['name'] }}</b><br>
+            {{ dict['clients'][0]['address'] }}
+          </p>
+        </div>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> first client details</span></a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="grid-divider grid-3-4"></div>
+
+    {% if client_count == 2 %}
+    <div class="grid-wrapper">
+      <div class="grid grid-1-4">
+        <h2 class="inner-block heading-small">Second client</h2>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <p>
+              <b>{{ dict['clients'][1]['name'] }}</b><br>
+              {{ dict['clients'][1]['address'] }}
+          </p>
+        </div>
+      </div>
+      <div class="grid grid-1-4">
+        <div class="inner-block">
+          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> second client details</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-divider grid-3-4"></div>
+    {% endif %}
+
+    <div class="outer-block">
+      <div class="inner-block">
+        <p>
+          <a href="/relationship/conveyancer/token" class="button">Confirm details</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+{% endblock %}

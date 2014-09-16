@@ -1,0 +1,46 @@
+{% extends "servicefrontend_base.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+    <div id="content">
+        {% include "inc_alpha_banner.html" %}
+
+        <div class="outer-block">
+            <div class="inner-block">
+
+                <h1>Create a client relationship</h1>
+
+                <div class="text">
+
+                    <p class="lede">Solicitors or conveyancers acting on behalf of a client must use this service to
+                        generate a unique transaction code.</p>
+
+                    <p>The code must be given to each client on the transaction so they can use it to authorise the
+                        relationship with the solicitor or conveyancer.</p>
+
+                    <p>The relationship will only be authorised once each client on the transaction has completed the
+                        process.</p>
+
+                    <p>To use this service you’ll need to confirm:</p>
+                    <ul class="list-bullet">
+                        <li>your identity on GOV.UK</li>
+                        <li>the address of the property or land</li>
+                        <li>contact details of your client</li>
+                        <li>what your client wants to do</li>
+                    </ul>
+
+                </div>
+
+                <p>
+                    <a href="/relationship/conveyancer/search" class="button">Start now</a>
+                </p>
+
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+{% endblock %}

@@ -10,6 +10,8 @@ class Config(object):
     MATCHING_URL = os.environ['MATCHING_URL']
     OWNERSHIP_URL = os.environ['OWNERSHIP_URL']
     OS_API_KEY = os.environ['OS_API_KEY']
+    INTRODUCTION_URL = os.environ['INTRODUCTION_URL']
+    SEARCH_API = os.environ['SEARCH_API']
 
 
     # optional and only needed on heroku so get

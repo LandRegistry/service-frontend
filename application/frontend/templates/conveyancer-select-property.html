@@ -1,0 +1,68 @@
+{% extends "servicefrontend_base.html" %}
+{% include "global/map_includes.html" %}
+
+{% block content %}
+
+<main id="wrapper" role="main">
+
+    <div id="content">
+        {% include "inc_alpha_banner.html" %}
+
+        <div class="outer-block">
+            <div class="inner-block">
+
+                <h1 class="heading-large">Select property</h1>
+
+                {% if title %}
+
+                <ul class="results-list">
+
+                    <li class="result">
+                        <div class="grid grid-1-3">
+                            <p class="lede" itemscope itemtype="http://schema.org/PostalAddress">
+                                <span itemprop="streetAddress">{{ title.property.address.house_number }} {{ title.property.address.road }}</span>
+                                <span itemprop="addressLocality">{{ title.property.address.town }}</span><br>
+                                <span name = "test" itemprop="postalCode">{{ title.property.address.postcode }}</span>
+                            </p>
+
+                            <p>Title number: {{ title.title_number }}</p>
+
+                            <form class="form" action="/relationship/conveyancer/task" method="POST">
+                                <input type="hidden" name="title_no" value="{{ title.title_number }}">
+                                <input type="hidden" name="house_number" value="{{ title.property.address.house_number }}">
+                                <input type="hidden" name="road" value="{{ title.property.address.road }}">
+                                <input type="hidden" name="town" value="{{ title.property.address.town }}">
+                                <input type="hidden" name="postalCode" value="{{ title.property.address.postcode }}">
+                                <p>
+                                    <input type="submit" class="button" value="Select this property">
+                                </p>
+                            </form>
+
+                        </div>
+                        <div class="grid grid-1-4">
+                            <div id="map" class="title-plan" style="width:240px; height:160px;">
+                                <script type='text/javascript'>
+                                    var extentData = {{ title.extent | tojson}};
+                                    var easementData = null;
+                                    var apiKey = "{{ apiKey }}";
+                            </script>
+                                <script src="{{asset_path}}/javascripts/map.js"></script>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                {% else %}
+
+                <p>No results found</p>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+{% endblock %}
