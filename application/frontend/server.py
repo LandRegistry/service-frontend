@@ -214,7 +214,7 @@ def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_cl
 @login_required
 def client_relationship_flow_step_6():
     add_client_form = ConveyancerAddClientForm(request.form)
-    client_number = 1
+    client_number = session['number_of_clients']
     app.logger.info(client_number)
     if add_client_form.validate():
         session['last_client_full_name'] = add_client_form.full_name.data
@@ -235,17 +235,17 @@ def client_relationship_flow_step_6():
 
 
 def conveyancer_dict():
-   
-        clients = [
-            {
-                "lrid": "",
-                "name": session['last_client_full_name'],
-                "address": session['last_client_address'],
-                "DOB": session['last_client_date_of_birth'],
-                "tel_no": session['last_client_telephone'],
-                "email": session['last_client_email']
-            }
-        ]
+
+    clients = [
+        {
+            "lrid": "",
+            "name": session['last_client_full_name'],
+            "address": session['last_client_address'],
+            "DOB": session['last_client_date_of_birth'],
+            "tel_no": session['last_client_telephone'],
+            "email": session['last_client_email']
+        }
+    ]
 
     data = {
         "conveyancer_lrid": session['lrid'],
