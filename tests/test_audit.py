@@ -36,10 +36,11 @@ class AuditTestCase(unittest.TestCase):
         db.session.add(user)
         db.session.commit()
 
-    def _login(self, email=None, password=None):
+    def _login(self, email=None, password=None, role=None):
         email = email
         password = password or 'password'
-        return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
+        role = role
+        return self.client.post('/login', data={'email': email, 'password': password, 'role': role}, follow_redirects=True)
 
     def logout(self):
         return self.client.get('/logout', follow_redirects=True)
@@ -48,7 +49,7 @@ class AuditTestCase(unittest.TestCase):
     @mock.patch('application.frontend.server.is_matched', return_value=True)
     @mock.patch(LOGGER)
     def test_audit_get_index_logs_authenticated_user(self, mock_logger, mock_match):
-        self._login('landowner@mail.com', 'password')
+        self._login('landowner@mail.com', 'password', 'CITIZEN')
         path = '/'
         self.client.get(path)
         args, kwargs = mock_logger.call_args
@@ -60,7 +61,7 @@ class AuditTestCase(unittest.TestCase):
     @mock.patch('requests.get')
     def test_audit_get_property_page_logs_authenticated_user(self, mock_get,mock_logger, mock_match):
         mock_get.return_value.json.return_value = title
-        self._login('landowner@mail.com', 'password')
+        self._login('landowner@mail.com', 'password', 'CITIZEN')
         path = '/property/TEST123'
         self.client.get(path)
         assert 'Audit: ' in mock_logger.call_args_list[0][0][0]
