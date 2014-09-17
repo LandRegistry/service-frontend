@@ -2,6 +2,7 @@ import logging
 import requests
 import uuid
 import json
+import sys
 
 from requests.exceptions import (
     HTTPError,

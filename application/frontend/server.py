@@ -30,7 +30,8 @@ from forms import (
 from application.services import (
     post_to_cases,
     is_matched,
-    is_owner
+    is_owner,
+    get_lrid_and_roles
 )
 from application.auth.models import User
 from application import (
@@ -66,9 +67,8 @@ def currency(value):
 @app.route('/')
 @login_required
 def index():
-    roles = session['roles']
-    lrid = session['lrid']
-    return render_template('index.html', roles=roles, lrid=lrid)
+    lrid, roles = get_lrid_and_roles(session)
+    return render_template('index.html')
 
 
 @app.route('/property/<title_number>')
@@ -78,10 +78,10 @@ def property_by_title(title_number):
         app.config['AUTHENTICATED_SEARCH_API'],
         'auth/titles',
         title_number)
-    app.logger.info("Requesting title url : %s" % title_url)
+    app.logger.debug("Requesting title url : %s" % title_url)
     response = get_or_log_error(title_url)
     title = response.json()
-    app.logger.info("Found the following title: %s" % title)
+    app.logger.debug("Found the following title: %s" % title)
     owner = is_owner(current_user, title_number)
     return render_template(
         'view_property.html',
@@ -101,7 +101,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
         form = ChangeForm(request.form, marriage_country='GB')
         if request.method == 'GET':
             title = _get_title(title_number)
-            app.logger.info("Found the following title: %s" % title)
+            app.logger.debug("Found the following title: %s" % title)
             form.title_number.data = title['title_number']
 
             proprietor = title['proprietors'][proprietor_index-1]
@@ -181,10 +181,10 @@ def client_relationship_flow_step_1_show_search():
 def client_relationship_flow_step_2_render_results_in_template():
     query = request.form['search-text']
     search_url = "%s/auth/titles/%s" % (search_api, query)
-    app.logger.info("URL requested %s" % search_url)
+    app.logger.debug("URL requested %s" % search_url)
     response = get_or_log_error(search_url)
     result_json = response.json()
-    app.logger.info("RESULT = %s" % result_json)
+    app.logger.debug("RESULT = %s" % result_json)
     return render_template('conveyancer-select-property.html',
                            title=result_json,
                            apiKey=os.environ['OS_API_KEY'])
@@ -213,7 +213,7 @@ def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_cl
 def client_relationship_flow_step_6():
     add_client_form = ConveyancerAddClientForm(request.form)
     client_number = 1
-    app.logger.info(client_number)
+    app.logger.debug(client_number)
     if add_client_form.validate():
         session['last_client_full_name'] = add_client_form.full_name.data
         session['last_client_date_of_birth'] = str(add_client_form.date_of_birth.data)
@@ -278,7 +278,7 @@ def conveyancer_token():
 
     data = json.dumps(conveyancer_dict())
     relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
-    app.logger.info("Sending data %s to introduction at %s" % (data, relationship_url))
+    app.logger.debug("Sending data %s to introduction at %s" % (data, relationship_url))
     response = requests.post(relationship_url, data=data, headers=headers)
     token = response.json()['code']
     clear_captured_client_relationship_session_variables()

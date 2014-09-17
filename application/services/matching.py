@@ -19,10 +19,10 @@ logger.addHandler(logging.StreamHandler())
 
 
 def check_user_match(user):
-    logger.info("Checking user %s against matching service %s" % (user, MATCHING_URL))
+    logger.debug("Checking user %s against matching service %s" % (user, MATCHING_URL))
 
     if 'lrid' in session:
-        logger.info('Already have LRID for user %s' % user)
+        logger.debug('Already have LRID for user %s' % user)
         return True
 
     headers = {'Content-type': 'application/json'}
@@ -36,7 +36,7 @@ def check_user_match(user):
 
         response.raise_for_status()
         data = response.json()
-        logger.info('Reponse lrid %s' % data['lrid'])
+        logger.debug('Reponse lrid %s' % data['lrid'])
 
         # NOTE we are using flask-kvsession with sqlalchemy as
         #storage so session data is not sent client
