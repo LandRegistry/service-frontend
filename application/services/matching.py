@@ -52,3 +52,26 @@ def check_user_match(user):
         logger.error("Unknown error trying to check for user match: %s" % e)
         return False
 
+def get_client_lrid(user):
+    data = user.to_json_for_match()
+    headers = {'Content-type': 'application/json'}
+    try:
+        response = requests.post(
+            url='%s/match' % MATCHING_URL,
+            data=data,
+            headers=headers)
+
+        response.raise_for_status()
+        data = response.json()
+        return data.get('lrid', None)
+
+    except (HTTPError, ConnectionError) as e:
+        logger.error("Error trying to check for lrid for: %s" % data)
+        return False
+    except:
+        e = sys.exc_info()[0]
+        logger.error("Unknown error trying to get lrid for: %s" % data)
+        logger.error("Error: %s" % e)
+        return False
+
+

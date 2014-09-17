@@ -93,6 +93,10 @@ class ConveyancerAddClientForm(Form):
     telephone = StringField('Telephone', validators=[DataRequired()])
     email = StringField('Email address', validators=[DataRequired(), Email()])
 
+    # this is temporary for matching
+    gender = SelectField('Gender', choices=[('', 'Select gender'),('F', 'Female'), ('M', 'Male')], validators=[DataRequired()])
+
+
 
 class SelectTaskForm(Form):
     buying_or_selling_property = RadioField(
@@ -102,10 +106,3 @@ class SelectTaskForm(Form):
             ('selling', 'Selling this property')
         ],
         validators=[DataRequired()])
-
-
-class ConveyancerAddClientsForm(Form):
-    num_of_clients = IntegerField('How many clients will you act for?',
-                                  validators=[DataRequired(),
-                                              NumberRange(1, 2, "Number of clients cannot be more than two.")])
-

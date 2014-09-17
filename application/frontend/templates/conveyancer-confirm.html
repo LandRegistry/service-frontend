@@ -67,70 +67,25 @@
 
     <div class="grid-wrapper">
       <div class="grid grid-1-4">
-        <h2 class="inner-block heading-small">Number of clients</h2>
-      </div>
-      <div class="grid grid-1-4">
-        <div class="inner-block">
-          <p>{{ client_count }}</p>
-        </div>
-      </div>
-      <div class="grid grid-1-4">
-        <div class="inner-block">
-          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> number of clients</span></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid-divider grid-3-4"></div>
-
-    <div class="grid-wrapper">
-      <div class="grid grid-1-4">
-        {% if client_count == 1%}
           <h2 class="inner-block heading-small">Client</h2>
-        {% else %}
-          <h2 class="inner-block heading-small">First client</h2>
-        {% endif %}
       </div>
       <div class="grid grid-1-4">
         <div class="inner-block">
           <p>
-            <b>{{ dict['clients'][0]['name'] }}</b><br>
-            {{ dict['clients'][0]['address'] }}
+            <b>{{ dict['client']['name'] }}</b><br>
+            {{ dict['client']['address'] }}
           </p>
         </div>
       </div>
       <div class="grid grid-1-4">
         <div class="inner-block">
-          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> first client details</span></a>
+          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> client details</span></a>
         </div>
       </div>
     </div>
 
 
     <div class="grid-divider grid-3-4"></div>
-
-    {% if client_count == 2 %}
-    <div class="grid-wrapper">
-      <div class="grid grid-1-4">
-        <h2 class="inner-block heading-small">Second client</h2>
-      </div>
-      <div class="grid grid-1-4">
-        <div class="inner-block">
-          <p>
-              <b>{{ dict['clients'][1]['name'] }}</b><br>
-              {{ dict['clients'][1]['address'] }}
-          </p>
-        </div>
-      </div>
-      <div class="grid grid-1-4">
-        <div class="inner-block">
-          <a href="#" class="button-secondary">Change<span class="visuallyhidden"> second client details</span></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid-divider grid-3-4"></div>
-    {% endif %}
 
     <div class="outer-block">
       <div class="inner-block">
