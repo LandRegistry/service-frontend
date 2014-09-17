@@ -7,6 +7,7 @@ import responses
 import mock
 import unittest
 import datetime
+import uuid
 
 from stub_json import title
 TITLE_NUMBER = "TN1234567"
@@ -30,8 +31,10 @@ class AuthenticationTestCase(unittest.TestCase):
         db.session.add(self.user)
         db.session.commit()
 
+        self.lrid = uuid.uuid4()
+        self.roles = ['CITIZEN']
+
     def login(self, email=None, password=None):
-        email = email
         password = password or 'password'
         return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
 
@@ -39,8 +42,8 @@ class AuthenticationTestCase(unittest.TestCase):
         return self.client.get('/logout', follow_redirects=True)
 
     @mock.patch('requests.post')
-    @mock.patch('application.frontend.server.is_matched', return_value=True)
-    def test_login(self, mock_check, mock_post):
+    def test_login(self, mock_post):
+        mock_post.return_value.json.return_value = {"lrid":self.lrid, "roles":self.roles}
         rv = self.login('landowner@mail.com', 'password')
         assert rv.status == '200 OK'
 
@@ -61,15 +64,15 @@ class AuthenticationTestCase(unittest.TestCase):
 
 
     @mock.patch('requests.get')
-    @mock.patch('application.frontend.server.is_matched', return_value=True)
+    @mock.patch('requests.post')
     @mock.patch('application.frontend.server.is_owner', return_value=False)
-    def test_viewing_property_requires_logged_in_and_matched_user(self, mock_match, mock_owner, mock_get):
+    def test_viewing_property_requires_logged_in_and_matched_user(self, mock_owner, mock_post, mock_get):
+        mock_post.return_value.json.return_value = {"lrid":self.lrid, "roles":self.roles}
         mock_get.return_value.json.return_value = title
 
         self.login('landowner@mail.com', 'password')
         rv = self.client.get('/property/%s' % TITLE_NUMBER)
 
-        mock_match.assert_called_once()
         mock_owner.assert_called_once()
         self.assertEquals(rv.status_code, 200)
         self.assertTrue(TITLE_NUMBER in rv.data)

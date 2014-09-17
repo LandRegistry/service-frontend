@@ -6,3 +6,6 @@ def is_matched(user):
 
 def is_owner(user, title_number):
     return check_user_is_owner(user, title_number)
+
+def get_lrid_and_roles(session):
+    return (session['lrid'], session['roles'])

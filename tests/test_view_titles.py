@@ -25,36 +25,15 @@ mock_is_matched.return_value = True
 class ViewFullTitleTestCase(unittest.TestCase):
 
     def setUp(self):
+        db.drop_all()
         db.create_all()
         self.search_api = app.config['AUTHENTICATED_SEARCH_API']
         self.app = app
         self.client = app.test_client()
 
-        self.user = User(email='landowner@mail.com',
-                    password='password',
-                    name='noname',
-                    gender='M',
-                    date_of_birth=datetime.datetime.now(),
-                    current_address='nowhere',
-                    previous_address='nowhere')
-
-        db.session.add(self.user)
-        db.session.commit()
-
-    def login(self, email=None, password=None):
-        email = email
-        password = password or 'password'
-        return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
-
-    def logout(self):
-        return self.client.get('/logout', follow_redirects=True)
-
-
     @mock.patch('requests.get')
     def test_get_property_calls_search_api(self, mock_get):
         mock_get.return_value.json.return_value = title
-
-        self.login('landowner@mail.com', 'password')
         self.client.get('/property/%s' % TITLE_NUMBER)
 
         mock_get.assert_called_with('%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER))
@@ -69,20 +48,14 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
         mock_response.status_code = 500
         mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError
-
         mock_get.return_value = mock_response
-
-        self.login('landowner@mail.com', 'password')
         response = self.client.get('/property/%s' % TITLE_NUMBER)
-
         assert response.status_code == 500
+
 
     @mock.patch('requests.get', side_effect=requests.exceptions.ConnectionError)
     def test_requests_connection_error_returns_500_to_client(self,mock_get):
-
-        self.login('landowner@mail.com', 'password')
         response = self.client.get('/property/%s' % TITLE_NUMBER)
-
         assert response.status_code == 500
 
 
@@ -94,7 +67,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
         #Now call the usual Service frontend for the same title.  Redirects
         #to the mocked response in HTML.
-        self.login('landowner@mail.com', 'password')
+
         rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Bob Test' in rv.data
@@ -106,9 +79,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
 
-        #Now call the usual Service frontend for the same title.  Redirects
-        #to the mocked response in HTML.
-        self.login('landowner@mail.com', 'password')
+        #Now call the usual Service frontend for the same title
         rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Charges Register' in rv.data
@@ -127,9 +98,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
       responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
             body = response_without_charge, status = 200, content_type='application/json')
 
-      #Now call the usual Service frontend for the same title.  Redirects
-      #to the mocked response in HTML.
-      self.login('landowner@mail.com', 'password')
+      #Now call the usual Service frontend for the same title.
       rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
       assert rv.status_code == 200
       assert 'Charges Register' not in rv.data
@@ -140,9 +109,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
 
-        #Now call the usual Service frontend for the same title.  Redirects
-        #to the mocked response in HTML.
-        self.login('landowner@mail.com', 'password')
+        #Now call the usual Service frontend for the same title
         rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Easements Register' in rv.data
@@ -155,16 +122,12 @@ class ViewFullTitleTestCase(unittest.TestCase):
       responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
             body = response_without_easement, status = 200, content_type='application/json')
 
-      #Now call the usual Service frontend for the same title.  Redirects
-      #to the mocked response in HTML.
-      self.login('landowner@mail.com', 'password')
+      #Now call the usual Service frontend for the same title
+
       rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
       assert rv.status_code == 200
       assert 'Easements Register' not in rv.data
 
-    def tearDown(self):
-        db.session.delete(self.user)
-        db.session.commit()
 
     def test_health(self):
         response = self.client.get('/health')
