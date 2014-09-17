@@ -40,6 +40,7 @@ def check_user_match(user):
         #NOTE we are using flask-kvsession with sqlalchemy as
         #storage so session data is not sent client
         session['lrid'] = data['lrid']
+        session['roles'] = data['roles']
         return True
 
     except (HTTPError, ConnectionError) as e:

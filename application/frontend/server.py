@@ -64,8 +64,11 @@ def currency(value):
 
 
 @app.route('/')
+@login_required
 def index():
-    return render_template('index.html')
+    roles = session['roles']
+    lrid = session['lrid']
+    return render_template('index.html', roles=roles, lrid=lrid)
 
 
 @app.route('/property/<title_number>')
@@ -152,6 +155,7 @@ def login():
 @login_required
 def logout():
     session.pop("lrid", None)
+    session.pop("roles", None)
     logout_user()
     return redirect(url_for('.login'))
 
@@ -202,13 +206,7 @@ def client_relationship_flow_step_3_store_selected_title_and_show_task_choices()
 def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_client_form():
     session['buying_or_selling'] = request.form['buying_or_selling_property']
     client_form = ConveyancerAddClientForm()
-    if client_form.validate_on_submit():
-        return render_template('conveyancer-add-client.html', add_client_heading='add client',
-                                   action_path='/relationship/conveyancer/confirm',
-                                   form=(ConveyancerAddClientForm(request.form)))
-    else:
-
-        return render_template('conveyancer-add-client.html',   action_path='/relationship/conveyancer/confirm', form=client_form)
+    return render_template('conveyancer-add-client.html',   action_path='/relationship/conveyancer/confirm', form=client_form)
 
 @app.route('/relationship/conveyancer/confirm', methods=['POST'])
 @login_required
