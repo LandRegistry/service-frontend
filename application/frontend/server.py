@@ -68,7 +68,7 @@ def currency(value):
 @login_required
 def index():
     lrid, roles = get_lrid_and_roles(session)
-    return render_template('index.html')
+    return render_template('index.html', roles=roles, lrid=lrid)
 
 
 @app.route('/property/<title_number>')
