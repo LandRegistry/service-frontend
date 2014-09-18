@@ -254,8 +254,6 @@ def conveyancer_dict():
     data = {
         "conveyancer_lrid": session['lrid'],
         "title_number": session['title_no'],
-        "conveyancer_name": "Da Big Boss Company",
-        "conveyancer_address": "123 High Street, Stoke, ST4 4AX",
         "clients": client,
         "task": session['buying_or_selling']
     }

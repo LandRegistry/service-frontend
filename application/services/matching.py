@@ -73,5 +73,3 @@ def get_client_lrid(user):
         logger.error("Unknown error trying to get lrid for: %s" % data)
         logger.error("Error: %s" % e)
         return False
-
-
