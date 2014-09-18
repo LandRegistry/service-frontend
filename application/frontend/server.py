@@ -38,13 +38,6 @@ from application import (
     app
 )
 from utils import get_or_log_error
-from controllers import ClientController, ConveyancerController
-
-
-clientController = ClientController()
-conveyancerController = ConveyancerController()
-search_api = app.config['SEARCH_API']
-
 
 @app.template_filter()
 def format_date_YMD(value):
@@ -198,7 +191,7 @@ def client_relationship_flow_step_1_show_search():
 @login_required
 def client_relationship_flow_step_2_render_results_in_template():
     query = request.form['search-text']
-    search_url = "%s/auth/titles/%s" % (search_api, query)
+    search_url = "%s/auth/titles/%s" % ( app.config['AUTHENTICATED_SEARCH_API'], query)
     app.logger.debug("URL requested %s" % search_url)
     response = get_or_log_error(search_url)
     result_json = response.json()
