@@ -24,14 +24,14 @@ from forms import (
     ConfirmForm,
     LoginForm,
     SelectTaskForm,
-    ConveyancerAddClientForm,
-    ConveyancerAddClientsForm
+    ConveyancerAddClientForm
 )
 from application.services import (
     post_to_cases,
     is_matched,
     is_owner,
-    get_lrid_and_roles
+    get_lrid_and_roles,
+    get_client_lrid
 )
 from application.auth.models import User
 from application import (
@@ -164,14 +164,13 @@ def logout():
 def relationship_client():
     return render_template('client-enter-token.html')
 
-@app.route('/relationship/client/accept/', methods=['POST'])
+@app.route('/relationship/client/accept', methods=['POST'])
 def client_get_relationship_details():
     url = current_app.config['INTRODUCTION_URL']+'/details/' + request.form['token']
-    app.logger.info("INTRO URL: %s" % url)
-    x = get_or_log_error(url)
-    app.logger.info("INTRO resp: %s" % x)
-    app.logger.info("INTRO resp json: %s " % x.json())
-    return render_template('client-confirm.html', details = x.json(), token=request.form['token'])
+    app.logger.debug("INTRO URL: %s" % url)
+    response = get_or_log_error(url)
+    app.logger.debug("INTRO response json: %s " % response.json())
+    return render_template('client-confirm.html', details = response.json(), token=request.form['token'])
 
 @app.route('/relationship/client/confirm', methods=['POST'])
 def client_confirm_relationship():
@@ -233,53 +232,48 @@ def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_cl
 @app.route('/relationship/conveyancer/confirm', methods=['POST'])
 @login_required
 def client_relationship_flow_step_6():
-    add_client_form = ConveyancerAddClientForm(request.form)
-    client_number = 1
-    app.logger.debug(client_number)
-    if add_client_form.validate():
-        session['last_client_full_name'] = add_client_form.full_name.data
-        session['last_client_date_of_birth'] = str(add_client_form.date_of_birth.data)
-        session['last_client_address'] = add_client_form.address.data
-        session['last_client_telephone'] = add_client_form.telephone.data
-        session['last_client_email'] = add_client_form.email.data
-        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(),
-                               client_count=num_of_clients(conveyancer_dict()), property_address=property_address())
-    else:
-        if client_number == 1:
-            return render_template('conveyancer-add-client.html', form=add_client_form,
-                                   action_path='/relationship/conveyancer/confirm', add_client_heading='add client')
+    form = ConveyancerAddClientForm(request.form)
+    if form.validate_on_submit():
+
+        session['client_full_name'] = form.full_name.data
+        session['client_date_of_birth'] = str(form.date_of_birth.data)
+        session['client_address'] = form.address.data
+        session['client_telephone'] = form.telephone.data
+        session['client_email'] = form.email.data
+
+        client_lrid = get_client_lrid(_create_user(form))
+
+        if client_lrid:
+            session['client_lrid'] = client_lrid
         else:
-            return render_template('conveyancer-add-client.html', form=add_client_form,
-                                   action_path='/relationship/conveyancer/secondclient',
-                                   add_client_heading='add second client')
+            flash("The client is not in our system")
+            return render_template('conveyancer-add-client.html', form=form, action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
+
+        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(), property_address=property_address())
+    else:
+        return render_template('conveyancer-add-client.html', form=form, action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
 
 
 def conveyancer_dict():
-
-    clients = [
-        {
-            "lrid": "",
-            "name": session['last_client_full_name'],
-            "address": session['last_client_address'],
-            "DOB": session['last_client_date_of_birth'],
-            "tel_no": session['last_client_telephone'],
-            "email": session['last_client_email']
-        }
-    ]
+    client = {
+        "lrid": session['client_lrid'],
+        "name": session['client_full_name'],
+        "address": session['client_address'],
+        "DOB": session['client_date_of_birth'],
+        "tel_no": session['client_telephone'],
+        "email": session['client_email']
+    }
 
     data = {
         "conveyancer_lrid": session['lrid'],
         "title_number": session['title_no'],
         "conveyancer_name": "Da Big Boss Company",
         "conveyancer_address": "123 High Street, Stoke, ST4 4AX",
-        "clients": clients,
+        "client": client,
         "task": session['buying_or_selling']
     }
+
     return data
-
-
-def num_of_clients(conveyancer_dict):
-    return len(conveyancer_dict['clients'])
 
 
 def property_address():
@@ -292,6 +286,12 @@ def property_address():
 
     return address
 
+def _create_user(form):
+    client_data = {'name': form.full_name.data,
+                    'date_of_birth': form.date_of_birth.data,
+                    'current_address': form.address.data,
+                    'gender': form.gender.data}
+    return User(**client_data)
 
 @app.route('/relationship/conveyancer/token')
 @login_required
@@ -312,11 +312,6 @@ def clear_captured_client_relationship_session_variables():
     session.pop('client_address', None)
     session.pop('client_date_of_birth', None)
     session.pop('client_telephone', None)
-    session.pop('client_email', None)
-    session.pop('last_client_full_name', None)
-    session.pop('last_client_address', None)
-    session.pop('last_client_date_of_birth', None)
-    session.pop('last_client_telephone', None)
-    session.pop('last_client_email', None)
+    session.pop('client_lrid', None)
     session.pop('title_no', None)
     session.pop('buying_or_selling', None)

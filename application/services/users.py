@@ -1,4 +1,6 @@
 from matching import check_user_match
+from matching import get_client_lrid
+
 from ownership import check_user_is_owner
 
 def is_matched(user):
