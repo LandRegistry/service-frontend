@@ -147,9 +147,8 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
-    session.clear()
-    #session.pop("lrid", None)
-    #session.pop("roles", None)
+    session.pop("lrid", None)
+    session.pop("roles", None)
     logout_user()
     return redirect(url_for('.login'))
 
@@ -261,7 +260,7 @@ def conveyancer_dict():
         "clients": client,
         "task": session['buying_or_selling']
     }
-    
+
     return data
 
 
