@@ -247,29 +247,26 @@ def client_relationship_flow_step_6():
             session['client_lrid'] = client_lrid
         else:
             flash("The client is not in our system")
-            return render_template('conveyancer-add-client.html', form=form, action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
+            return render_template('conveyancer-add-client.html', form=form,
+                                   action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
 
-        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(), property_address=property_address())
+        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(), property_address=property_address(),
+               client_name=session['client_full_name'], client_address=session['client_address'])
     else:
         return render_template('conveyancer-add-client.html', form=form, action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
 
 
 def conveyancer_dict():
-    client = {
-        "lrid": session['client_lrid'],
-        "name": session['client_full_name'],
-        "address": session['client_address'],
-        "DOB": session['client_date_of_birth'],
-        "tel_no": session['client_telephone'],
-        "email": session['client_email']
-    }
+    client = [{
+        "lrid": session['client_lrid']
+    }]
 
     data = {
         "conveyancer_lrid": session['lrid'],
         "title_number": session['title_no'],
         "conveyancer_name": "Da Big Boss Company",
         "conveyancer_address": "123 High Street, Stoke, ST4 4AX",
-        "client": client,
+        "clients": client,
         "task": session['buying_or_selling']
     }
 
@@ -300,9 +297,13 @@ def conveyancer_token():
 
     data = json.dumps(conveyancer_dict())
     relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
+
     app.logger.debug("Sending data %s to introduction at %s" % (data, relationship_url))
     response = requests.post(relationship_url, data=data, headers=headers)
-    token = response.json()['code']
+    app.logger.debug('data is*************************************')
+    app.logger.debug(data)
+    app.logger.debug('data end*************************************')
+    token = response.json()['token']
     clear_captured_client_relationship_session_variables()
     return render_template('conveyancer-token.html', token=token)
 
