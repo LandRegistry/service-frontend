@@ -174,16 +174,13 @@ def client_get_relationship_details():
 
 @app.route('/relationship/client/confirm', methods=['POST'])
 def client_confirm_relationship():
-    app.logger.info('session: %s' % session['lrid'])
-    request_json = json.dumps({'code':request.form['token']})
+    request_json = json.dumps({'token':request.form['token'], "client_lrid": session['lrid']})
     url = current_app.config['INTRODUCTION_URL'] + '/confirm'
 
-    app.logger.info("intro/confirm: " + url)
     response = requests.post(url, data=request_json, headers={'Content-Type': 'application/json'})
 
-    app.logger.info("info/confirm response %s " % response.json())
-
     return render_template('client-confirmed.html', conveyancer_name=response.json()['conveyancer_name'])
+
 
 
 @app.route('/relationship/conveyancer')
