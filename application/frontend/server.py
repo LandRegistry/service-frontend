@@ -300,9 +300,6 @@ def conveyancer_token():
 
     app.logger.debug("Sending data %s to introduction at %s" % (data, relationship_url))
     response = requests.post(relationship_url, data=data, headers=headers)
-    app.logger.debug('data is*************************************')
-    app.logger.debug(data)
-    app.logger.debug('data end*************************************')
     token = response.json()['token']
     clear_captured_client_relationship_session_variables()
     return render_template('conveyancer-token.html', token=token)
