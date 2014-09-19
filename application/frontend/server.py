@@ -39,6 +39,7 @@ from application import (
 )
 from utils import get_or_log_error
 
+
 @app.template_filter()
 def format_date_YMD(value):
     new_date = datetime.strptime(value, '%Y-%m-%d')
@@ -62,6 +63,7 @@ def currency(value):
 def index():
     lrid, roles = get_lrid_and_roles(session)
     return render_template('index.html', roles=roles, lrid=lrid)
+
 
 # TEMP - sketched in Register View
 @app.route('/property/register')
@@ -104,7 +106,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
             app.logger.debug("Found the following title: %s" % title)
             form.title_number.data = title['title_number']
 
-            proprietor = title['proprietors'][proprietor_index-1]
+            proprietor = title['proprietors'][proprietor_index - 1]
             form.proprietor_full_name.data = proprietor['full_name']
 
         if form.validate_on_submit():
@@ -114,7 +116,7 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
                 # HACK read title again instead of getting it from session
                 title = _get_title(title_number)
-                title['proprietors'][proprietor_index - 1] = {'full_name' : form.proprietor_new_full_name.data}
+                title['proprietors'][proprietor_index - 1] = {'full_name': form.proprietor_new_full_name.data}
                 form.title.data = title
 
                 post_to_cases('change-name-marriage', form.data)
@@ -123,20 +125,23 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
                 return render_template('acknowledgement.html', form=form)
             else:
                 from datatypes.validators.iso_country_code_validator import countries
+
                 country = countries.get(alpha2=form.data['marriage_country']).name
                 return render_template('confirm.html', form=ConfirmForm(obj=form.data), country=country)
         return render_template('edit_property.html', form=form)
     else:
         abort(401)
 
+
 def _get_title(title_number):
     title_url = "%s/%s/%s" % (
-    app.config['AUTHENTICATED_SEARCH_API'],
-    'auth/titles',
-    title_number)
+        app.config['AUTHENTICATED_SEARCH_API'],
+        'auth/titles',
+        title_number)
     app.logger.debug("Requesting title url : %s" % title_url)
     response = get_or_log_error(title_url)
     return response.json()
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -164,23 +169,24 @@ def logout():
 def relationship_client():
     return render_template('client-enter-token.html')
 
+
 @app.route('/relationship/client/accept', methods=['POST'])
 def client_get_relationship_details():
-    url = current_app.config['INTRODUCTION_URL']+'/details/' + request.form['token']
+    url = current_app.config['INTRODUCTION_URL'] + '/details/' + request.form['token']
     app.logger.debug("INTRO URL: %s" % url)
     response = get_or_log_error(url)
     app.logger.debug("INTRO response json: %s " % response.json())
-    return render_template('client-confirm.html', details = response.json(), token=request.form['token'])
+    return render_template('client-confirm.html', details=response.json(), token=request.form['token'])
+
 
 @app.route('/relationship/client/confirm', methods=['POST'])
 def client_confirm_relationship():
-    request_json = json.dumps({'token':request.form['token'], "client_lrid": session['lrid']})
+    request_json = json.dumps({'token': request.form['token'], "client_lrid": session['lrid']})
     url = current_app.config['INTRODUCTION_URL'] + '/confirm'
 
     response = requests.post(url, data=request_json, headers={'Content-Type': 'application/json'})
 
     return render_template('client-confirmed.html', conveyancer_name=response.json()['conveyancer_name'])
-
 
 
 @app.route('/relationship/conveyancer')
@@ -224,7 +230,9 @@ def client_relationship_flow_step_3_store_selected_title_and_show_task_choices()
 def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_client_form():
     session['buying_or_selling'] = request.form['buying_or_selling_property']
     client_form = ConveyancerAddClientForm()
-    return render_template('conveyancer-add-client.html',   action_path='/relationship/conveyancer/confirm', form=client_form)
+    return render_template('conveyancer-add-client.html', action_path='/relationship/conveyancer/confirm',
+                           form=client_form)
+
 
 @app.route('/relationship/conveyancer/confirm', methods=['POST'])
 @login_required
@@ -248,15 +256,16 @@ def client_relationship_flow_step_6():
                                    action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
 
         return render_template('conveyancer-confirm.html', dict=conveyancer_dict(), property_address=property_address(),
-               client_name=session['client_full_name'], client_address=session['client_address'])
+                               client_name=session['client_full_name'], client_address=session['client_address'])
     else:
-        return render_template('conveyancer-add-client.html', form=form, action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
+        return render_template('conveyancer-add-client.html', form=form,
+                               action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
 
 
 def conveyancer_dict():
     client = [{
-        "lrid": session['client_lrid']
-    }]
+                  "lrid": session['client_lrid']
+              }]
 
     data = {
         "conveyancer_lrid": session['lrid'],
@@ -278,12 +287,14 @@ def property_address():
 
     return address
 
+
 def _create_user(form):
     client_data = {'name': form.full_name.data,
-                    'date_of_birth': form.date_of_birth.data,
-                    'current_address': form.address.data,
-                    'gender': form.gender.data}
+                   'date_of_birth': form.date_of_birth.data,
+                   'current_address': form.address.data,
+                   'gender': form.gender.data}
     return User(**client_data)
+
 
 @app.route('/relationship/conveyancer/token')
 @login_required
@@ -308,3 +319,17 @@ def clear_captured_client_relationship_session_variables():
     session.pop('client_lrid', None)
     session.pop('title_no', None)
     session.pop('buying_or_selling', None)
+
+
+@app.route('/property/<title_number>/changes')
+@login_required
+def changes(title_number):
+    if is_owner(current_user, title_number):
+        cases_url = app.config['CASES_URL'] + '/cases/property/' + title_number
+        app.logger.debug("Requesting cases for url: %s" % cases_url)
+        response = requests.get(cases_url)
+        cases = response.json()
+        app.logger.debug("Received cases for %s: %s" % (title_number, cases))
+        return render_template('changes.html', title_number=title_number, cases=cases)
+    else:
+        abort(401)
