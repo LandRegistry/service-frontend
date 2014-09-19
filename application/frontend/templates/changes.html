@@ -11,6 +11,7 @@
 
                 <h1>Changes to title {{title_number}}</h1>
 
+                {% if cases %}
                 <h2>Pending changes</h2>
 
                 <div class="text">
@@ -27,17 +28,22 @@
 
                         <div class="text footnote">
                             <ul>
-                                <li>Previous name: {{case.request_details_data.proprietor_full_name}} </li>
-                                <li>New name: {{case.request_details_data.proprietor_new_full_name}} </li>
-                                <li>Marriage date: {{case.request_details_data.marriage_date}} </li>
-                                <li>Marriage certificate number: {{case.request_details_data.marriage_certificate_number}} </li>
-                                <li>Marriage location: {{case.request_details_data.marriage_place}} </li>
-                                <li>Marriage country: {{case.request_details_data.marriage_country}} </li>
+                                <li>Previous name: {{case.request_details_data.proprietor_full_name}}</li>
+                                <li>New name: {{case.request_details_data.proprietor_new_full_name}}</li>
+                                <li>Marriage date: {{case.request_details_data.marriage_date}}</li>
+                                <li>Marriage certificate number:
+                                    {{case.request_details_data.marriage_certificate_number}}
+                                </li>
+                                <li>Marriage location: {{case.request_details_data.marriage_place}}</li>
+                                <li>Marriage country: {{case.request_details_data.marriage_country}}</li>
                             </ul>
                         </div>
                     </li>
                     {% endfor %}
                 </ol>
+                {% else %}
+                    <h2>No pending casework</h2>
+                {% endif %}
 
             </div>
         </div>

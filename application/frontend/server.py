@@ -326,10 +326,10 @@ def clear_captured_client_relationship_session_variables():
 def changes(title_number):
     if is_owner(current_user, title_number):
         cases_url = app.config['CASES_URL'] + '/cases/property/' + title_number
-        app.logger.debug("Requesting cases for url: %s" % cases_url)
+        app.logger.debug("Requesting cases from %s" % cases_url)
         response = requests.get(cases_url)
         cases = response.json()
-        app.logger.debug("Received cases for %s: %s" % (title_number, cases))
+        app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
         return render_template('changes.html', title_number=title_number, cases=cases)
     else:
         abort(401)
