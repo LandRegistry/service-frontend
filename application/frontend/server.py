@@ -63,6 +63,13 @@ def index():
     lrid, roles = get_lrid_and_roles(session)
     return render_template('index.html', roles=roles, lrid=lrid)
 
+# TEMP - sketched in Register View
+@app.route('/property/register')
+@login_required
+def view_register():
+    lrid, roles = get_lrid_and_roles(session)
+    return render_template('view_register.html', roles=roles, lrid=lrid)
+
 
 @app.route('/property/<title_number>')
 @login_required
