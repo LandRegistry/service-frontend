@@ -13,7 +13,7 @@ from application import db
 
 class User(db.Model, UserMixin):
 
-    __tablename__ = 'users'
+    __tablename__ = 'lr_users'
 
     email = db.Column(db.String(255), primary_key=True)
     _password = db.Column(db.String(255))
