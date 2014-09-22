@@ -55,6 +55,11 @@ def health(self):
         return False, 'DB'
 
 
+@app.errorhandler(401)
+def permission(err):
+    return render_template('401.html'), 401
+
+
 @app.errorhandler(404)
 def page_not_found(err):
     return render_template('404.html'), 404
