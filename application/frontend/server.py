@@ -329,7 +329,14 @@ def changes(title_number):
         app.logger.debug("Requesting cases from %s" % cases_url)
         response = requests.get(cases_url)
         cases = response.json()
+        pending = []
+        previous = []
+        for case in cases:
+            if case['status'] != 'completed':
+                pending.append(case)
+            else:
+                previous.append(case)
         app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
-        return render_template('changes.html', title_number=title_number, cases=cases)
+        return render_template('changes.html', title_number=title_number, pending=pending, previous=previous)
     else:
         abort(401)
