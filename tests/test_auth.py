@@ -77,6 +77,21 @@ class AuthenticationTestCase(unittest.TestCase):
         self.assertEquals(rv.status_code, 200)
         self.assertTrue(TITLE_NUMBER in rv.data)
 
+
+    @mock.patch('requests.get')
+    @mock.patch('requests.post')
+    @mock.patch('application.frontend.server.is_owner', return_value=False)
+    def test_view_changes_requires_logged_in_and_owner_user(self, mock_owner, mock_post, mock_get):
+        mock_post.return_value.json.return_value = {"lrid":self.lrid, "roles":self.roles}
+        mock_get.return_value.json.return_value = title
+
+        self.login('landowner@mail.com', 'password')
+        rv = self.client.get('/property/%s/changes' % TITLE_NUMBER)
+
+        mock_owner.assert_called_once()
+        self.assertEquals(rv.status_code, 401)
+
+
     def tearDown(self):
         db.session.delete(self.user)
         db.session.commit()

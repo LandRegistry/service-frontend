@@ -3,15 +3,14 @@ import logging
 
 from flask import Flask
 from flask import render_template
+from audit import Audit
+from raven.contrib.flask import Sentry
+
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
-
 from flask.ext.login import LoginManager
-
 from health import Health
-from audit import Audit
 
-from raven.contrib.flask import Sentry
 
 app = Flask('application.frontend')
 app.config.from_object(os.environ.get('SETTINGS'))
@@ -25,6 +24,7 @@ SQLAlchemy.health = health
 
 from flask_kvsession import KVSessionExtension
 from simplekv.db.sql import SQLAlchemyStore
+
 store = SQLAlchemyStore(db.engine, db.metadata, 'sessions')
 KVSessionExtension(store, app)
 
@@ -81,9 +81,10 @@ def after_request(response):
     response.headers.add('X-XSS-Protection', '1; mode=block')
     return response
 
+
 @app.context_processor
 def asset_path_context_processor():
     return {
-      'asset_path': '/static/build/',
-      'landregistry_asset_path': '/static/build/'
+        'asset_path': '/static/build/',
+        'landregistry_asset_path': '/static/build/'
     }
