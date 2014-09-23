@@ -44,7 +44,7 @@
                                     var extentData = {{ title.extent | tojson}};
                                     var easementData = null;
                                     var apiKey = "{{ apiKey }}";
-                            </script>
+                                </script>
                             </div>
                         </div>
                     </li>
@@ -63,4 +63,9 @@
     </div>
 </main>
 
+{% endblock %}
+
+
+{% block js_additionals %}
+<script src="{{asset_path}}/javascripts/map.js"></script>
 {% endblock %}

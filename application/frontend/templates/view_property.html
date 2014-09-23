@@ -179,17 +179,21 @@
 
         </div><!-- end inner-block -->
     </div><!-- end content -->
-
-    <script>
-        $(document).ready(function() {
-            var $editMode = $('.edit-mode');
-            $editMode.hide();
-            $('#makeChange').click(function() {
-                $editMode.show();
-                $('html, body').animate({ scrollTop: 0 }, 0);
-            });
-        });
-    </script>
 </main>
 
+{% endblock %}
+
+{% block js_additionals %}
+<script src="{{asset_path}}/javascripts/map.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var $editMode = $('.edit-mode');
+        $editMode.hide();
+        $('#makeChange').click(function() {
+            $editMode.show();
+            $('html, body').animate({ scrollTop: 0 }, 0);
+        });
+    });
+</script>
 {% endblock %}
