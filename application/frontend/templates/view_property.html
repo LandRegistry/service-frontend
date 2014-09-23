@@ -1,5 +1,4 @@
 {% extends "servicefrontend_base.html" %}
-{% include "global/map_includes.html" %}
 
 {% block content %}
 
@@ -44,17 +43,6 @@
                     <figure class="grid grid-1-3">
                         {% if title.extent is defined %}
                         <div id="map" class="title-plan" style="width:300px; height:200px;">
-                            <script type='text/javascript'>
-                                var extentData = {{ title.extent | tojson}};
-                                {% if title.easements %}
-                                  <!-- This is only for sprint 4, just one easement allowed, left as an array for future enhancement -->
-                                  var easementData = {{ title.easements[0].easement_geometry | tojson}};
-                                {% else %}
-                                  var easementData = null;
-                                {% endif %}
-                                var apiKey = "{{ apiKey }}";
-                            </script>
-                            <script src="{{asset_path}}/javascripts/map.js"></script>
                         </div>
                         {% endif %}
                     </figure>
@@ -181,17 +169,31 @@
 
         </div><!-- end inner-block -->
     </div><!-- end content -->
-
-    <script>
-        $(document).ready(function() {
-            var $editMode = $('.edit-mode');
-            $editMode.hide();
-            $('#makeChange').click(function() {
-                $editMode.show();
-                $('html, body').animate({ scrollTop: 0 }, 0);
-            });
-        });
-    </script>
 </main>
 
+{% endblock %}
+
+{% block js_additionals %}
+<script type='text/javascript'>
+    var extentData = {{ title.extent | tojson}};
+    {% if title.easements %}
+      <!-- This is only for sprint 4, just one easement allowed, left as an array for future enhancement -->
+      var easementData = {{ title.easements[0].easement_geometry | tojson}};
+    {% else %}
+      var easementData = null;
+    {% endif %}
+    var apiKey = "{{ apiKey }}";
+</script>
+<script src="{{asset_path}}/javascripts/map.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var $editMode = $('.edit-mode');
+        $editMode.hide();
+        $('#makeChange').click(function() {
+            $editMode.show();
+            $('html, body').animate({ scrollTop: 0 }, 0);
+        });
+    });
+</script>
 {% endblock %}

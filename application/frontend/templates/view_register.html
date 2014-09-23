@@ -1,5 +1,4 @@
 {% extends "servicefrontend_base.html" %}
-{% include "global/map_includes.html" %}
 
 {% block content %}
 
@@ -357,17 +356,6 @@
 
         </div><!-- end inner-block -->
     </div><!-- end content -->
-
-    <script>
-        $(document).ready(function() {
-            var $editMode = $('.edit-mode');
-            $editMode.hide();
-            $('#makeChange').click(function() {
-                $editMode.show();
-                $('html, body').animate({ scrollTop: 0 }, 0);
-            });
-        });
-    </script>
 </main>
 
 {% endblock %}
