@@ -40,11 +40,6 @@
                         </div>
                         <div class="grid grid-1-4">
                             <div id="map" class="title-plan" style="width:240px; height:160px;">
-                                <script type='text/javascript'>
-                                    var extentData = {{ title.extent | tojson}};
-                                    var easementData = null;
-                                    var apiKey = "{{ apiKey }}";
-                                </script>
                             </div>
                         </div>
                     </li>
@@ -67,5 +62,10 @@
 
 
 {% block js_additionals %}
+<script type='text/javascript'>
+    var extentData = {{ title.extent | tojson}};
+    var easementData = null;
+    var apiKey = "{{ apiKey }}";
+</script>
 <script src="{{asset_path}}/javascripts/map.js"></script>
 {% endblock %}
