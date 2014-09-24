@@ -111,16 +111,8 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
 
         if form.validate_on_submit():
             if 'confirm' in form and form.confirm.data:
-                # the title will be persisted in its entirety when
-                # it's sent to the casework system
-
-                # HACK read title again instead of getting it from session
-                title = _get_title(title_number)
-                title['proprietors'][proprietor_index - 1] = {'full_name': form.proprietor_new_full_name.data}
-                form.title.data = title
 
                 post_to_cases('change-name-marriage', form.data)
-                form.title.data
                 # TODO handle non-200 responses, and ack accordingly.
                 return render_template('acknowledgement.html', form=form)
             else:
