@@ -141,7 +141,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.get(form.email.data)
         if user and user.check_password(form.password.data) and is_matched(user):
-            login_user(user, remember=form.remember.data)
+            login_user(user)
             return redirect(form.next.data or url_for('.index'))
         else:
             flash("Sorry, those details haven&rsquo;t been recognised. Please try again.")
