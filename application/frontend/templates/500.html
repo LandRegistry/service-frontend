@@ -1,25 +1,27 @@
 {% extends "servicefrontend_base.html" %}
 
+{% block page_title %}Sorry, we are experiencing technical difficulties (500 error) - GOV.UK{% endblock %}
+
 {% block content %}
 
 <main id="wrapper" role="main">
 
-    <div id="content">
+  <div id="content">
 
-        {% include "inc_alpha_banner.html" %}
+    {% include "inc_alpha_banner.html" %}
 
-        <div class="inner-block">
+    <div class="inner-block">
 
-            <h1 class="heading-xlarge">
-                Error
-            </h1>
+        <h1 class="heading-xlarge">
+          Sorry, we are experiencing technical difficulties
+        </h1>
 
-            <div class="text">
-                <p class="lede">Sorry, there was an error</p>
-            </div>
+      <div class="text">
+        <p>Please try again in a few moments.</p>
+      </div>
 
-        </div>
     </div>
+  </div>
 
 </main>
 
