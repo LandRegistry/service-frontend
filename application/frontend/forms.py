@@ -49,7 +49,6 @@ class LoginForm(Form):
 
 class ChangeForm(Form):
     title_number = HiddenField('Title Number')
-    # title = HiddenField('Title')
 
     confirm = BooleanField('Confirm')
     proprietor_full_name = HiddenField('Previous full name')
