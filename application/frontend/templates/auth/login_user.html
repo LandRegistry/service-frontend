@@ -1,5 +1,7 @@
 {% extends "servicefrontend_base.html" %}
 
+{% block page_title %}Sign in to view register of title{% endblock %}
+
 {% block content %}
   <main id="wrapper" role="main">
     <div id="content">
@@ -15,7 +17,11 @@
 
           <form action="/login" method="POST" name="form" class="login-user-form">
 
-            <h1 class="form-title heading-large">Login</h1>
+            <h1 class="form-title heading-large">Sign in</h1>
+
+            <div class="text">
+              <p class="lede">Please sign in to view the register of title</p>
+            </div>
 
             {%- with messages = get_flashed_messages(with_categories=true) -%}
               {% if messages %}
