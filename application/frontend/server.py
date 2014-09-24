@@ -144,7 +144,7 @@ def login():
             login_user(user, remember=form.remember.data)
             return redirect(form.next.data or url_for('.index'))
         else:
-            flash("Invalid login")
+            flash("Sorry, those details haven&rsquo;t been recognised. Please try again.")
     return render_template("auth/login_user.html", form=form)
 
 
