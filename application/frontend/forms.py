@@ -36,15 +36,13 @@ class ValidateDateNotInFuture(object):
 class LoginForm(Form):
     email = StringField(validators=[DataRequired()])
     password = PasswordField(validators=[DataRequired()])
-    submit = SubmitField('Login')
-    remember = BooleanField('Remember me')
+    submit = SubmitField('Sign in')
     next = HiddenField()
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         if not self.next.data:
             self.next.data = request.args.get('next', '')
-        self.remember.default = True
 
 
 class ChangeForm(Form):

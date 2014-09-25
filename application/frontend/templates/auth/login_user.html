@@ -1,5 +1,7 @@
 {% extends "servicefrontend_base.html" %}
 
+{% block page_title %}Sign in to view register of title{% endblock %}
+
 {% block content %}
   <main id="wrapper" role="main">
     <div id="content">
@@ -13,23 +15,27 @@
 
         <div class="full-width">
 
-          {%- with messages = get_flashed_messages(with_categories=true) -%}
-          {% if messages %}
-            <ul class="flashes">
-            {% for category, message in messages %}
-              <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-            </ul>
-          {% endif %}
-{%- endwith %}
-
           <form action="/login" method="POST" name="form" class="login-user-form">
 
-            <h1 class="form-title heading-large">Login</h1>
+            <h1 class="form-title heading-large">Sign in</h1>
+
+            <div class="text">
+              <p class="lede">Please sign in to view the register of title</p>
+            </div>
+
+            {%- with messages = get_flashed_messages(with_categories=true) -%}
+              {% if messages %}
+                <ul class="errors">
+                  {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message | safe }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {%- endwith %}
 
             {{ render_field_with_errors(form.email, class_='form-control') }}
             {{ render_field_with_errors(form.password, class_='form-control') }}
-            {{ render_field_with_errors(form.remember) }}
+
             {{ render_field(form.submit, class_='button') }}
             {{ form.hidden_tag() }}
 
