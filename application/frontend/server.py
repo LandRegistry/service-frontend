@@ -53,6 +53,12 @@ def format_date_DMY(value):
 
 
 @app.template_filter()
+def format_date_time_DMYHMS(value):
+    new_datetime = datetime.strptime(value, '%d-%m-%Y %H:%M:%S')
+    return new_datetime.strftime('%d-%m-%Y %H:%M:%S')
+
+
+@app.template_filter()
 def currency(value):
     """Format a comma separated  currency to 2 decimal places."""
     return "{:,.2f}".format(float(value))
