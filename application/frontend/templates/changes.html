@@ -13,60 +13,62 @@
 
                 <h2>Pending changes</h2>
 
-                <div class="text">
+                <div class="text" id="pending">
                     <p class="lede">Upcoming changes to this title register, in order of priority.</p>
-                </div>
-                {% if pending %}
-                    {% for case in pending %}
-                        <ol class="register-changes-pending">
-                            <li>
-                                <h3 class="heading-small">{{case.application_type}}</h3>
-                                                <span class="alert-flag">Submitted on: {{case.submitted_at}} </br>
-                                                    Submitted by: {{case.submitted_by}}
-                                                </span>
 
-                                <div class="text footnote">
-                                    <ul>
-                                        <li>Previous name: {{case.request_details_data.proprietor_full_name}}</li>
-                                        <li>New name: {{case.request_details_data.proprietor_new_full_name}}</li>
-                                        <li>Marriage date: {{case.request_details_data.marriage_date}}</li>
-                                        <li>Marriage certificate number:
-                                            {{case.request_details_data.marriage_certificate_number}}
-                                        </li>
-                                        <li>Marriage location: {{case.request_details_data.marriage_place}}</li>
-                                        <li>Marriage country: {{case.request_details_data.marriage_country}}</li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ol>
-                    {% endfor %}
-                {% else %}
-                    <h3>No pending changes</h3>
-                {% endif %}
+                    {% if pending %}
+                        {% for case in pending %}
+                            <ol class="register-changes-pending">
+                                <li>
+                                    <h3 class="heading-small">{{case.application_name}}</h3>
+                                                        <span class="alert-flag">Submitted on: {{case.submitted_at | format_date_time_DMYHMS}} </br>
+                                                            Submitted by: {{case.submitted_by}}
+                                                        </span>
+
+                                    <div class="text footnote">
+                                        <ul>
+                                            <li>Previous name: {{case.request_details_data.proprietor_full_name}}</li>
+                                            <li>New name: {{case.request_details_data.proprietor_new_full_name}}</li>
+                                            <li>Marriage date: {{case.request_details_data.marriage_date}}</li>
+                                            <li>Marriage certificate number:
+                                                {{case.request_details_data.marriage_certificate_number}}
+                                            </li>
+                                            <li>Marriage location: {{case.request_details_data.marriage_place}}</li>
+                                            <li>Marriage country: {{case.request_details_data.marriage_country}}</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ol>
+                        {% endfor %}
+                    {% else %}
+                        <h3>No pending changes</h3>
+                    {% endif %}
+                </div>
 
                 <h2>Previous changes</h2>
 
-                <div class="text">
+                <div class="text" id="previous">
                     <p class="lede">Changes to this title register, in chronological order.</p>
+
+                    {% if previous %}
+                        {% for case in previous %}
+                            <ol class="register-changes-previous">
+
+                                <li>
+                                    <time datetime="2013-06-06">{{case.submitted_at | format_date_time_DMYHMS}}</time>
+                                    <h3 class="heading-small">{{case.application_name}}</h3>
+
+                                    <div class="text footnote">
+                                        <p>Submitted by: {{case.submitted_by}}</p>
+                                    </div>
+                                </li>
+
+                            </ol>
+                        {% endfor %}
+                    {% else %}
+                        <h3>No previous changes</h3>
+                    {% endif %}
                 </div>
-                {% if previous %}
-                    {% for case in previous %}
-                        <ol class="register-changes-previous">
-
-                            <li>
-                                <time datetime="2013-06-06">{{case.submitted_at}}</time>
-                                <h3 class="heading-small">{{case.application_type}}</h3>
-
-                                <div class="text footnote">
-                                    <p>Submitted by: {{case.submitted_by}}</p>
-                                </div>
-                            </li>
-
-                        </ol>
-                    {% endfor %}
-                {% else %}
-                    <h3>No previous changes</h3>
-                {% endif %}
             </div>
         </div>
 
