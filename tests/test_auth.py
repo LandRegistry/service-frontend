@@ -51,7 +51,7 @@ class AuthenticationTestCase(unittest.TestCase):
     @mock.patch('application.frontend.server.is_matched', return_value=True)
     def test_login_fail(self, mock_check, mock_post):
          rv = self.login('********@mail.com', 'password')
-         self.assertTrue('Invalid login' in rv.data)
+         self.assertTrue('Sorry, those details haven&rsquo;t been recognised. Please try again.' in rv.data)
          self.assertEqual('200 OK', rv.status)
 
     @mock.patch('application.frontend.server.is_matched', return_value=False)
@@ -60,7 +60,7 @@ class AuthenticationTestCase(unittest.TestCase):
         rv = self.login('landowner@mail.com', 'password')
 
         mock_check.assert_called_once()
-        self.assertTrue('Invalid login' in rv.data)
+        self.assertTrue('Sorry, those details haven&rsquo;t been recognised. Please try again.' in rv.data)
 
 
     @mock.patch('requests.get')
