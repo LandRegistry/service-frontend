@@ -39,6 +39,8 @@ from application import (
 )
 from utils import get_or_log_error
 
+from pytz import timezone
+
 
 @app.template_filter()
 def format_date_YMD(value):
@@ -51,12 +53,15 @@ def format_date_DMY(value):
     new_date = datetime.strptime(value, '%d-%m-%Y')
     return new_date.strftime('%d %B %Y')
 
+def _tz(dt):
+    utc = timezone('UTC').localize(dt)
+    bst = timezone('Europe/London').localize(dt)
+    return bst + (utc - bst)
 
 @app.template_filter()
-def format_date_time_DMYHMS(value):
+def format_date_time_DMYHM(value):
     new_datetime = datetime.strptime(value, '%d-%m-%Y %H:%M:%S')
-    return new_datetime.strftime('%d-%m-%Y %H:%M:%S')
-
+    return _tz(new_datetime).strftime('%d-%m-%Y %H:%M')
 
 @app.template_filter()
 def currency(value):
