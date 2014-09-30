@@ -155,6 +155,7 @@ def login():
             login_user(user)
             return redirect(form.next.data or url_for('.index'))
         else:
+            app.logger.info("Login failed for user email %s" % form.email.data)
             flash("Sorry, those details haven&rsquo;t been recognised. Please try again.")
     return render_template("auth/login_user.html", form=form)
 
