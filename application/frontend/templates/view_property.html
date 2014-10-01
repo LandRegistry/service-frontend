@@ -23,19 +23,8 @@
 
                         <div itemscope itemtype="http://schema.org/PostalAddress">
                             <span itemprop="streetAddress">
-                                {{ title.property.address.address_line_1 }}<br>
-                                {% if title.property.address.address_line_2 %}
-                                    {{ title.property.address.address_line_2 }} <br>
-                                {% endif %}
-                                {% if title.property.address.address_line_3 %}
-                                    {{ title.property.address.address_line_3 }}<br>
-                                {% endif %}
-                                {% if title.property.address.address_line_4 %}
-                                    {{ title.property.address.address_line_4 }}<br>
-                                 {% endif %}
-                            </span>
-                            <span itemprop="addressLocality">{{ title.property.address.city }}</span><br>
-                            <span itemprop="postalCode">{{ title.property.address.postcode }}</span>
+                                 {{ title.property_description.fields['address'].full_address }}
+                                </span>
                         </div>
 
                     </div>
@@ -72,100 +61,100 @@
                         {% endfor %}
                     </dd>
                     <dt>Tenure</dt>
-                    <dd>{{ title.property.tenure | capitalize }}</dd>
+                    <dd>{{ title.property_description.fields['tenure'] | capitalize }}</dd>
 
                     <dt>Quality of title</dt>
-                    <dd>{{ title.property.class_of_title | capitalize }}</dd>
+                    <dd>{{ title.property_description.fields['class_of_title'] | capitalize }}</dd>
 
                     {% if title.payment.price_paid %}
                     <dt>Price paid</dt>
-                    <dd>&pound; {{ title.payment.price_paid | currency }}</dd>
+                    <dd> {{ title.price_paid.fields['amount'] }}</dd>
                     {% endif %}
                 </dl>
 
             </div>
 
-            {% if title.property.tenure == 'Leasehold' %}
-                <h2 class="heading-large">Lease Details</h2>
-                <dd>Short particulars of the lease(s) (or under-lease(s)) under which the land is held:</dd>   <br/>
-                <div class="charges">
-                    <dl class="definition-tabular">
-                    {% for lease in title.leases %}
-                        <dt>Lease Date</dt>
-                        <dd id="leaseDate">{{ lease.lease_date | format_date_YMD }}</dd>
-                        <dt>Term</dt>
-                        <dd id="leaseTerm">{{ lease.lease_term }} years from {{ lease.lease_from | format_date_YMD }}</dd>
+            <!--{% if title.property_description.fields['tenure'] == 'Leasehold' %}-->
+                <!--<h2 class="heading-large">Lease Details</h2>-->
+                <!--<dd>Short particulars of the lease(s) (or under-lease(s)) under which the land is held:</dd>   <br/>-->
+                <!--<div class="charges">-->
+                    <!--<dl class="definition-tabular">-->
+                    <!--{% for lease in title.leases %}-->
+                        <!--<dt>Lease Date</dt>-->
+                        <!--<dd id="leaseDate">{{ lease.lease_date | format_date_YMD }}</dd>-->
+                        <!--<dt>Term</dt>-->
+                        <!--<dd id="leaseTerm">{{ lease.lease_term }} years from {{ lease.lease_from | format_date_YMD }}</dd>-->
 
-                        <dt>Parties</dt>
-                        <dd id="parties">1. {{ lease.lessor_name }}
-                            {% if lease.lessee_name %}
-                                <br/>
-                                2. {{ lease.lessee_name }}
-                            {% endif %}
-                        </dd>
-                    </dl>
-                    {% if lease.lease_easements == True or lease.alienation_clause == True or lease.title_registered == True %}
-                    <h4>Clauses</h4>
-                    {% endif %}
+                        <!--<dt>Parties</dt>-->
+                        <!--<dd id="parties">1. {{ lease.lessor_name }}-->
+                            <!--{% if lease.lessee_name %}-->
+                                <!--<br/>-->
+                                <!--2. {{ lease.lessee_name }}-->
+                            <!--{% endif %}-->
+                        <!--</dd>-->
+                    <!--</dl>-->
+                    <!--{% if lease.lease_easements == True or lease.alienation_clause == True or lease.title_registered == True %}-->
+                    <!--<h4>Clauses</h4>-->
+                    <!--{% endif %}-->
 
-                    {% if lease.lease_easements == True %}
-                        <p id="easementClause">Unless otherwise mentioned the title includes any legal easements granted
-                            by the registered lease(s) but is subject to any rights that it reserves,
-                            so far as those easements and rights exist and benefit or
-                            affect the registered land.
-                        </p><br/>
-                    {% endif %}
+                    <!--{% if lease.lease_easements == True %}-->
+                        <!--<p id="easementClause">Unless otherwise mentioned the title includes any legal easements granted-->
+                            <!--by the registered lease(s) but is subject to any rights that it reserves,-->
+                            <!--so far as those easements and rights exist and benefit or-->
+                            <!--affect the registered land.-->
+                        <!--</p><br/>-->
+                    <!--{% endif %}-->
 
-                    {% if lease.alienation_clause == True %}
-                        <p id="alienationClause">There are excepted from the effect of registration all estates. rights,
-                            interests, powers and remedies arising upon, or by reason of, any
-                            dealing made in breach of the prohibition or restriction against
-                            dealings therewith inter vivos contained in the Lease.
-                        </p><br/>
-                    {% endif %}
+                    <!--{% if lease.alienation_clause == True %}-->
+                        <!--<p id="alienationClause">There are excepted from the effect of registration all estates. rights,-->
+                            <!--interests, powers and remedies arising upon, or by reason of, any-->
+                            <!--dealing made in breach of the prohibition or restriction against-->
+                            <!--dealings therewith inter vivos contained in the Lease.-->
+                        <!--</p><br/>-->
+                    <!--{% endif %}-->
 
-                    {% if lease.title_registered == True %}
-                        <p id="titleRegisteredClause">The landlord's title is registered.</p><br/>
-                    {% endif %}
-                {% endfor %}
+                    <!--{% if lease.title_registered == True %}-->
+                        <!--<p id="titleRegisteredClause">The landlord's title is registered.</p><br/>-->
+                    <!--{% endif %}-->
+                <!--{% endfor %}-->
 
-                </div>
-            {% endif %}
+                <!--</div>-->
+            <!--{% endif %}-->
 
-            {% if title.charges %}
-            <h2 class="heading-large">Charges Register</h2>
-            <div class="charges">
-              <h3>This register contains any charges and other matters that affect the land.</h3>
-              <ul>
-                   {% for charge in title.charges %}
-                  <li>Registered charge dated {{ charge.charge_date | format_date_YMD }}.<br>
-                  Proprietor: {{ charge.chargee_name }}
-                  (Co. Regn. No. {{ charge.chargee_registration_number }})
-                  of {{ charge.chargee_address }}.</li>
-                  {% endfor %}
-              </ul>
-            </div>
-            {% endif %}
+            <!--{% if title.charges %}-->
+            <!--<h2 class="heading-large">Charges Register</h2>-->
+            <!--<div class="charges">-->
+              <!--<h3>This register contains any charges and other matters that affect the land.</h3>-->
+              <!--<ul>-->
+                   <!--{% for charge in title.charges %}-->
+                  <!--<li>Registered charge dated {{ charge.charge_date | format_date_YMD }}.<br>-->
+                  <!--Proprietor: {{ charge.chargee_name }}-->
+                  <!--(Co. Regn. No. {{ charge.chargee_registration_number }})-->
+                  <!--of {{ charge.chargee_address }}.</li>-->
+                  <!--{% endfor %}-->
+              <!--</ul>-->
+            <!--</div>-->
+            <!--{% endif %}-->
 
-            {% if title.easements %}
-            <h2 class="heading-large">Easements Register</h2>
-            <div class="charges">
-              <h3>This register contains any easements and other matters that affect the land.</h3>
-              <ul>
-                   {% for easement in title.easements %}
-                  <li>{{ easement.easement_description }}</li>
-                  {% endfor %}
-              </ul>
-            </div>
-            {% endif %}
+            <!--{% if title.easements %}-->
+            <!--<h2 class="heading-large">Easements Register</h2>-->
+            <!--<div class="charges">-->
+              <!--<h3>This register contains any easements and other matters that affect the land.</h3>-->
+              <!--<ul>-->
+                   <!--{% for easement in title.easements %}-->
+                  <!--<li>{{ easement.text }}</li>-->
+                  <!--{% endfor %}-->
+              <!--</ul>-->
+            <!--</div>-->
+            <!--{% endif %}-->
 
-            {% if is_owner %}
-                <a href="{{ title.title_number }}/changes">View pending and historical changes to this title</a>
+            <!--{% if is_owner %}-->
+                <!--<a href="{{ title.title_number }}/changes">View pending and historical changes to this title</a>-->
 
-                <div class="divider">
-                    <button class='button' id='makeChange'>Edit the register</button>
-                </div>
-            {% endif %}
+                <!--<div class="divider">-->
+                    <!--<button class='button' id='makeChange'>Edit the register</button>-->
+                <!--</div>-->
+            <!--{% endif %}-->
 
         </div><!-- end inner-block -->
     </div><!-- end content -->
@@ -174,16 +163,7 @@
 {% endblock %}
 
 {% block js_additionals %}
-<script type='text/javascript'>
-    var extentData = {{ title.extent | tojson}};
-    {% if title.easements %}
-      <!-- This is only for sprint 4, just one easement allowed, left as an array for future enhancement -->
-      var easementData = {{ title.easements[0].easement_geometry | tojson}};
-    {% else %}
-      var easementData = null;
-    {% endif %}
-    var apiKey = "{{ apiKey }}";
-</script>
+
 <script src="{{asset_path}}/javascripts/map.js"></script>
 
 <script>
