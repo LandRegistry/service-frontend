@@ -68,7 +68,7 @@
                     <dl class="definition-tabular">
                         <dt>Owner(s)</dt>
                         <dd>
-                            {% if proprietors.length > 1 %}
+                            {% if proprietorship.fields.proprietors | count > 1 %}
                                 <ul class="collapse">
                                 {% for proprietor in proprietorship.fields.proprietors  %}
                                     <li>proprietor.name.full_name</li>
@@ -83,7 +83,7 @@
                         <dd>General UK PLC</dd>
 
                         <dt>Tenure type</dt>
-                        <dd>Leasehold</dd>
+                        <dd>{{ property_description.fields.tenure }}</dd>
 
                         <dt>Title quality</dt>
                         <dd>Absolute</dd>
@@ -128,19 +128,21 @@
                                 </p>
                                 <p class="footnote">See <a href="#">extent of title</a> and <a href="#">architectural diagram (pdf, 1.2mb)</a></p>
 
-                                <h3 class="heading-medium">Lease details</h3>
-                                <dl class="definition-tabular">
-                                    <dt>Date</dt>
-                                    <dd>11 February 1991</dd>
-                                    <dt>Term</dt>
-                                    <dd>125 years from 11 February 1991</dd>
-                                    <dt>Rent</dt>
-                                    <dd>&pound;10 and additional rent</dd>
-                                    <dt>Lessor</dt>
-                                    <dd>The Mayor and Burgesses of the London Borough of Brent</dd>
-                                    <dt>Lessee</dt>
-                                    <dd>Beatrice Surname</dd>
-                                </dl>
+                                {% if lease %}
+                                    <h3 class="heading-medium">Lease details</h3>
+                                    <dl class="definition-tabular">
+                                        <dt>Date</dt>
+                                        <dd>11 February 1991</dd>
+                                        <dt>Term</dt>
+                                        <dd>125 years from 11 February 1991</dd>
+                                        <dt>Rent</dt>
+                                        <dd>&pound;10 and additional rent</dd>
+                                        <dt>Lessor</dt>
+                                        <dd>The Mayor and Burgesses of the London Borough of Brent</dd>
+                                        <dt>Lessee</dt>
+                                        <dd>Beatrice Surname</dd>
+                                    </dl>
+                                {% endif %}
 
                                 <p class="footnote">
                                 The registered Lease is made pursuant to Part V of the Housing Act 1985 and the land has the benefit of and is subject to the easements and rights specified in paragraph 2 of Schedule 6 of the said Act.
@@ -155,25 +157,14 @@
                                 <div class="group">
                                     <h3 class="heading-medium">Owner(s)</h3>
 
-                                    <div class="grid grid-1-2">
-                                        <p>
-                                            Matthew Jameson<br>
-                                            118 Leafy Way,<br>
-                                            Thale,<br>
-                                            Berks<br>
-                                            RG12 9AB
-                                        </p>
-                                    </div>
-
-                                    <div class="grid grid-1-2">
-                                        <p>
-                                            Jennifer Spencer<br>
-                                            88 Monad Road,<br>
-                                            Slough,<br>
-                                            Berks<br>
-                                            SL20 3JD
-                                        </p>
-                                    </div>
+                                    {% for proprietor in proprietorship.fields.proprietors  %}
+                                        <div class="grid grid-1-2">
+                                            <p>
+                                                proprietor.name.full_name<br>
+                                                proprietor.address.full_address
+                                            </p>
+                                        </div>
+                                    {% endfor %}
 
                                 </div>
 
