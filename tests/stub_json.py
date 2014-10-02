@@ -345,9 +345,20 @@ conveyancer_two_clients = {
     "task": "sell"
 }
 
+introductions_response = {
+    "task": "sell",
+    "conveyancer_address": "123 High Street, Stoke, ST4 4AX",
+    "conveyancer_name": "Da Big Boss Company",
+    "client_lrid": "f55a02a0-057b-4a3f-9e34-ede5791a5874",
+    "title_number": "TEST1410429781566",
+    "conveyancer_lrid": "214b78b1-20a0-4cdb-a0f3-111b5ba21d48"
+}
+
 response_json = json.dumps(title)
 response_without_charge = json.dumps(title_no_charge)
 response_without_easement = json.dumps(title_no_easement)
 
 response_relationship_one_client = json.dumps(conveyancer_one_client)
 response_relationship_two_clients = json.dumps(conveyancer_two_clients)
+
+response_intoduction_token_details = json.dumps(introductions_response)
