@@ -68,7 +68,7 @@
                     <dl class="definition-tabular">
                         <dt>Owner(s)</dt>
                         <dd>
-                            {% if proprietorship.fields.proprietors | count > 1 %}
+                            {% if proprietorship.fields.proprietors|count > 1 %}
                                 <ul class="collapse">
                                 {% for proprietor in proprietorship.fields.proprietors  %}
                                     <li>proprietor.name.full_name</li>
@@ -88,8 +88,10 @@
                         <dt>Title quality</dt>
                         <dd>Absolute</dd>
 
-                        <dt>Price paid</dt>
-                        <dd>&pound;450,000 on 26 July 2013</dd>
+                        {% if title.price_paid %}
+                            <dt>Price paid</dt>
+                            <dd>{{ title.price_paid.fields.amount }} on {{ title.price_paid.fields.date }}</dd>
+                        {% endif %}
                     </dl>
 
                 </div><!-- /summary -->
@@ -103,10 +105,16 @@
                                 <nav>
                                     <ul>
                                         <li><a href="#property-details">Property details</a></li>
-                                        <li><a href="#property-restrictions">Restrictions (2)</a></li>
-                                        <li><a href="#property-restrictive-covenants">Restrictive covenants (1)</a></li>
+                                        {% if restrictions %}
+                                            <li><a href="#property-restrictions">Restrictions ({{ restrictions|count }})</a></li>
+                                        {% endif %}
+                                        {% if restrictive_covenants %}
+                                            <li><a href="#property-restrictive-covenants">Restrictive covenants ({{ restrictive_covenants|count }})</a></li>
+                                        {% endif %}
                                         <li><a href="#property-easements">Easements (1)</a></li>
-                                        <li><a href="#property-provisions">Provisions (1)</a></li>
+                                        {% if provisions %}
+                                            <li><a href="#property-provisions">Provisions ({{ provisions|count }})</a></li>
+                                        {% endif %}
                                         <li><a href="#maps-plans">Maps and plans</a></li>
                                         <li><a href="#related-documents">Related documents</a></li>
                                     </ul>
@@ -142,17 +150,17 @@
                                         <dt>Lessee</dt>
                                         <dd>Beatrice Surname</dd>
                                     </dl>
-                                {% endif %}
 
-                                <p class="footnote">
-                                The registered Lease is made pursuant to Part V of the Housing Act 1985 and the land has the benefit of and is subject to the easements and rights specified in paragraph 2 of Schedule 6 of the said Act.
-                                </p>
-                                <p class="footnote">
-                                Unless otherwise mentioned the title includes any legal easements granted by the registered lease(s) but is subject to any rights that it reserves, so far as those easements and rights exist and benefit or affect the registered land.
-                                </p>
-                                <p class="footnote">
-                                The lessor’s title is registered.
-                                </p>
+                                    <p class="footnote">
+                                    The registered Lease is made pursuant to Part V of the Housing Act 1985 and the land has the benefit of and is subject to the easements and rights specified in paragraph 2 of Schedule 6 of the said Act.
+                                    </p>
+                                    <p class="footnote">
+                                    Unless otherwise mentioned the title includes any legal easements granted by the registered lease(s) but is subject to any rights that it reserves, so far as those easements and rights exist and benefit or affect the registered land.
+                                    </p>
+                                    <p class="footnote">
+                                    The lessor’s title is registered.
+                                    </p>
+                                {% endif %}
 
                                 <div class="group">
                                     <h3 class="heading-medium">Owner(s)</h3>
@@ -184,125 +192,107 @@
 
                             </section>
 
-                            <section id="property-restrictions" class="text js-faux-details">
+                            {% if restrictive_covenants %}
 
-                                <h2 class="heading-medium">Restrictions <span class="number-flag">2</span></h2>
+                                <section id="property-restrictions" class="text js-faux-details">
 
-                                <details>
-                                    <summary>What are restrictions?</summary>
-                                    <div class="panel-indent">
-                                        <p>A restriction limits the powers of a registered owner to deal with or dispose of the registered land. It may also limit the powers of a chargee to dispose of a charge.</p>
-                                    </div>
-                                </details>
+                                    <h2 class="heading-medium">Restrictions <span class="number-flag">2</span></h2>
 
-                                <p>
-                                    No disposition by a sole proprietor of the registered estate (except a trust corporation) under which capital money arises is to be registered unless authorised by an order of the court.
-                                </p>
+                                    <details>
+                                        <summary>What are restrictions?</summary>
+                                        <div class="panel-indent">
+                                            <p>A restriction limits the powers of a registered owner to deal with or dispose of the registered land. It may also limit the powers of a chargee to dispose of a charge.</p>
+                                        </div>
+                                    </details>
 
-                                <p>
-                                    No disposition of the registered estate by the proprietor of the registered estate is to be registered without a written consent signed by the proprietor for the time being of the Charge dated 27 July 2013 in favour of General UK PLC referred to in the Charges Register.
-                                </p>
+                                    {% for restriction in restrictions %}
+                                        <div class="note">
+                                            <p>{{ restriction.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
 
-                            </section>
+                                </section>
 
-                            <section id="property-restrictive-covenants" class="text js-faux-details">
+                            {% endif %}
 
-                                <h2 class="heading-medium">Restrictive covenants <span class="number-flag">1</span></h2>
+                            {% if restrictive_covenants %}
 
-                                <details>
-                                    <summary>What is a restrictive covenant?</summary>
-                                    <div class="panel-indent">
-                                        <p>A restrictive covenant is a promise by one person to another (eg a buyer of land and a seller) not to do certain things with the property or land. The restrictions will continue to be in effect for any subsequent buyer.</p>
-                                        <p>Common examples of restrictive covenants include:</p>
-                                        <ul class="list-bullet">
-                                            <li>preventing alterations to an existing property</li>
-                                            <li>agreeing not to run a business from the property</li>
-                                        </ul>
-                                    </div>
-                                </details>
+                                <section id="property-restrictive-covenants" class="text js-faux-details">
 
-                                <div class="note">
-                                    <p>
-                                    A Deed dated 11 February 1991 contains restrictive covenants.
-                                    </p>
+                                    <h2 class="heading-medium">Restrictive covenants <span class="number-flag">1</span></h2>
 
-                                    <div class="deed-relationship">
-                                        <dl>
-                                            <dt>Between</dt>
-                                            <dd>Helen Cassidy</dd>
-                                            <dd>Jerome Hall</dd>
-                                        </dl>
-                                        <dl>
-                                            <dt>and</dt>
-                                            <dd>Clara Teoh</dd>
-                                        </dl>
-                                    </div>
+                                    <details>
+                                        <summary>What is a restrictive covenant?</summary>
+                                        <div class="panel-indent">
+                                            <p>A restrictive covenant is a promise by one person to another (eg a buyer of land and a seller) not to do certain things with the property or land. The restrictions will continue to be in effect for any subsequent buyer.</p>
+                                            <p>Common examples of restrictive covenants include:</p>
+                                            <ul class="list-bullet">
+                                                <li>preventing alterations to an existing property</li>
+                                                <li>agreeing not to run a business from the property</li>
+                                            </ul>
+                                        </div>
+                                    </details>
 
-                                    <p class="footnote">
-                                        See <a href="#">Deed document L234567 (pdf, 450k)</a>.<br>
-                                        Deed originally filed under title <a href="#">L234567</a>.
-                                    </p>
-                                </div>
+                                    {% for covenant in restrictive_covenants %}
+                                        <div class="note">
+                                            <p>{{ covenant.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
 
-                            </section>
+                                </section>
 
-                            <section id="property-easements" class="text js-faux-details">
+                            {% endif %}
 
-                                <h2 class="heading-medium">Easements <span class="number-flag">1</span></h2>
+                            {% if easements %}
 
-                                <details>
-                                    <summary>What are easements?</summary>
-                                    <div class="panel-indent">
-                                        <p>An easement is a right to use someone else's land for a specified purpose. It relates to the land or property itself and isn’t a personal right.</p>
-                                        <p>Common examples of easements:</p>
-                                        <ul class="list-bullet">
-                                            <li>rights of way such as public footpaths</li>
-                                            <li>rights to run service pipes and cables underground</li>
-                                        </ul>
-                                    </div>
-                                </details>
+                                <section id="property-easements" class="text js-faux-details">
 
-                                <p>
-                                    The title includes any legal easements referred to in clause LR11.1 of the registered lease but is subject to any rights that are granted or reserved by the lease and affect the registered land.
-                                </p>
+                                    <h2 class="heading-medium">Easements <span class="number-flag">1</span></h2>
 
-                            </section>
+                                    <details>
+                                        <summary>What are easements?</summary>
+                                        <div class="panel-indent">
+                                            <p>An easement is a right to use someone else's land for a specified purpose. It relates to the land or property itself and isn’t a personal right.</p>
+                                            <p>Common examples of easements:</p>
+                                            <ul class="list-bullet">
+                                                <li>rights of way such as public footpaths</li>
+                                                <li>rights to run service pipes and cables underground</li>
+                                            </ul>
+                                        </div>
+                                    </details>
 
-                            <section id="property-provisions" class="text js-faux-details">
+                                    {% for easement in easements %}
+                                        <div class="note">
+                                            <p>{{ easement.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
 
-                                <h2 class="heading-medium">Provisions <span class="number-flag">1</span></h2>
+                                </section>
 
-                                <details>
-                                    <summary>What are provisions?</summary>
-                                    <div class="panel-indent">
-                                        <p>A provision is an agreement between parties which usually relates to ownership and maintenance of boundaries and the right to the enjoyment of light and air.</p>
-                                    </div>
-                                </details>
+                            {% endif %}
 
-                                <div class="note">
-                                    <p>
-                                        A transfer dated 11 February 1991 contains provisions as to light or air, boundary structures and other matters.
-                                    </p>
+                            {% if provisions %}
 
-                                    <div class="deed-relationship">
-                                        <dl>
-                                            <dt>Between</dt>
-                                            <dd>Helen Cassidy</dd>
-                                            <dd>Jerome Hall</dd>
-                                        </dl>
-                                        <dl>
-                                            <dt>and</dt>
-                                            <dd>Clara Teoh</dd>
-                                        </dl>
-                                    </div>
+                                <section id="property-provisions" class="text js-faux-details">
 
-                                    <p class="footnote">
-                                        See <a href="#">Deed document L123456 (pdf, 450k)</a>.<br>
-                                        Deed originally filed under title <a href="#">L123456</a>.
-                                    </p>
-                                </div>
+                                    <h2 class="heading-medium">Provisions <span class="number-flag">1</span></h2>
 
-                            </section>
+                                    <details>
+                                        <summary>What are provisions?</summary>
+                                        <div class="panel-indent">
+                                            <p>A provision is an agreement between parties which usually relates to ownership and maintenance of boundaries and the right to the enjoyment of light and air.</p>
+                                        </div>
+                                    </details>
+
+                                    {% for provision in provisions %}
+                                        <div class="note">
+                                            <p>{{ provision.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
+
+                                </section>
+
+                            {% endif %}
 
                             <section id="maps-plans" class="text js-faux-details">
 
