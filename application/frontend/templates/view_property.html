@@ -6,7 +6,7 @@
     <div id="content">
 
         {% include "inc_alpha_banner.html" %}
-        
+
         <div class="outer-block">
             <div class="inner-block">
 
@@ -55,7 +55,7 @@
                             {% else %}
                                 {{ title.proprietorship.fields.proprietors[0].name.full_name }}
                                 <span class='change edit-mode'>
-                                    (<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)
+                                    (<a href='{{request.path}}/edit/title.proprietor.1'>change</a>)
                                 </span>
                             {% endif %}
                         </dd>
@@ -92,7 +92,9 @@
                                         {% if title.restrictive_covenants %}
                                             <li><a href="#property-restrictive-covenants">Restrictive covenants ({{ title.restrictive_covenants|count }})</a></li>
                                         {% endif %}
-                                        <li><a href="#property-easements">Easements (1)</a></li>
+                                        {% if title.easements %}
+                                            <li><a href="#property-provisions">Easements ({{ title.Easements|count }})</a></li>
+                                        {% endif %}
                                         {% if title.provisions %}
                                             <li><a href="#property-provisions">Provisions ({{ title.provisions|count }})</a></li>
                                         {% endif %}
@@ -105,7 +107,7 @@
 
                     <div class="grid grid-3-4"><!-- right col content -->
                         <div class="inner-block">
-          
+
                             <section id="property-details" class="text js-faux-details js-faux-details--open">
 
                                 <h2 class="heading-medium collapse-top">Property details</h2>
