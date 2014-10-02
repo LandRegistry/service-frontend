@@ -331,16 +331,25 @@ def changes(title_number):
     if is_owner(current_user, title_number):
         cases_url = app.config['CASES_URL'] + '/cases/property/' + title_number
         app.logger.debug("Requesting cases from %s" % cases_url)
-        response = requests.get(cases_url)
-        cases = response.json()
+        cases_response = requests.get(cases_url)
+        cases = cases_response.json()
         pending = []
         previous = []
+
+        historian_list = app.config['HISTORIAN_URL'] + '/' + title_number + '?version=list'
+        app.logger.debug('*************************************************************************')
+        app.logger.debug('requesting history from ' + historian_list)
+        historian_response = requests.get(historian_list)
+        app.logger.debug(historian_response.json())
+
         for case in cases:
             if case['status'] != 'completed':
                 pending.append(case)
             else:
                 previous.append(case)
         app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
-        return render_template('changes.html', title_number=title_number, pending=pending, previous=previous)
+
+        return render_template('changes.html', title_number=title_number, pending=pending,
+                               previous=historian_response.json())
     else:
         abort(401)
