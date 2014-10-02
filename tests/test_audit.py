@@ -7,7 +7,7 @@ from application import db
 from application.frontend.server import app
 from application.auth.models import User
 
-from stub_json import title
+from test_samples import title
 
 class AuditTestCase(unittest.TestCase):
     """

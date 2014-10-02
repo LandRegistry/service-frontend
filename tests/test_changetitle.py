@@ -8,7 +8,7 @@ import unittest
 import datetime
 import uuid
 
-from stub_json import response_json
+from test_samples import response_json
 
 TITLE_NUMBER = "TN1234567"
 

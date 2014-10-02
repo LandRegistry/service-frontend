@@ -9,10 +9,8 @@ from application.frontend.server import app
 from application.frontend import server
 from application import db
 from application.auth.models import User
-
-from stub_json import ( title,
-                        response_json,
-                        response_without_charge,
+from test_samples import title, response_json
+from stub_json import ( response_without_charge,
                         response_without_easement
 )
 
@@ -83,14 +81,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         rv = self.client.get('/property/%s' % TITLE_NUMBER, follow_redirects=True)
         assert rv.status_code == 200
         assert 'Charges Register' in rv.data
-        assert 'Registered charge dated 11 August 2014.' in rv.data
-        assert 'Proprietor: compone' in rv.data
-        assert '(Co. Regn. No. 12345)' in rv.data
-        assert 'of a warehouse.' in rv.data
-        assert 'Registered charge dated 12 August 2014.' in rv.data
-        assert 'Proprietor: comptwo' in rv.data
-        assert '(Co. Regn. No. 56666)' in rv.data
-        assert 'of a barn.' in rv.data
+        assert 'A Transfer of the land in this title dated 01.06.1996 made between Mr Michael Jones and Mr Jeff Smith contains the following provision:-The land has the benefit of a right of way along the passageway to the rear of the property, and also a right of way on foot only on to the open ground on the north west boundary of the land in this title' in rv.data
 
     @responses.activate
     def test_no_charges_header(self):

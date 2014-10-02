@@ -9,7 +9,7 @@ import unittest
 import datetime
 import uuid
 
-from stub_json import title
+from test_samples import title, response_json
 TITLE_NUMBER = "TN1234567"
 
 class AuthenticationTestCase(unittest.TestCase):
