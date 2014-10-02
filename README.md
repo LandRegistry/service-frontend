@@ -49,10 +49,11 @@ There's an intial migration script in the project created using Flask-Migrate so
 python manage.py db upgrade
 ```
 
-On heroku run this
+If you need to run this on Heroku, use this command:
 ```
 heroku run python manage.py db upgrade --app lr-service-frontend
 ```
+Note that this is run automatically as part of the deploy from travis
 
 Run the upgrade command whenever you have additional migrations
 
@@ -80,7 +81,7 @@ python manage.py create_user --email=auser@gmail.com --password=apassword
 
 ```
 
-On Heroku:
+On Heroku :
 ```
 heroku run python manage.py create_user --email=auser@gmail.com --password=apassword --app lr-service-frontend
 ```
