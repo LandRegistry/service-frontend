@@ -5,11 +5,10 @@ import uuid
 import json
 
 from application.frontend.server import app
-from application.frontend import server
 from application import db
-from application.auth.models import User
 
-from stub_json import (response_json, response_intoduction_token_details)
+from test_samples import response_json
+from stub_json import response_intoduction_token_details
 
 TITLE_NUMBER = "TN1234567"
 CLIENT_LRID = uuid.UUID("f55a02a0-057b-4a3f-9e34-ede5791a5874")
