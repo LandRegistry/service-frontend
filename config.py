@@ -11,6 +11,7 @@ class Config(object):
     OWNERSHIP_URL = os.environ['OWNERSHIP_URL']
     OS_API_KEY = os.environ['OS_API_KEY']
     INTRODUCTION_URL = os.environ['INTRODUCTION_URL']
+    HISTORIAN_URL = os.environ['HISTORIAN_URL']
 
     # optional and only needed on heroku so get
     # safely
