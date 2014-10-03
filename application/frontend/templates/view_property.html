@@ -301,8 +301,12 @@
 {% endblock %}
 
 {% block js_additionals %}
-
-<script src="{{asset_path}}/javascripts/map.js"></script>
+<script type='text/javascript'>
+    var extentData = {{ title.extent | tojson}};
+    var easementData = null;
+    var apiKey = "{{ apiKey }}";
+</script>
+<script src="{{asset_path}}javascripts/map.js"></script>
 
 <script>
     $(document).ready(function() {

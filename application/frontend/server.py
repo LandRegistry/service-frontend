@@ -123,8 +123,8 @@ def property_by_title_edit_proprietor(title_number, proprietor_index):
             app.logger.debug("Found the following title: %s" % title)
             form.title_number.data = title['title_number']
 
-            proprietor = title['proprietors'][proprietor_index - 1]
-            form.proprietor_full_name.data = proprietor['full_name']
+            proprietor = title['proprietorship']['fields']['proprietors'][proprietor_index - 1]
+            form.proprietor_full_name.data = proprietor['name']['full_name']
 
         if form.validate_on_submit():
             if 'confirm' in form and form.confirm.data:
@@ -337,16 +337,27 @@ def changes(title_number):
     if is_owner(current_user, title_number):
         cases_url = app.config['CASES_URL'] + '/cases/property/' + title_number
         app.logger.debug("Requesting cases from %s" % cases_url)
-        response = requests.get(cases_url)
-        cases = response.json()
+        cases_response = requests.get(cases_url)
+        cases = cases_response.json()
         pending = []
-        previous = []
+        previous = {}
+
+        historian_list_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version=list'
+        historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
+        app.logger.debug('requesting history from ' + historian_list_url)
+        historian_list_response = requests.get(historian_list_url)
+        for version in historian_list_response.json()['versions']:
+            historian_version_response = requests.get(historian_version_url + version['version_id'])
+            previous[version['version_id']] = historian_version_response.json()['contents']
+
         for case in cases:
             if case['status'] != 'completed':
                 pending.append(case)
             else:
                 previous.append(case)
         app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
-        return render_template('changes.html', title_number=title_number, pending=pending, previous=previous)
+
+        return render_template('changes.html', title_number=title_number, pending=pending,
+                               previous=previous)
     else:
         abort(401)

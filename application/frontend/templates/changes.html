@@ -38,19 +38,17 @@
                     <p class="lede">Previous changes to this title register, in chronological order.</p>
 
                     {% if previous %}
-                        {% for case in previous %}
-                            <ol class="register-changes-previous">
+                        {% for version in previous %}
 
-                                <li>
-                                    <time datetime="2013-06-06">{{case.submitted_at | format_date_time_DMYHM}}</time>
-                                    <h3 class="heading-small">{{case.application_name}}</h3>
+                                <ol class="register-changes-previous">
 
-                                    <div class="text footnote">
-                                        <p>Submitted by: {{case.submitted_by}}</p>
-                                    </div>
-                                </li>
+                                    <li>
+                                        <b>version {{ version }}</b>
+                                        <p>{{ previous[version] }}</p>
+                                    </li>
 
-                            </ol>
+                                </ol>
+
                         {% endfor %}
                     {% else %}
                         <h3>No previous changes</h3>
