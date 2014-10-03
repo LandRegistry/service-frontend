@@ -38,13 +38,13 @@
                     <p class="lede">Previous changes to this title register, in chronological order.</p>
 
                     {% if previous %}
-                        {% for version in previous.versions %}
+                        {% for version in previous %}
 
                                 <ol class="register-changes-previous">
 
                                     <li>
-                                        <time datetime="2013-06-06">{{ version }}</time>
-                                        <h3 class="heading-small"></h3>
+                                        <b>version {{ version }}</b>
+                                        <p>{{ previous[version] }}</p>
                                     </li>
 
                                 </ol>

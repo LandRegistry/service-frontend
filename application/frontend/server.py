@@ -334,13 +334,15 @@ def changes(title_number):
         cases_response = requests.get(cases_url)
         cases = cases_response.json()
         pending = []
-        previous = []
+        previous = {}
 
-        historian_list = app.config['HISTORIAN_URL'] + '/' + title_number + '?version=list'
-        app.logger.debug('*************************************************************************')
-        app.logger.debug('requesting history from ' + historian_list)
-        historian_response = requests.get(historian_list)
-        app.logger.debug(historian_response.json())
+        historian_list_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version=list'
+        historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
+        app.logger.debug('requesting history from ' + historian_list_url)
+        historian_list_response = requests.get(historian_list_url)
+        for version in historian_list_response.json()['versions']:
+            historian_version_response = requests.get(historian_version_url + version['version_id'])
+            previous[version['version_id']] = historian_version_response.json()['contents']
 
         for case in cases:
             if case['status'] != 'completed':
@@ -350,6 +352,6 @@ def changes(title_number):
         app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
 
         return render_template('changes.html', title_number=title_number, pending=pending,
-                               previous=historian_response.json())
+                               previous=previous)
     else:
         abort(401)
