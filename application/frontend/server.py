@@ -37,7 +37,10 @@ from application.auth.models import User
 from application import (
     app
 )
-from utils import get_or_log_error
+from utils import (
+    get_or_log_error,
+    AddressBuilder
+)
 
 from pytz import timezone
 
@@ -96,10 +99,13 @@ def property_by_title(title_number):
     title = response.json()
     app.logger.debug("Found the following title: %s" % title)
     owner = is_owner(current_user, title_number)
+    raw_address = title["property_description"]["fields"]["address"]
+    address = AddressBuilder(**raw_address).build()
     return render_template(
         'view_property.html',
         title=title,
         is_owner=owner,
+        address=address,
         apiKey=os.environ['OS_API_KEY'])
 
 
