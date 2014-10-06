@@ -352,8 +352,7 @@ def changes(title_number):
         for case in cases:
             if case['status'] != 'completed':
                 pending.append(case)
-            else:
-                historical_changes_list.append(case)
+
         app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
 
         return render_template('changes.html', title_number=title_number, pending=pending,
