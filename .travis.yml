@@ -29,3 +29,8 @@ deploy:
     repo: LandRegistry/service-frontend
   run:
     - "python manage.py db upgrade"
+addons:
+  postgresql: "9.3"
+services:
+- redis-server
+
