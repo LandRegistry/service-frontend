@@ -9,7 +9,6 @@ from application.auth.models import *
 from application import app
 from application import db
 
-from simplekv.db.sql import SQLAlchemyStore
 
 app.config.from_object(os.environ['SETTINGS'])
 
@@ -41,6 +40,13 @@ def create_user(email, password, name, dob, gender, current_address, previous_ad
 
         db.session.add(user)
         db.session.commit()
+
+
+@manager.command
+def cleanup_expired_sessions():
+    from application import app, kv_store
+    kv_store.cleanup_sessions(app)
+
 
 
 if __name__ == '__main__':

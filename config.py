@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 
 class Config(object):
     DEBUG = False
@@ -11,6 +12,8 @@ class Config(object):
     OS_API_KEY = os.environ['OS_API_KEY']
     INTRODUCTION_URL = os.environ['INTRODUCTION_URL']
     HISTORIAN_URL = os.environ['HISTORIAN_URL']
+    REDIS_URL = os.environ['REDIS_URL']
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=int(os.environ['PERMANENT_SESSION_LIFETIME']))
     WTF_CSRF_ENABLED = True
 
     # optional and only needed on heroku so get
