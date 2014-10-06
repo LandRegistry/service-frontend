@@ -68,6 +68,9 @@ def currency(value):
     """Format a comma separated  currency to 2 decimal places."""
     return "{:,.2f}".format(float(value))
 
+def unix_timestamp_to_DMYHMS(value):
+    return datetime.fromtimestamp(int(value)).strftime('%d %B %Y %H:%M:%S')
+
 
 @app.route('/')
 @login_required
@@ -334,24 +337,49 @@ def changes(title_number):
         cases_response = requests.get(cases_url)
         cases = cases_response.json()
         pending = []
-        previous = {}
+        historical_changes_list = {}
 
         historian_list_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version=list'
         historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
         app.logger.debug('requesting history from ' + historian_list_url)
         historian_list_response = requests.get(historian_list_url)
+        #version information put in a list to pass to the template.
         for version in historian_list_response.json()['versions']:
             historian_version_response = requests.get(historian_version_url + version['version_id'])
-            previous[version['version_id']] = historian_version_response.json()['contents']
+            converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response.json()['contents']['created_ts']))
+            historical_changes_list[version['version_id']] = converted_unix_timestamp
+            # historical_changes_list[version['version_id']] = historian_version_response.json()['contents']
 
         for case in cases:
             if case['status'] != 'completed':
                 pending.append(case)
             else:
-                previous.append(case)
+                historical_changes_list.append(case)
         app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
 
         return render_template('changes.html', title_number=title_number, pending=pending,
-                               previous=previous)
+                               historical_changes=historical_changes_list)
     else:
         abort(401)
+
+@app.route('/property/<title_number>/changes/<version>')
+@login_required
+def change_version(title_number, version):
+
+    historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
+    app.logger.debug('requesting historical version from ' + historian_version_url)
+    historian_version_response = requests.get(historian_version_url + version).json()['contents']
+    converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response['created_ts']))
+    owner = is_owner(current_user, title_number)
+
+    # app.logger.debug(historian_version_response)['contents']
+
+    return render_template(
+        'view_historical_version.html',
+        title=historian_version_response,
+        is_owner=owner,
+        apiKey=os.environ['OS_API_KEY'],
+        change_date=converted_unix_timestamp)
+
+    # lrid, roles = get_lrid_and_roles(session)
+    # return render_template('view_register.html', roles=roles, lrid=lrid)

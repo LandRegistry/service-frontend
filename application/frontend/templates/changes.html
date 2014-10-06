@@ -35,16 +35,16 @@
                 <h2>Historical changes</h2>
 
                 <div class="text" id="previous">
-                    <p class="lede">Previous changes to this title register, in chronological order.</p>
+                    <p class="lede">Previous changes to this title register.</p>
 
-                    {% if previous %}
-                        {% for version in previous %}
+                    {% if historical_changes %}
+                        {% for version in historical_changes %}
 
                                 <ol class="register-changes-previous">
 
                                     <li>
-                                        <b>version {{ version }}</b>
-                                        <p>{{ previous[version] }}</p>
+                                        <a href="changes/{{ version }}">Version {{ version }}</a>
+                                        <p>{{ historical_changes[version] }}</p>
                                     </li>
 
                                 </ol>
@@ -61,3 +61,5 @@
 </main>
 
 {% endblock %}
+
+
