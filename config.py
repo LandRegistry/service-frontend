@@ -6,12 +6,12 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     CASES_URL = os.environ['CASES_URL']
     SECRET_KEY = os.environ['SECRET_KEY']
-    WTF_CSRF_ENABLED = True
     MATCHING_URL = os.environ['MATCHING_URL']
     OWNERSHIP_URL = os.environ['OWNERSHIP_URL']
     OS_API_KEY = os.environ['OS_API_KEY']
     INTRODUCTION_URL = os.environ['INTRODUCTION_URL']
     HISTORIAN_URL = os.environ['HISTORIAN_URL']
+    WTF_CSRF_ENABLED = True
 
     # optional and only needed on heroku so get
     # safely
@@ -21,7 +21,6 @@ class Config(object):
 class DevelopmentConfig(Config):
     DEBUG = True
     WTF_CSRF_ENABLED = False
-    CASES_URL = 'http://cases.landregistry.local'
 
 class TestConfig(DevelopmentConfig):
     TESTING = True
