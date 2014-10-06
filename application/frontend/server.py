@@ -348,7 +348,6 @@ def changes(title_number):
             historian_version_response = requests.get(historian_version_url + version['version_id'])
             converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response.json()['contents']['created_ts']))
             historical_changes_list[version['version_id']] = converted_unix_timestamp
-            # historical_changes_list[version['version_id']] = historian_version_response.json()['contents']
 
         for case in cases:
             if case['status'] != 'completed':
@@ -372,8 +371,6 @@ def change_version(title_number, version):
     converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response['created_ts']))
     owner = is_owner(current_user, title_number)
 
-    # app.logger.debug(historian_version_response)['contents']
-
     return render_template(
         'view_historical_version.html',
         title=historian_version_response,
@@ -381,5 +378,3 @@ def change_version(title_number, version):
         apiKey=os.environ['OS_API_KEY'],
         change_date=converted_unix_timestamp)
 
-    # lrid, roles = get_lrid_and_roles(session)
-    # return render_template('view_register.html', roles=roles, lrid=lrid)
