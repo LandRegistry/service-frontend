@@ -27,7 +27,8 @@ class AuthenticationTestCase(unittest.TestCase):
                     date_of_birth=datetime.datetime.now(),
                     current_address='nowhere',
                     previous_address='nowhere',
-                    blocked=False)
+                    blocked=False,
+                    view_count=0)
 
         self.blocked_user = User(email='landowner2@mail.com',
                      password='password',
@@ -36,7 +37,8 @@ class AuthenticationTestCase(unittest.TestCase):
                      date_of_birth=datetime.datetime.now(),
                      current_address='nowhere',
                      previous_address='nowhere',
-                     blocked=True)
+                     blocked=True,
+                     view_count=0)
 
         db.session.add(self.user)
         db.session.add(self.blocked_user)
