@@ -20,15 +20,7 @@
       </div>
       <div class="grid grid-1-4">
         <div class="inner-block">
-          <p class="lede" itemscope itemtype="http://schema.org/PostalAddress">
-            <span itemprop="streetAddress">
-              {{ property_address['house_number'] }}<br>
-              {{ property_address['road'] }}<br>
-              {{ property_address['town'] }}<br>
-              {{ property_address['postalCode'] }}
-            </span>
-            <span itemprop="addressLocality">London</span><br>
-          </p>
+          <p>{{address.property_full_address}}</p>
         </div>
       </div>
 
