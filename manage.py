@@ -9,7 +9,6 @@ from application.auth.models import *
 from application import app
 from application import db
 
-from simplekv.db.sql import SQLAlchemyStore
 
 app.config.from_object(os.environ['SETTINGS'])
 
@@ -37,11 +36,42 @@ def create_user(email, password, name, dob, gender, current_address, previous_ad
                     date_of_birth=date_of_birth,
                     gender=gender,
                     current_address=current_address,
-                    previous_address=previous_address)
+                    previous_address=previous_address,
+                    blocked=False)
 
         db.session.add(user)
         db.session.commit()
 
+
+@manager.command
+def cleanup_expired_sessions():
+    from application import app, kv_store
+    kv_store.cleanup_sessions(app)
+
+@manager.option('--email', dest='email')
+def block_user(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.blocked = True
+
+        db.session.add(user)
+        db.session.commit()
+        print "User %s has been blocked" % user.name
+    else:
+        print "User does not exist"
+
+
+@manager.option('--email', dest='email')
+def unblock_user(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.blocked = False
+
+        db.session.add(user)
+        db.session.commit()
+        print "User %s has been unblocked" % user.name
+    else:
+        print "User does not exist"
 
 if __name__ == '__main__':
     manager.run()

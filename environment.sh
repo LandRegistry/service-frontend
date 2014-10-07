@@ -9,3 +9,5 @@ export CASES_URL='http://cases.landregistry.local'
 export HISTORIAN_URL='http://historian.landregistry.local'
 export SECRET_KEY='localdev-not-secret'
 export OS_API_KEY='no-key'
+export REDIS_URL='redis://user:@localhost:6379'
+export PERMANENT_SESSION_LIFETIME=60 # minutes picked by random inspiration
