@@ -56,6 +56,7 @@
 
                         <form class="form" action="/relationship/conveyancer/task" method="POST">
                             <input type="hidden" name="title_no" value="{{ title.title_number }}">
+                            <input type="hidden" name="property_full_address" value="{{address.string.get_string()}}">
                             <p>
                                 <input type="submit" class="button" value="Select this property">
                             </p>
