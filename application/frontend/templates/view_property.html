@@ -4,156 +4,328 @@
 
 <main id="wrapper" role="main">
     <div id="content">
-    {% include "inc_alpha_banner.html" %}
-        <div class="inner-block">
 
-            <div class="notification edit-mode">
-                <h2 class="heading-medium">Edit mode</h2>
-            </div>
+        {% include "inc_alpha_banner.html" %}
 
-            <div class="callout callout--summary">
+        <div class="outer-block">
+            <div class="inner-block">
 
-                <h1 class="heading-large first-heading">
-                    Register of title <span class="title-flag">{{ title.title_number }}</span>
-                </h1>
+                <div class="notification edit-mode">
+                    <h2 class="heading-medium">Edit mode</h2>
+                </div>
 
-                <div class="lede">
+                <div class="callout callout--summary">
 
-                    <div class="grid grid-1-3">
+                    <h1 class="heading-large first-heading">
+                        Register of title <span class="title-flag">{{ title.title_number }}</span>
+                    </h1>
 
-                        <div itemscope itemtype="http://schema.org/PostalAddress">
-                            <span itemprop="streetAddress">
-                                 {{ title.property_description.fields['address'].full_address }}
-                                </span>
-                        </div>
+                    <p>
+                        This register was last changed on <b>DATE</b> at <b>TIME</b>
+                    </p>
+
+                    <div class="lede">
+
+                        {% if address.structured %}
+
+                            <div class="grid grid-1-3">
+                                <div itemscope itemtype="http://schema.org/PostalAddress">
+                                    <span itemprop="streetAddress">
+                                        {{ address.structured.house_no }} {{ address.structured.street_name }}<br>
+                                    </span>
+                                    <span itemprop="addressLocality">
+                                        {{ address.structured.town }}<br>
+                                    </span>
+                                    <span itemprop="addressRegion">
+                                        {% if address.structured.postal_county %}
+                                            {{ address.structured.postal_county }}<br>
+                                        {% endif %}
+                                        {% if address.structured.region_name %}
+                                            {{ address.structured.region_name }}<br>
+                                        {% endif %}
+                                    </span>
+                                    <span itemprop="postalCode">{{ address.structured.postcode }}<br></span>
+                                    {% if address.structured.country %}
+                                        <span itemprop="addressCountry">{{ address.structured.country }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        {% else %}
+
+                            <div class="grid grid-1-3">
+                                {% for item in address.string.get_fields()  %}
+                                    {{ item }}<br>
+                                {% endfor %}
+                            </div>
+
+                        {% endif %}
+
+                        <figure class="grid grid-1-3">
+                            {% if title.extent is defined %}
+                                <div id="map" class="title-plan" style="width:300px; height:200px;"></div>
+                            {% endif %}
+                        </figure>
 
                     </div>
 
-                    <figure class="grid grid-1-3">
-                        {% if title.extent is defined %}
-                        <div id="map" class="title-plan" style="width:300px; height:200px;">
-                        </div>
-                        {% endif %}
-                    </figure>
-
-                </div>
-
-                <dl class="definition-tabular">
-                    <dt>Registered owner(s)</dt>
-                    <dd>
-                        {% for proprietor in title.proprietorship.fields['proprietors'] %}
-                            {% if  proprietor['name'] %}
-                                {% if not loop.first %}, {% endif %}
-                                {{ proprietor['name']['full_name'] }}
+                    <dl class="definition-tabular">
+                        <dt>Owner(s)</dt>
+                        <dd>
+                            {% if title.proprietorship.fields.proprietors|count > 1 %}
+                                <ul class="collapse">
+                                {% for proprietor in title.proprietorship.fields.proprietors  %}
+                                    <li>
+                                        {{ proprietor.name.full_name }}
+                                        <span class='change edit-mode'>
+                                            (<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                {{ title.proprietorship.fields.proprietors[0].name.full_name }}
                                 <span class='change edit-mode'>
-                                    (<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)
+                                    (<a href='{{request.path}}/edit/title.proprietor.1'>change</a>)
                                 </span>
                             {% endif %}
-                        {% endfor %}
-                    </dd>
+                        </dd>
 
-                    <dt>Restriction</dt>
-                    <dd>
-                        {% for charge in title.charges %}
-                        No disposition of the registered estate by the proprietor of the registered estate is to be registered
-                        without a written consent signed by the proprietor for the time being of the Charge dated {{ charge.charge_date | format_date_YMD }} in favour
-                        of {{ charge.chargee_name }} referred to in the Charges Register.
-                        {% endfor %}
-                    </dd>
-                    <dt>Tenure</dt>
-                    <dd>{{ title.property_description.fields['tenure'] | capitalize }}</dd>
+                        <dt>Lender(s)</dt>
+                        <dd>LENDER(S)</dd>
 
-                    <dt>Quality of title</dt>
-                    <dd>{{ title.property_description.fields['class_of_title'] | capitalize }}</dd>
+                        <dt>Tenure type</dt>
+                        <dd>{{ title.property_description.fields.tenure|capitalize }}</dd>
 
-                    {% if title.price_paid %}
-                    <dt>Price paid</dt>
-                    <dd> {{ title.price_paid.fields['amount'] }}</dd>
-                    {% endif %}
-                </dl>
+                        <dt>Title quality</dt>
+                        <dd>QUALITY</dd>
 
-            </div>
+                        {% if title.price_paid %}
+                            <dt>Price paid</dt>
+                            <dd>{{ title.price_paid.fields.amount }} on {{ title.price_paid.fields.date }}</dd>
+                        {% endif %}
+                    </dl>
 
-            <!--{% if title.property_description.fields['tenure'] == 'Leasehold' %}-->
-                <!--<h2 class="heading-large">Lease Details</h2>-->
-                <!--<dd>Short particulars of the lease(s) (or under-lease(s)) under which the land is held:</dd>   <br/>-->
-                <!--<div class="charges">-->
-                    <!--<dl class="definition-tabular">-->
-                    <!--{% for lease in title.leases %}-->
-                        <!--<dt>Lease Date</dt>-->
-                        <!--<dd id="leaseDate">{{ lease.lease_date | format_date_YMD }}</dd>-->
-                        <!--<dt>Term</dt>-->
-                        <!--<dd id="leaseTerm">{{ lease.lease_term }} years from {{ lease.lease_from | format_date_YMD }}</dd>-->
+                </div><!-- /summary -->
 
-                        <!--<dt>Parties</dt>-->
-                        <!--<dd id="parties">1. {{ lease.lessor_name }}-->
-                            <!--{% if lease.lessee_name %}-->
-                                <!--<br/>-->
-                                <!--2. {{ lease.lessee_name }}-->
-                            <!--{% endif %}-->
-                        <!--</dd>-->
-                    <!--</dl>-->
-                    <!--{% if lease.lease_easements == True or lease.alienation_clause == True or lease.title_registered == True %}-->
-                    <!--<h4>Clauses</h4>-->
-                    <!--{% endif %}-->
 
-                    <!--{% if lease.lease_easements == True %}-->
-                        <!--<p id="easementClause">Unless otherwise mentioned the title includes any legal easements granted-->
-                            <!--by the registered lease(s) but is subject to any rights that it reserves,-->
-                            <!--so far as those easements and rights exist and benefit or-->
-                            <!--affect the registered land.-->
-                        <!--</p><br/>-->
-                    <!--{% endif %}-->
+                <div class="grid-wrapper">
 
-                    <!--{% if lease.alienation_clause == True %}-->
-                        <!--<p id="alienationClause">There are excepted from the effect of registration all estates. rights,-->
-                            <!--interests, powers and remedies arising upon, or by reason of, any-->
-                            <!--dealing made in breach of the prohibition or restriction against-->
-                            <!--dealings therewith inter vivos contained in the Lease.-->
-                        <!--</p><br/>-->
-                    <!--{% endif %}-->
+                    <div class="grid grid-1-4"><!-- left col nav -->
+                        <section class="inner-block page-contents js-stick-at-top-when-scrolling">
+                            <h2 class="visuallyhidden">Register contents</h2>
+                                <nav>
+                                    <ul>
+                                        <li><a href="#property-details">Property details</a></li>
+                                        {% if title.restrictions %}
+                                            <li><a href="#property-restrictions">Restrictions ({{ title.restrictions|count }})</a></li>
+                                        {% endif %}
+                                        {% if title.restrictive_covenants %}
+                                            <li><a href="#property-restrictive-covenants">Restrictive covenants ({{ title.restrictive_covenants|count }})</a></li>
+                                        {% endif %}
+                                        {% if title.easements %}
+                                            <li><a href="#property-provisions">Easements ({{ title.Easements|count }})</a></li>
+                                        {% endif %}
+                                        {% if title.provisions %}
+                                            <li><a href="#property-provisions">Provisions ({{ title.provisions|count }})</a></li>
+                                        {% endif %}
+                                        <!--
+                                        <li><a href="#maps-plans">Maps and plans</a></li>
+                                        <li><a href="#related-documents">Related documents</a></li>
+                                        -->
+                                    </ul>
+                                </nav>
+                        </section>
+                    </div><!-- / left col nav -->
 
-                    <!--{% if lease.title_registered == True %}-->
-                        <!--<p id="titleRegisteredClause">The landlord's title is registered.</p><br/>-->
-                    <!--{% endif %}-->
-                <!--{% endfor %}-->
+                    <div class="grid grid-3-4"><!-- right col content -->
+                        <div class="inner-block">
 
-                <!--</div>-->
-            <!--{% endif %}-->
+                            <section id="property-details" class="text js-faux-details js-faux-details--open">
 
-            {% for charge in title.provisions %}
-                {% if loop.first %}
-                    <h2 class="heading-large">Charges Register</h2>
-                    <div class="charges">
-                    <h3>This register contains any charges and other matters that affect the land.</h3>
-                    <ul>
+                                <h2 class="heading-medium collapse-top">Property details</h2>
+
+                                <p>{{ title.property_description.full_text }}</p>
+
+                                <div class="group">
+                                    <h3 class="heading-medium">Owner(s)</h3>
+
+                                    {% for proprietor in title.proprietorship.fields.proprietors %}
+                                        <div class="grid grid-1-2">
+                                            <p>
+                                                {{ proprietor.name.full_name }}<br>
+                                                {{ proprietor.address.full_address }}
+                                            </p>
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+
+                            </section>
+
+                            {% if title.restrictions %}
+
+                                <section id="property-restrictions" class="text js-faux-details">
+
+                                    <h2 class="heading-medium">Restrictions <span class="number-flag">{{ title.restrictions|count }}</span></h2>
+
+                                    <details>
+                                        <summary>What are restrictions?</summary>
+                                        <div class="panel-indent">
+                                            <p>A restriction limits the powers of a registered owner to deal with or dispose of the registered land. It may also limit the powers of a chargee to dispose of a charge.</p>
+                                        </div>
+                                    </details>
+
+                                    {% for restriction in title.restrictions %}
+                                        <div class="note">
+                                            <p>{{ restriction.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
+
+                                </section>
+
+                            {% endif %}
+
+                            {% if title.restrictive_covenants %}
+
+                                <section id="property-restrictive-covenants" class="text js-faux-details">
+
+                                    <h2 class="heading-medium">Restrictive covenants <span class="number-flag">{{ title.restrictive_covenants|count }}</span></h2>
+
+                                    <details>
+                                        <summary>What is a restrictive covenant?</summary>
+                                        <div class="panel-indent">
+                                            <p>A restrictive covenant is a promise by one person to another (eg a buyer of land and a seller) not to do certain things with the property or land. The restrictions will continue to be in effect for any subsequent buyer.</p>
+                                            <p>Common examples of restrictive covenants include:</p>
+                                            <ul class="list-bullet">
+                                                <li>preventing alterations to an existing property</li>
+                                                <li>agreeing not to run a business from the property</li>
+                                            </ul>
+                                        </div>
+                                    </details>
+
+                                    {% for covenant in title.restrictive_covenants %}
+                                        <div class="note">
+                                            <p>{{ covenant.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
+
+                                </section>
+
+                            {% endif %}
+
+                            {% if title.easements %}
+
+                                <section id="property-easements" class="text js-faux-details">
+
+                                    <h2 class="heading-medium">Easements <span class="number-flag">{{ title.easements|count }}</span></h2>
+
+                                    <details>
+                                        <summary>What are easements?</summary>
+                                        <div class="panel-indent">
+                                            <p>An easement is a right to use someone else's land for a specified purpose. It relates to the land or property itself and isn’t a personal right.</p>
+                                            <p>Common examples of easements:</p>
+                                            <ul class="list-bullet">
+                                                <li>rights of way such as public footpaths</li>
+                                                <li>rights to run service pipes and cables underground</li>
+                                            </ul>
+                                        </div>
+                                    </details>
+
+                                    {% for easement in title.easements %}
+                                        <div class="note">
+                                            <p>{{ easement.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
+
+                                </section>
+
+                            {% endif %}
+
+                            {% if title.provisions %}
+
+                                <section id="property-provisions" class="text js-faux-details">
+
+                                    <h2 class="heading-medium">Provisions <span class="number-flag">{{ title.provisions|count }}</span></h2>
+
+                                    <details>
+                                        <summary>What are provisions?</summary>
+                                        <div class="panel-indent">
+                                            <p>A provision is an agreement between parties which usually relates to ownership and maintenance of boundaries and the right to the enjoyment of light and air.</p>
+                                        </div>
+                                    </details>
+
+                                    {% for provision in title.provisions %}
+                                        <div class="note">
+                                            <p>{{ provision.full_text }}</p>
+                                        </div>
+                                    {% endfor %}
+
+                                </section>
+
+                            {% endif %}
+
+                        </div>
+                    </div><!-- / right col content -->
+
+                <!--{% if title.property_description.fields['tenure'] == 'Leasehold' %}-->
+                    <!--<h2 class="heading-large">Lease Details</h2>-->
+                    <!--<dd>Short particulars of the lease(s) (or under-lease(s)) under which the land is held:</dd>   <br/>-->
+                    <!--<div class="charges">-->
+                        <!--<dl class="definition-tabular">-->
+                        <!--{% for lease in title.leases %}-->
+                            <!--<dt>Lease Date</dt>-->
+                            <!--<dd id="leaseDate">{{ lease.lease_date | format_date_YMD }}</dd>-->
+                            <!--<dt>Term</dt>-->
+                            <!--<dd id="leaseTerm">{{ lease.lease_term }} years from {{ lease.lease_from | format_date_YMD }}</dd>-->
+
+                            <!--<dt>Parties</dt>-->
+                            <!--<dd id="parties">1. {{ lease.lessor_name }}-->
+                                <!--{% if lease.lessee_name %}-->
+                                    <!--<br/>-->
+                                    <!--2. {{ lease.lessee_name }}-->
+                                <!--{% endif %}-->
+                            <!--</dd>-->
+                        <!--</dl>-->
+                        <!--{% if lease.lease_easements == True or lease.alienation_clause == True or lease.title_registered == True %}-->
+                        <!--<h4>Clauses</h4>-->
+                        <!--{% endif %}-->
+
+                        <!--{% if lease.lease_easements == True %}-->
+                            <!--<p id="easementClause">Unless otherwise mentioned the title includes any legal easements granted-->
+                                <!--by the registered lease(s) but is subject to any rights that it reserves,-->
+                                <!--so far as those easements and rights exist and benefit or-->
+                                <!--affect the registered land.-->
+                            <!--</p><br/>-->
+                        <!--{% endif %}-->
+
+                        <!--{% if lease.alienation_clause == True %}-->
+                            <!--<p id="alienationClause">There are excepted from the effect of registration all estates. rights,-->
+                                <!--interests, powers and remedies arising upon, or by reason of, any-->
+                                <!--dealing made in breach of the prohibition or restriction against-->
+                                <!--dealings therewith inter vivos contained in the Lease.-->
+                            <!--</p><br/>-->
+                        <!--{% endif %}-->
+
+                        <!--{% if lease.title_registered == True %}-->
+                            <!--<p id="titleRegisteredClause">The landlord's title is registered.</p><br/>-->
+                        <!--{% endif %}-->
+                    <!--{% endfor %}-->
+
+                    <!--</div>-->
+                <!--{% endif %}-->
+
+                {% if is_owner %}
+                    <a href="{{ title.title_number }}/changes">View pending and historical changes to this title</a>
+
+                    <div class="divider">
+                        <button class='button' id='makeChange'>Edit the register</button>
+                    </div>
                 {% endif %}
-                  <li> {{ charge.full_text }}</li>
-              </ul>
-            </div>
-            {% endfor %}
 
-            {% for easement in title.easements %}
-                {% if loop.first %}
-                    <h2 class="heading-large">Easements Register</h2>
-                        <div class="charges">
-                    <h3>This register contains any easements and other matters that affect the land.</h3>
-                    <ul>
-                {% endif %}
-                  <li>{{ easement.full_text }}</li>
-                  {% endfor %}
-              </ul>
-            </div>
+            </div><!-- end inner-block -->
+        </div><!-- end outer-block -->
 
-            {% if is_owner %}
-                <a href="{{ title.title_number }}/changes">View pending and historical changes to this title</a>
-
-                <div class="divider">
-                    <button class='button' id='makeChange'>Edit the register</button>
-                </div>
-            {% endif %}
-
-        </div><!-- end inner-block -->
     </div><!-- end content -->
 </main>
 
