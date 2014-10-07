@@ -31,7 +31,7 @@
                             <div class="grid grid-1-3">
                                 <div itemscope itemtype="http://schema.org/PostalAddress">
                                     <span itemprop="streetAddress">
-                                        {{ address.structured.house_number }} {{ address.structured.street_name }}<br>
+                                        {{ address.structured.house_no }} {{ address.structured.street_name }}<br>
                                     </span>
                                     <span itemprop="addressLocality">
                                         {{ address.structured.town }}<br>
@@ -44,9 +44,9 @@
                                             {{ address.structured.region_name }}<br>
                                         {% endif %}
                                     </span>
-                                    <span itemprop="postalCode">{{ address.structured.postal_code }}</span>
+                                    <span itemprop="postalCode">{{ address.structured.postcode }}<br></span>
                                     {% if address.structured.country %}
-                                        <span itemprop="addressCountry">{{ address.structured.postal_code }}</span>
+                                        <span itemprop="addressCountry">{{ address.structured.country }}</span>
                                     {% endif %}
                                 </div>
                             </div>
