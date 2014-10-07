@@ -40,14 +40,14 @@
                     {% if historical_changes %}
                         {% for version in historical_changes %}
 
-                                <ol class="register-changes-previous">
+                            <ol class="register-changes-previous">
 
-                                    <li>
-                                        <a href="changes/{{ version }}">Version {{ version }}</a>
-                                        <p>{{ historical_changes[version] }}</p>
-                                    </li>
+                                <li>
+                                    <a href="changes/{{ version }}">Version {{ version }}</a>
+                                    <p>{{ historical_changes[version] }}</p>
+                                </li>
 
-                                </ol>
+                            </ol>
 
                         {% endfor %}
                     {% else %}
