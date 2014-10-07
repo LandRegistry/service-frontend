@@ -1,5 +1,7 @@
 import os
 import logging
+import redis
+import urlparse
 
 from flask import Flask
 from flask import render_template
@@ -10,7 +12,6 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
 from flask.ext.login import LoginManager
 from health import Health
-
 
 app = Flask('application.frontend')
 app.config.from_object(os.environ.get('SETTINGS'))
@@ -24,10 +25,18 @@ db = SQLAlchemy(app)
 SQLAlchemy.health = health
 
 from flask_kvsession import KVSessionExtension
-from simplekv.db.sql import SQLAlchemyStore
+from simplekv.memory.redisstore import RedisStore
 
-store = SQLAlchemyStore(db.engine, db.metadata, 'sessions')
-KVSessionExtension(store, app)
+redis_url = urlparse.urlparse(app.config.get('REDIS_URL'))
+
+redis_server = redis.StrictRedis(
+        host=redis_url.hostname,
+        port=redis_url.port,
+        password=redis_url.password
+)
+
+store = RedisStore(redis_server)
+kv_store = KVSessionExtension(store, app)
 
 Health(app, checks=[db.health])
 Audit(app)

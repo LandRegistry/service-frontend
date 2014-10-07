@@ -21,6 +21,7 @@ MarkupSafe
 psycopg2
 pytz
 raven
+redis
 requests
 simplekv
 six
