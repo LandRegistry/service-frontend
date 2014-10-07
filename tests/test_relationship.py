@@ -56,10 +56,7 @@ class RelationshipTestCase(unittest.TestCase):
         with app.test_request_context():
             form = {}
             form['title_no'] = TITLE_NUMBER
-            form['house_number'] = '111'
-            form['road'] = 'High Street'
-            form['town'] = 'Croydon'
-            form['postalCode'] = 'CR0 1DN'
+            form['property_full_address'] = 'a full address'
             return form
 
     def get_task_form(self):
@@ -144,7 +141,7 @@ class RelationshipTestCase(unittest.TestCase):
         assert rv.status_code == 200
         with self.client.session_transaction() as sess:
             assert sess['title_no'] == TITLE_NUMBER
-            assert sess['postalCode'] == 'CR0 1DN'
+            assert sess['property_full_address'] == 'a full address'
 
     @responses.activate
     def test_store_task_show_clients(self):
