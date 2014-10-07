@@ -154,7 +154,8 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.get(form.email.data)
-        if user and user.check_password(form.password.data) and is_matched(user):
+
+        if user and user.check_password(form.password.data) and is_matched(user) and not user.blocked:
             login_user(user)
             return redirect(form.next.data or url_for('.index'))
         else:

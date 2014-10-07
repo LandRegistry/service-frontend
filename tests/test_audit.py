@@ -31,7 +31,8 @@ class AuditTestCase(unittest.TestCase):
                     gender='M',
                     date_of_birth=datetime.datetime.now(),
                     current_address='nowhere',
-                    previous_address='nowhere')
+                    previous_address='nowhere',
+                    blocked=False)
 
         db.session.add(user)
         db.session.commit()

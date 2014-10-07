@@ -1,4 +1,5 @@
 import json
+
 from datetime import datetime
 
 from sqlalchemy.dialects.postgresql import TEXT
@@ -6,6 +7,8 @@ from sqlalchemy.types import Enum
 
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+
+from sqlalchemy.dialects.postgresql import BOOLEAN
 
 from flask.ext.login import UserMixin
 
@@ -23,6 +26,7 @@ class User(db.Model, UserMixin):
     gender = db.Column(Enum('F', 'M', name='gender_types'), nullable=False)
     current_address = db.Column(TEXT, nullable=False)
     previous_address = db.Column(TEXT, nullable=False)
+    blocked = db.Column(BOOLEAN, nullable=False)
 
     def get_id(self):
         return self.email
