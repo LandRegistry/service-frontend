@@ -26,9 +26,20 @@ class AuthenticationTestCase(unittest.TestCase):
                     gender='M',
                     date_of_birth=datetime.datetime.now(),
                     current_address='nowhere',
-                    previous_address='nowhere')
+                    previous_address='nowhere',
+                    blocked=False)
+
+        self.blocked_user = User(email='landowner2@mail.com',
+                     password='password',
+                     name='noname',
+                     gender='M',
+                     date_of_birth=datetime.datetime.now(),
+                     current_address='nowhere',
+                     previous_address='nowhere',
+                     blocked=True)
 
         db.session.add(self.user)
+        db.session.add(self.blocked_user)
         db.session.commit()
 
         self.lrid = uuid.uuid4()
@@ -46,6 +57,14 @@ class AuthenticationTestCase(unittest.TestCase):
         mock_post.return_value.json.return_value = {"lrid":self.lrid, "roles":self.roles}
         rv = self.login('landowner@mail.com', 'password')
         assert rv.status == '200 OK'
+
+    @mock.patch('requests.post')
+    def test_blocked_login(self, mock_post):
+        self.logout()
+        mock_post.return_value.json.return_value = {"lrid":self.lrid, "roles":self.roles}
+        rv = self.login('landowner2@mail.com', 'password')
+        assert rv.status == '200 OK'
+        self.assertTrue('Sorry, those details haven&rsquo;t been recognised. Please try again.' in rv.data)
 
     @mock.patch('requests.post')
     @mock.patch('application.frontend.server.is_matched', return_value=True)
@@ -94,4 +113,5 @@ class AuthenticationTestCase(unittest.TestCase):
 
     def tearDown(self):
         db.session.delete(self.user)
+        db.session.delete(self.blocked_user)
         db.session.commit()
