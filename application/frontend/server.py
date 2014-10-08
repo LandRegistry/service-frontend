@@ -102,7 +102,7 @@ def property_by_title(title_number):
     title = response.json()
     app.logger.debug("Found the following title: %s" % title)
     owner = is_owner(current_user, title_number)
-    raw_address = title["property_description"]["fields"]["address"]
+    raw_address = title["property_description"]["fields"]["address"][0]
     address = AddressBuilder(**raw_address).build()
     return render_template(
         'view_property.html',
@@ -224,7 +224,7 @@ def client_relationship_flow_step_2_render_results_in_template():
     title = response.json()
     app.logger.debug("RESULT = %s" % title)
 
-    raw_address = title["property_description"]["fields"]["address"]
+    raw_address = title["property_description"]["fields"]["address"][0]
     address = AddressBuilder(**raw_address).build()
 
     return render_template('conveyancer-select-property.html',
