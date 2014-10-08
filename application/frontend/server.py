@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 import json
 
@@ -31,7 +30,9 @@ from application.services import (
     is_matched,
     is_owner,
     get_lrid_and_roles,
-    get_client_lrid
+    get_client_lrid,
+    is_within_view_limit,
+    is_allowed_to_see_title
 )
 from application.auth.models import User
 from application import (
@@ -93,23 +94,27 @@ def view_register():
 @app.route('/property/<title_number>')
 @login_required
 def property_by_title(title_number):
-    title_url = "%s/%s/%s" % (
-        app.config['AUTHENTICATED_SEARCH_API'],
-        'auth/titles',
-        title_number)
-    app.logger.debug("Requesting title url : %s" % title_url)
-    response = get_or_log_error(title_url)
-    title = response.json()
-    app.logger.debug("Found the following title: %s" % title)
-    owner = is_owner(current_user, title_number)
-    raw_address = title["property_description"]["fields"]["address"][0]
-    address = AddressBuilder(**raw_address).build()
-    return render_template(
-        'view_property.html',
-        title=title,
-        is_owner=owner,
-        address=address,
-        apiKey=app.config['OS_API_KEY'])
+    if is_within_view_limit(current_user):
+        title_url = "%s/%s/%s" % (
+           app.config['AUTHENTICATED_SEARCH_API'],
+           'auth/titles',
+           title_number)
+        app.logger.debug("Requesting title url : %s" % title_url)
+        response = get_or_log_error(title_url)
+        title = response.json()
+
+        app.logger.debug("Found the following title: %s" % title)
+        owner = is_owner(current_user, title_number)
+        raw_address = title["property_description"]["fields"]["address"][0]
+        address = AddressBuilder(**raw_address).build()
+        return render_template(
+           'view_property.html',
+           title=title,
+           is_owner=owner,
+           address=address,
+           apiKey=app.config['OS_API_KEY'])
+    else:
+        return redirect(url_for('.login'))
 
 
 # Sticking to convention, "/property/<title_number>" will show the
@@ -160,8 +165,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.get(form.email.data)
-
-        if (user and not user.blocked and user.check_password(form.password.data)) and is_matched(user):
+        if user and is_allowed_to_see_title(user, form.password.data):
             login_user(user)
             return redirect(form.next.data or url_for('.index'))
         else:
@@ -376,5 +380,7 @@ def change_version(title_number, version):
         'view_historical_version.html',
         title=historian_version_response,
         is_owner=owner,
-        apiKey=os.environ['OS_API_KEY'])
+        apiKey=app.config['OS_API_KEY'],
+        change_date=converted_unix_timestamp)
+
 

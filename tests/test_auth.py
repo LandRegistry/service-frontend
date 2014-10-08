@@ -114,6 +114,6 @@ class AuthenticationTestCase(unittest.TestCase):
 
 
     def tearDown(self):
-        db.session.delete(self.user)
-        db.session.delete(self.blocked_user)
+        db.session.remove()
+        db.drop_all()
         db.session.commit()
