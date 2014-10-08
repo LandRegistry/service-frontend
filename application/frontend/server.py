@@ -345,14 +345,17 @@ def changes(title_number):
         pending = []
         historical_changes_list = {}
 
-        historian_list_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version=list'
+        historian_list_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?versions=list'
         historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
         app.logger.debug('requesting history from ' + historian_list_url)
         historian_list_response = requests.get(historian_list_url)
-        #version information put in a list to pass to the template.
-        for version in historian_list_response.json()['versions']:
-            historian_version_response = requests.get(historian_version_url + version['version_id'])
-            historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['created_ts']
+        app.logger.debug('***********************')
+        if historian_list_response:
+            #version information put in a list to pass to the template.
+            app.logger.debug(historian_list_response.json())
+            for version in historian_list_response.json()['versions']:
+                historian_version_response = requests.get(historian_version_url + version['version_id'])
+                historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['created_ts']
 
         for case in cases:
             if case['status'] != 'completed':
