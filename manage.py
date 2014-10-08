@@ -37,7 +37,8 @@ def create_user(email, password, name, dob, gender, current_address, previous_ad
                     gender=gender,
                     current_address=current_address,
                     previous_address=previous_address,
-                    blocked=False)
+                    blocked=False,
+                    view_count=0)
 
         db.session.add(user)
         db.session.commit()

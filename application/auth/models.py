@@ -27,6 +27,7 @@ class User(db.Model, UserMixin):
     current_address = db.Column(TEXT, nullable=False)
     previous_address = db.Column(TEXT, nullable=False)
     blocked = db.Column(BOOLEAN, nullable=False)
+    view_count = db.Column(db.Integer, nullable=False)
 
     def get_id(self):
         return self.email
@@ -48,4 +49,4 @@ class User(db.Model, UserMixin):
             'date_of_birth': datetime.strftime(self.date_of_birth, '%Y-%m-%d'),
             'gender' : self.gender,
             'current_address': self.current_address,
-            'previous_address': self.previous_address })
+            'previous_address': self.previous_address})
