@@ -21,7 +21,7 @@
                     </h1>
 
                     <p>
-                        This register was last changed on <b>DATE</b> at <b>TIME</b>
+                        This register was last changed on <b>{{title.edition_date}}</b>
                     </p>
 
                     <div class="lede">
@@ -95,14 +95,14 @@
                         <dd>LENDER(S)</dd>
 
                         <dt>Tenure type</dt>
-                        <dd>{{ title.property_description.fields.tenure|capitalize }}</dd>
+                        <dd>{{ title.tenure|capitalize }}</dd>
 
                         <dt>Title quality</dt>
                         <dd>QUALITY</dd>
 
                         {% if title.price_paid %}
                             <dt>Price paid</dt>
-                            <dd>{{ title.price_paid.fields.amount }} on {{ title.price_paid.fields.date }}</dd>
+                            <dd>{{ title.price_paid.fields.amount[0] }} on {{ title.price_paid.fields.date[0] }}</dd>
                         {% endif %}
                     </dl>
 
