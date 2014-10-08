@@ -365,8 +365,11 @@ def changes(title_number):
             if case['status'] != 'completed':
                 pending.append(case)
 
+        order_by_latest_version_first = list(reversed(sorted(historical_changes_list.keys())))
+
         return render_template('changes.html', title_number=title_number, pending=pending,
-                               historical_changes=historical_changes_list)
+                               historical_changes=historical_changes_list,
+                               order_by_latest_version_first=order_by_latest_version_first)
     else:
         abort(401)
 
