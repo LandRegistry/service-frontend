@@ -349,10 +349,13 @@ def changes(title_number):
         historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
         app.logger.debug('requesting history from ' + historian_list_url)
         historian_list_response = requests.get(historian_list_url)
-        #version information put in a list to pass to the template.
-        for version in historian_list_response.json()['versions']:
-            historian_version_response = requests.get(historian_version_url + version['version_id'])
-            historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['created_ts']
+        if historian_list_response:
+            #version information put in a list to pass to the template.
+            for version in historian_list_response.json()['versions']:
+                historian_version_response = requests.get(historian_version_url + version['version_id'])
+                converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response.json()['contents']['created_ts']))
+                historical_changes_list[version['version_id']] = converted_unix_timestamp
+                #historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['created_ts']
 
         for case in cases:
             if case['status'] != 'completed':
@@ -370,11 +373,13 @@ def change_version(title_number, version):
     historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
     app.logger.debug('requesting historical version from ' + historian_version_url)
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
+    converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response['created_ts']))
     owner = is_owner(current_user, title_number)
 
     return render_template(
         'view_historical_version.html',
         title=historian_version_response,
         is_owner=owner,
-        apiKey=os.environ['OS_API_KEY'])
+        apiKey=os.environ['OS_API_KEY'],
+        change_date=converted_unix_timestamp)
 
