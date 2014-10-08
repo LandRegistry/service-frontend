@@ -36,20 +36,15 @@
 
                 <div class="text" id="previous">
                     <p class="lede">Previous changes to this title register.</p>
-
                     {% if historical_changes %}
+                        <ol class="register-changes-previous">
                         {% for version in historical_changes %}
-
-                                <ol class="register-changes-previous">
-
-                                    <li>
-                                        <a href="changes/{{ version }}">Version {{ version }}</a>
-                                        <p>{{ historical_changes[version] }}</p>
-                                    </li>
-
-                                </ol>
-
+                              <li>
+                                  <a href="changes/{{ version }}">Version {{ version }}</a>
+                                  <p>{{ historical_changes[version] }}</p>
+                              </li>
                         {% endfor %}
+                        </ol>
                     {% else %}
                         <h3>No previous changes</h3>
                     {% endif %}
@@ -61,5 +56,3 @@
 </main>
 
 {% endblock %}
-
-

@@ -102,14 +102,14 @@ def property_by_title(title_number):
     title = response.json()
     app.logger.debug("Found the following title: %s" % title)
     owner = is_owner(current_user, title_number)
-    raw_address = title["property_description"]["fields"]["address"]
+    raw_address = title["property_description"]["fields"]["address"][0]
     address = AddressBuilder(**raw_address).build()
     return render_template(
         'view_property.html',
         title=title,
         is_owner=owner,
         address=address,
-        apiKey=os.environ['OS_API_KEY'])
+        apiKey=app.config['OS_API_KEY'])
 
 
 # Sticking to convention, "/property/<title_number>" will show the
@@ -221,21 +221,23 @@ def client_relationship_flow_step_2_render_results_in_template():
     search_url = "%s/auth/titles/%s" % ( app.config['AUTHENTICATED_SEARCH_API'], query)
     app.logger.debug("URL requested %s" % search_url)
     response = get_or_log_error(search_url)
-    result_json = response.json()
-    app.logger.debug("RESULT = %s" % result_json)
+    title = response.json()
+    app.logger.debug("RESULT = %s" % title)
+
+    raw_address = title["property_description"]["fields"]["address"][0]
+    address = AddressBuilder(**raw_address).build()
+
     return render_template('conveyancer-select-property.html',
-                           title=result_json,
-                           apiKey=os.environ['OS_API_KEY'])
+                           title=title,
+                           address=address,
+                           apiKey=app.config['OS_API_KEY'])
 
 
 @app.route('/relationship/conveyancer/task', methods=['POST'])
 @login_required
 def client_relationship_flow_step_3_store_selected_title_and_show_task_choices():
     session['title_no'] = request.form['title_no']
-    session['house_number'] = request.form['house_number']
-    session['road'] = request.form['road']
-    session['town'] = request.form['town']
-    session['postalCode'] = request.form['postalCode']
+    session['property_full_address'] = request.form['property_full_address']
     return render_template('conveyancer-select-task.html', form=(SelectTaskForm(request.form)))
 
 
@@ -269,7 +271,7 @@ def client_relationship_flow_step_6():
             return render_template('conveyancer-add-client.html', form=form,
                                    action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
 
-        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(), property_address=property_address(),
+        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(), address=property_full_address(),
                                client_name=session['client_full_name'], client_address=session['client_address'])
     else:
         return render_template('conveyancer-add-client.html', form=form,
@@ -291,14 +293,10 @@ def conveyancer_dict():
     return data
 
 
-def property_address():
+def property_full_address():
     address = {
-        "house_number": session['house_number'],
-        "road": session['road'],
-        "town": session['town'],
-        "postalCode": session['postalCode']
+        "property_full_address": session['property_full_address'],
     }
-
     return address
 
 
@@ -333,6 +331,7 @@ def clear_captured_client_relationship_session_variables():
     session.pop('client_lrid', None)
     session.pop('title_no', None)
     session.pop('buying_or_selling', None)
+    session.pop('property_full_address', None)
 
 
 @app.route('/property/<title_number>/changes')
@@ -353,14 +352,11 @@ def changes(title_number):
         #version information put in a list to pass to the template.
         for version in historian_list_response.json()['versions']:
             historian_version_response = requests.get(historian_version_url + version['version_id'])
-            converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response.json()['contents']['created_ts']))
-            historical_changes_list[version['version_id']] = converted_unix_timestamp
+            historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['created_ts']
 
         for case in cases:
             if case['status'] != 'completed':
                 pending.append(case)
-
-        app.logger.debug("Received cases from %s: %s" % (cases_url, cases))
 
         return render_template('changes.html', title_number=title_number, pending=pending,
                                historical_changes=historical_changes_list)
@@ -374,13 +370,11 @@ def change_version(title_number, version):
     historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
     app.logger.debug('requesting historical version from ' + historian_version_url)
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
-    converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response['created_ts']))
     owner = is_owner(current_user, title_number)
 
     return render_template(
         'view_historical_version.html',
         title=historian_version_response,
         is_owner=owner,
-        apiKey=os.environ['OS_API_KEY'],
-        change_date=converted_unix_timestamp)
+        apiKey=os.environ['OS_API_KEY'])
 
