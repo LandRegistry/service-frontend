@@ -153,7 +153,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         with self.client:
             from flask.ext.login import current_user
 
-            self.client.post('/login', data={'email': user.email, 'password': 'password'}, follow_redirects=True)
+            self.client.post('/auth/login', data={'email': user.email, 'password': 'password'}, follow_redirects=True)
             responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
 
@@ -191,7 +191,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
 
             app.config['VIEW_COUNT'] = 1
 
-            self.client.post('/login', data={'email': user.email, 'password': 'password'}, follow_redirects=True)
+            self.client.post('/auth/login', data={'email': user.email, 'password': 'password'}, follow_redirects=True)
             responses.add(responses.GET, '%s/auth/titles/%s' % (self.search_api, TITLE_NUMBER),
               body = response_json, status = 200, content_type='application/json')
 
@@ -199,7 +199,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
             response = self.client.get('/property/%s' % TITLE_NUMBER)
 
             self.assertEquals(302, response.status_code)
-            self.assertEquals(response.headers['location'], 'http://localhost/login')
+            self.assertEquals(response.headers['location'], 'http://localhost/auth/login')
             self.assertTrue(mock_logout.called)
 
 

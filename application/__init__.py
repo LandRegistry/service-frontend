@@ -18,8 +18,6 @@ app.config.from_object(os.environ.get('SETTINGS'))
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
-login_manager.login_message = ''
 
 db = SQLAlchemy(app)
 SQLAlchemy.health = health
@@ -54,6 +52,12 @@ if 'SENTRY_DSN' in os.environ:
     sentry = Sentry(app, dsn=os.environ['SENTRY_DSN'])
 
 app.logger.info("\nConfiguration\n%s\n" % app.config)
+
+# import and register auth blueprint
+from .auth.views import auth
+app.register_blueprint(auth)
+login_manager.login_view = 'auth.login'
+login_manager.login_message = ''
 
 
 def health(self):

@@ -10,18 +10,15 @@ from flask import (
     url_for,
     flash,
     session,
-    current_app)
-
+    current_app
+)
 from flask.ext.login import (
-    login_user,
-    logout_user,
     login_required,
     current_user
 )
 from forms import (
     ChangeForm,
     ConfirmForm,
-    LoginForm,
     SelectTaskForm,
     ConveyancerAddClientForm
 )
@@ -106,7 +103,7 @@ def property_by_title(title_number):
            address=address,
            apiKey=app.config['OS_API_KEY'])
     else:
-        return redirect(url_for('.login'))
+        return redirect(url_for('auth.login'))
 
 
 # Sticking to convention, "/property/<title_number>" will show the
@@ -152,27 +149,27 @@ def _get_title(title_number):
     return response.json()
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.get(form.email.data)
-        if user and is_allowed_to_see_title(user, form.password.data):
-            login_user(user)
-            return redirect(form.next.data or url_for('.index'))
-        else:
-            app.logger.info("Login failed for user email %s" % form.email.data)
-            flash("Sorry, those details haven&rsquo;t been recognised. Please try again.")
-    return render_template("auth/login_user.html", form=form)
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User.query.get(form.email.data)
+#         if user and is_allowed_to_see_title(user, form.password.data):
+#             login_user(user)
+#             return redirect(form.next.data or url_for('.index'))
+#         else:
+#             app.logger.info("Login failed for user email %s" % form.email.data)
+#             flash("Sorry, those details haven&rsquo;t been recognised. Please try again.")
+#     return render_template("auth/login_user.html", form=form)
 
 
-@app.route("/logout")
-@login_required
-def logout():
-    session.pop("lrid", None)
-    session.pop("roles", None)
-    logout_user()
-    return redirect(url_for('.login'))
+# @app.route("/logout")
+# @login_required
+# def logout():
+#     session.pop("lrid", None)
+#     session.pop("roles", None)
+#     logout_user()
+#     return redirect(url_for('.login'))
 
 
 @app.route('/relationship/client')
