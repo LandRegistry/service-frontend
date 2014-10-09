@@ -373,6 +373,7 @@ def change_version(title_number, version):
     return render_template(
         #'view_historical_version.html',
         'view_property.html',
+        historical_view='true',
         title=historian_version_response,
         is_owner=owner,
         apiKey=app.config['OS_API_KEY'],
