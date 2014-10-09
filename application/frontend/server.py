@@ -65,6 +65,13 @@ def format_date_time_DMYHM(value):
     return _tz(new_datetime).strftime('%d-%m-%Y %H:%M')
 
 @app.template_filter()
+def format_date_time_iso_8601(value):
+    split_date_by_microseconds = value.split(".")
+    DMYHMS = split_date_by_microseconds[0]
+    new_datetime = datetime.strptime(DMYHMS, '%d-%m-%Y %H:%M:%S')
+    return _tz(new_datetime).strftime('%d-%m-%Y %H:%M')
+
+@app.template_filter()
 def currency(value):
     """Format a comma separated  currency to 2 decimal places."""
     return "{:,.2f}".format(float(value))
