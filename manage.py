@@ -74,5 +74,11 @@ def unblock_user(email):
     else:
         print "User does not exist"
 
+@manager.command
+def reset_user_view_counts():
+    db.session.query(User).update({"view_count": app.config['VIEW_COUNT']})
+    db.session.commit()
+
+
 if __name__ == '__main__':
     manager.run()
