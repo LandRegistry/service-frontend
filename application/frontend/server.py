@@ -96,11 +96,16 @@ def property_by_title(title_number):
         owner = is_owner(current_user, title_number)
         raw_address = title["property_description"]["fields"]["address"][0]
         address = AddressBuilder(**raw_address).build()
+
+        raw_proprietor_address = title["proprietorship"]["fields"]["proprietors"][0]["address"][0]
+        proprietor_address = AddressBuilder(**raw_proprietor_address).build()
+
         return render_template(
            'view_property.html',
            title=title,
            is_owner=owner,
            address=address,
+           proprietor_address=proprietor_address,
            apiKey=app.config['OS_API_KEY'])
     else:
         return redirect(url_for('auth.login'))
