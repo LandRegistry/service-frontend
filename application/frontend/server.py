@@ -338,17 +338,15 @@ def changes(title_number):
         pending = []
         historical_changes_list = {}
 
-        historian_list_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version=list'
-        historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
+        historian_list_url = app.config['HISTORIAN_URL'] + '/titles/' + title_number + '?version=list'
+        historian_version_url = app.config['HISTORIAN_URL'] + '/titles/' + title_number + '?version='
         app.logger.debug('requesting history from ' + historian_list_url)
         historian_list_response = requests.get(historian_list_url)
         if historian_list_response:
             #version information put in a list to pass to the template.
             for version in historian_list_response.json()['versions']:
                 historian_version_response = requests.get(historian_version_url + version['version_id'])
-                converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response.json()['contents']['created_ts']))
-                historical_changes_list[version['version_id']] = converted_unix_timestamp
-                #historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['created_ts']
+                historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['edition_date']
 
         for case in cases:
             if case['status'] != 'completed':
@@ -366,10 +364,10 @@ def changes(title_number):
 @login_required
 def change_version(title_number, version):
 
-    historian_version_url = app.config['HISTORIAN_URL'] + '/' + title_number + '?version='
+    historian_version_url = app.config['HISTORIAN_URL'] + '/titles/' + title_number + '?version='
     app.logger.debug('requesting historical version from ' + historian_version_url)
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
-    converted_unix_timestamp = unix_timestamp_to_DMYHMS(str(historian_version_response['created_ts']))
+    converted_unix_timestamp = historian_version_response['edition_date']
     owner = is_owner(current_user, title_number)
 
     return render_template(
