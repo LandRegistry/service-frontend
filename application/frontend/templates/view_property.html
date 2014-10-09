@@ -148,6 +148,9 @@
                                         {% if title.provisions %}
                                             <li><a href="#property-provisions">Provisions ({{ title.provisions|count }})</a></li>
                                         {% endif %}
+                                        {% if title.bankruptcy %}
+                                            <li><a href="#property-bankruptcy">Bankruptcy ({{ title.bankruptcy|count }})</a></li>
+                                        {% endif %}
                                         <!--
                                         <li><a href="#maps-plans">Maps and plans</a></li>
                                         <li><a href="#related-documents">Related documents</a></li>
@@ -225,9 +228,7 @@
                                     </details>
 
                                     {% for restriction in title.restrictions %}
-                                        <div class="note">
-                                            <p>{{ restriction.full_text }}</p>
-                                        </div>
+                                        <p>{{ restriction.full_text }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -253,9 +254,7 @@
                                     </details>
 
                                     {% for covenant in title.restrictive_covenants %}
-                                        <div class="note">
-                                            <p>{{ covenant.full_text }}</p>
-                                        </div>
+                                        <p>{{ covenant.full_text }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -281,9 +280,7 @@
                                     </details>
 
                                     {% for easement in title.easements %}
-                                        <div class="note">
-                                            <p>{{ easement.full_text }}</p>
-                                        </div>
+                                        <p>{{ easement.full_text }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -304,9 +301,28 @@
                                     </details>
 
                                     {% for provision in title.provisions %}
-                                        <div class="note">
-                                            <p>{{ provision.full_text }}</p>
+                                        <p>{{ provision.full_text }}</p>
+                                    {% endfor %}
+
+                                </section>
+
+                            {% endif %}
+
+                            {% if title.bankruptcy %}
+
+                                <section id="property-bankruptcy" class="text js-faux-details">
+
+                                    <h2 class="heading-medium">Bankruptcy <span class="number-flag">{{ title.bankruptcy|count }}</span></h2>
+
+                                    <details>
+                                        <summary>What is bankruptcy?</summary>
+                                        <div class="panel-indent">
+                                            <p>Help text</p>
                                         </div>
+                                    </details>
+
+                                    {% for bankrupt in title.bankruptcy %}
+                                        <p>{{ bankrupt.full_text }}</p>
                                     {% endfor %}
 
                                 </section>
