@@ -371,7 +371,6 @@ def change_version(title_number, version):
     owner = is_owner(current_user, title_number)
 
     return render_template(
-        #'view_historical_version.html',
         'view_property.html',
         historical_view='true',
         title=historian_version_response,
