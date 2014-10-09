@@ -332,17 +332,37 @@
                             {% endif %}
 
                         </div>
+
+                        <div class="inner-block">
+                            <div class="legal-division--top">
+
+                                {% if is_owner and not historical_view %}
+                                    <section class="js-faux-details">
+
+                                        <h3 class="heading-medium">Changes to this title</h3>
+
+                                        <p>
+                                            <a href="{{ title.title_number }}/changes">View pending and historical changes to this title</a>
+                                        </p>
+
+                                    </section>
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+
+                        {% if is_owner and not historical_view %}
+                            <div class="inner-block">
+                                <div class="action-division--top">
+                                    <button class="button" id="makeChange">Make a change to the register</button>
+                                </div>
+                            </div>
+                        {% endif %}
+
                     </div><!-- / right col content -->
 
                 </div><!-- / grid wrapper -->
-
-                {% if is_owner and not historical_view %}
-                    <a href="{{ title.title_number }}/changes">View pending and historical changes to this title</a>
-
-                    <div class="divider">
-                        <button class='button' id='makeChange'>Edit the register</button>
-                    </div>
-                {% endif %}
 
             </div><!-- end inner-block -->
         </div><!-- end outer-block -->
