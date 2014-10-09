@@ -369,11 +369,14 @@ def change_version(title_number, version):
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
     converted_unix_timestamp = historian_version_response['edition_date']
     owner = is_owner(current_user, title_number)
+    raw_address = historian_version_response["property_description"]["fields"]["address"][0]
+    address = AddressBuilder(**raw_address).build()
 
     return render_template(
         'view_property.html',
         historical_view='true',
         title=historian_version_response,
+        address=address,
         is_owner=owner,
         apiKey=app.config['OS_API_KEY'],
         change_date=converted_unix_timestamp)
