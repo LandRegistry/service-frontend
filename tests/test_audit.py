@@ -40,19 +40,19 @@ class AuditTestCase(unittest.TestCase):
         self.lrid = uuid.uuid4()
         self.roles = ['CITIZEN']
 
-    def _login(self, email=None, password=None):
+    def login(self, email=None, password=None):
         password = password or 'password'
-        return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
+        return self.client.post('/auth/login', data={'email': email, 'password': password}, follow_redirects=True)
 
     def logout(self):
-        return self.client.get('/logout', follow_redirects=True)
+        return self.client.get('/auth/logout', follow_redirects=True)
 
 
     @mock.patch(LOGGER)
     @mock.patch('requests.post')
     def test_audit_get_index_logs_authenticated_user(self, mock_post, mock_logger):
         mock_post.return_value.json.return_value = {"lrid":self.lrid, "roles":self.roles}
-        self._login('landowner@mail.com', 'password')
+        self.login('landowner@mail.com', 'password')
         path = '/'
         self.client.get(path)
         args, kwargs = mock_logger.call_args
@@ -66,7 +66,7 @@ class AuditTestCase(unittest.TestCase):
     def test_audit_get_property_page_logs_authenticated_user(self, mock_owner_check, mock_get,mock_post, mock_logger):
         mock_post.return_value.json.return_value = {"lrid":self.lrid, "roles":self.roles}
         mock_get.return_value.json.return_value = title
-        self._login('landowner@mail.com', 'password')
+        self.login('landowner@mail.com', 'password')
         path = '/property/TEST123'
         self.client.get(path)
         args, kwargs = mock_logger.call_args

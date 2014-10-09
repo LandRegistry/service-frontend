@@ -7,7 +7,6 @@ from wtforms import (
     HiddenField,
     BooleanField,
     DateField,
-    PasswordField,
     SubmitField,
     SelectField,
     RadioField,
@@ -31,19 +30,6 @@ class ValidateDateNotInFuture(object):
     def _validate_date_not_in_future(self, form, date_field):
         if date_field > date.today():
             raise ValidationError('Date cannot be in the future')
-
-
-class LoginForm(Form):
-    email = StringField(validators=[DataRequired()])
-    password = PasswordField(validators=[DataRequired()])
-    submit = SubmitField('Sign in')
-    next = HiddenField()
-
-    def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
-        if not self.next.data:
-            self.next.data = request.args.get('next', '')
-
 
 class ChangeForm(Form):
     title_number = HiddenField('Title Number')

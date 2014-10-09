@@ -49,10 +49,10 @@ class AuthenticationTestCase(unittest.TestCase):
 
     def login(self, email=None, password=None):
         password = password or 'password'
-        return self.client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
+        return self.client.post('/auth/login', data={'email': email, 'password': password}, follow_redirects=True)
 
     def logout(self):
-        return self.client.get('/logout', follow_redirects=True)
+        return self.client.get('/auth/logout', follow_redirects=True)
 
     @mock.patch('requests.post')
     def test_login(self, mock_post):

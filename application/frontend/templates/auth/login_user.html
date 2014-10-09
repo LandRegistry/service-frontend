@@ -15,7 +15,7 @@
 
         <div class="full-width">
 
-          <form action="/login" method="POST" name="form" class="login-user-form">
+          <form action="{{ url_for('auth.login') }}" method="POST" name="form" class="login-user-form">
 
             <h1 class="form-title heading-large">Sign in</h1>
 
