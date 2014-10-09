@@ -37,7 +37,7 @@ from application import (
 )
 from utils import (
     get_or_log_error,
-    AddressBuilder
+    build_address
 )
 
 from pytz import timezone
@@ -101,8 +101,8 @@ def property_by_title(title_number):
 
         app.logger.debug("Found the following title: %s" % title)
         owner = is_owner(current_user, title_number)
-        raw_address = title["property_description"]["fields"]["address"][0]
-        address = AddressBuilder(**raw_address).build()
+        address = build_address(title)
+
         return render_template(
            'view_property.html',
            title=title,
@@ -223,9 +223,7 @@ def client_relationship_flow_step_2_render_results_in_template():
     response = get_or_log_error(search_url)
     title = response.json()
     app.logger.debug("RESULT = %s" % title)
-
-    raw_address = title["property_description"]["fields"]["address"][0]
-    address = AddressBuilder(**raw_address).build()
+    address = build_address(title)
 
     return render_template('conveyancer-select-property.html',
                            title=title,
@@ -376,8 +374,7 @@ def change_version(title_number, version):
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
     converted_unix_timestamp = historian_version_response['edition_date']
     owner = is_owner(current_user, title_number)
-    raw_address = historian_version_response["property_description"]["fields"]["address"][0]
-    address = AddressBuilder(**raw_address).build()
+    address = build_address(title)
 
     return render_template(
         'view_property.html',

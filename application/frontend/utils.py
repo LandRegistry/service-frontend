@@ -34,6 +34,18 @@ def get_or_log_error(url):
         abort(500)
 
 
+def build_address(title):
+    raw_address = title["property_description"]["fields"]["addresses"][0]
+    return AddressBuilder(house_no=raw_address["house_no"],
+                                            street_name=raw_address["street_name"],
+                                            town=raw_address["town"],
+                                            postcode=raw_address["postcode"],
+                                            postal_county=raw_address["postal_county"],
+                                            region_name=raw_address["region_name"],
+                                            country=raw_address["country"],
+                                            full_address=raw_address["full_address"]).build()
+
+
 class Address(object):
 
     def __init__(self, string_address):
