@@ -21,7 +21,7 @@
                             <ol class="register-changes-pending">
                                 <li>
                                     <h3 class="heading-small">{{case.application_name}}</h3>
-                                        <span class="alert-flag">Submitted on: {{case.submitted_at | format_date_time_DMYHM}} </br>
+                                        <span class="alert-flag">Submitted on: {{case.submitted_at | format_date_time_iso_8601}} </br>
                                             Submitted by: {{case.submitted_by}}
                                         </span>
                                 </li>
