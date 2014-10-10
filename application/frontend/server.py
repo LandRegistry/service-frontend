@@ -1,4 +1,5 @@
 from datetime import datetime
+import dateutil.parser
 import json
 
 import requests
@@ -71,10 +72,8 @@ def currency(value):
 
 @app.template_filter()
 def format_date_time_iso_8601(value):
-    split_date_by_microseconds = value.split(".")
-    DMYHMS = split_date_by_microseconds[0]
-    new_datetime = datetime.strptime(DMYHMS, '%Y-%m-%d %H:%M:%S')
-    return _tz(new_datetime).strftime('%Y-%m-%d %H:%M')
+    norm = dateutil.parser.parse(value)
+    return datetime.strftime(norm, '%d-%m-%Y %H:%M')
 
 def unix_timestamp_to_DMYHMS(value):
     return datetime.fromtimestamp(int(value)).strftime('%d %B %Y %H:%M:%S')
