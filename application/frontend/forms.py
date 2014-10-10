@@ -38,7 +38,7 @@ class ChangeForm(Form):
     proprietor_full_name = HiddenField('Previous full name')
     proprietor_new_full_name = StringField('New full name', validators=[DataRequired()])
     partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
-    marriage_date = DateField('Date of marriage', format='%d-%m-%Y',
+    marriage_date = DateField('Date of marriage', format='%Y-%m-%d',
                               validators=[DataRequired(), ValidateDateNotInFuture()],
                               description="For example, 20-08-2011")
     marriage_place = StringField('Location of marriage ceremony', validators=[DataRequired()])

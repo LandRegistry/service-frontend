@@ -52,6 +52,10 @@ def _payload_case(action, data):
 def _fmt(data):
     # date hack until we can settle on data formats/handling/ser/deser
     dt = data.pop('marriage_date')
+
+    current_app.logger.debug('***********************************************')
+    current_app.logger.debug(dt)
+
     data['marriage_date'] = long(dt.strftime("%s"))
 
     data['application_type'] = 'change-name-marriage'
