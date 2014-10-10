@@ -40,7 +40,7 @@ class ChangeForm(Form):
     partner_name = StringField('Partner\'s full name', validators=[DataRequired()])
     marriage_date = DateField('Date of marriage', format='%Y-%m-%d',
                               validators=[DataRequired(), ValidateDateNotInFuture()],
-                              description="For example, 20-08-2011")
+                              description="For example, 2011-08-20")
     marriage_place = StringField('Location of marriage ceremony', validators=[DataRequired()])
     marriage_country = SelectField('Country',
                                    validators=[DataRequired(), country_code_validator.wtform_validator()],
