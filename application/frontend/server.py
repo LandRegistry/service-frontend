@@ -374,7 +374,7 @@ def change_version(title_number, version):
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
     converted_unix_timestamp = historian_version_response['edition_date']
     owner = is_owner(current_user, title_number)
-    address = build_address(title)
+    address = build_address(historian_version_response)
 
     return render_template(
         'view_property.html',
