@@ -9,7 +9,7 @@
         <div class="outer-block">
             <div class="inner-block">
 
-                <div class="breadcumb-reverse">
+                <div class="expand-top">
                     <nav role="navigation">
                         <a href="/property/{{ title_number }}">Back to title</a>
                     </nav>
@@ -48,7 +48,7 @@
                         <ol class="register-changes-previous">
                         {% for version in order_by_latest_version_first %}
                             <li>
-                                <time datetime="2013-08-07T16:46:28Z">{{ historical_changes[version] }}</time>
+                                <time datetime="">{{ historical_changes[version] }}</time>
                                 <h3 class="heading-small">Version {{ version }}</h3>
                                 <p>
                                   <a href="changes/{{ version }}">View register on {{ historical_changes[version] }}</a>
