@@ -81,7 +81,7 @@
                         {% else %}
 
                             <div class="grid grid-1-3">
-                                {{ title.property_description.fields.address[0].full_address }}
+                                {{ title.property_description.fields.addresses[0].full_address }}
                             </div>
 
                         {% endif %}
@@ -183,7 +183,7 @@
                                         <div class="grid grid-1-2">
                                             <p>
                                                 {{ proprietor.name.full_name }}<br>
-                                                {{ proprietor.address.full_address }}
+                                                {{ proprietor.addresses[0].full_address }}
                                             </p>
                                         </div>
                                     {% endfor %}
