@@ -16,6 +16,7 @@ class ChangeTitleTestCase(unittest.TestCase):
 
     def setUp(self):
         app.config['LOGIN_DISABLED'] = True
+        app.config['VIEW_COUNT_ENABLED'] = False
 
         db.drop_all()
         db.create_all()

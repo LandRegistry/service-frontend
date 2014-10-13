@@ -35,8 +35,8 @@ from application.services import (
     is_owner,
     get_lrid_and_roles,
     get_client_lrid,
-    is_within_view_limit,
-    is_allowed_to_see_title
+    is_allowed_to_see_title,
+    view_count_limited
 )
 from application import (
     app
@@ -54,29 +54,27 @@ def index():
 
 
 @app.route('/property/<title_number>')
+@view_count_limited
 @login_required
 def property_by_title(title_number):
-    if is_within_view_limit(current_user):
-        title_url = "%s/%s/%s" % (
-           app.config['AUTHENTICATED_SEARCH_API'],
-           'auth/titles',
-           title_number)
-        app.logger.debug("Requesting title url : %s" % title_url)
-        response = get_or_log_error(title_url)
-        title = response.json()
+    title_url = "%s/%s/%s" % (
+       app.config['AUTHENTICATED_SEARCH_API'],
+       'auth/titles',
+       title_number)
+    app.logger.debug("Requesting title url : %s" % title_url)
+    response = get_or_log_error(title_url)
+    title = response.json()
 
-        app.logger.debug("Found the following title: %s" % title)
-        owner = is_owner(current_user, title_number)
-        address = build_address(title)
+    app.logger.debug("Found the following title: %s" % title)
+    owner = is_owner(current_user, title_number)
+    address = build_address(title)
 
-        return render_template(
+    return render_template(
            'view_property.html',
            title=title,
            is_owner=owner,
            address=address,
            apiKey=app.config['OS_API_KEY'])
-    else:
-        return redirect(url_for('auth.login'))
 
 
 # Sticking to convention, "/property/<title_number>" will show the
@@ -84,6 +82,7 @@ def property_by_title(title_number):
 # to edit said resource. Here we go a step further, and limit
 # the form to a section on the resource, e.g. "proprietor".
 @app.route('/property/<title_number>/edit/title.proprietor.<int:proprietor_index>', methods=['GET', 'POST'])
+@view_count_limited
 @login_required
 def property_by_title_edit_proprietor(title_number, proprietor_index):
     if is_owner(current_user, title_number):
@@ -227,6 +226,7 @@ def conveyancer_token():
     return render_template('conveyancer-token.html', token=token)
 
 @app.route('/property/<title_number>/changes')
+@view_count_limited
 @login_required
 def changes(title_number):
     if is_owner(current_user, title_number):
@@ -260,6 +260,7 @@ def changes(title_number):
         abort(401)
 
 @app.route('/property/<title_number>/changes/<version>')
+@view_count_limited
 @login_required
 def change_version(title_number, version):
 

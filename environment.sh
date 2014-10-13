@@ -12,3 +12,4 @@ export OS_API_KEY='no-key'
 export REDIS_URL='redis://user:@localhost:6379'
 export PERMANENT_SESSION_LIFETIME=60 # minutes picked by random inspiration
 export VIEW_COUNT=50
+export VIEW_COUNT_ENABLED=True
