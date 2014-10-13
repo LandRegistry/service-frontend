@@ -16,6 +16,13 @@ from flask.ext.login import (
     login_required,
     current_user
 )
+from application.frontend.session_models import (
+    conveyancer_dict,
+    populate_client_details,
+    property_full_address,
+    create_user,
+    clear_captured_client_relationship_session_variables
+)
 from forms import (
     ChangeForm,
     ConfirmForm,
@@ -31,7 +38,6 @@ from application.services import (
     is_within_view_limit,
     is_allowed_to_see_title
 )
-from application.auth.models import User
 from application import (
     app
 )
@@ -115,30 +121,6 @@ def _get_title(title_number):
     response = get_or_log_error(title_url)
     return response.json()
 
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     form = LoginForm()
-#     if form.validate_on_submit():
-#         user = User.query.get(form.email.data)
-#         if user and is_allowed_to_see_title(user, form.password.data):
-#             login_user(user)
-#             return redirect(form.next.data or url_for('.index'))
-#         else:
-#             app.logger.info("Login failed for user email %s" % form.email.data)
-#             flash("Sorry, those details haven&rsquo;t been recognised. Please try again.")
-#     return render_template("auth/login_user.html", form=form)
-
-
-# @app.route("/logout")
-# @login_required
-# def logout():
-#     session.pop("lrid", None)
-#     session.pop("roles", None)
-#     logout_user()
-#     return redirect(url_for('.login'))
-
-
 @app.route('/relationship/client')
 def relationship_client():
     return render_template('client-enter-token.html')
@@ -207,20 +189,15 @@ def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_cl
     return render_template('conveyancer-add-client.html', action_path='/relationship/conveyancer/confirm',
                            form=client_form)
 
-
 @app.route('/relationship/conveyancer/confirm', methods=['POST'])
 @login_required
 def client_relationship_flow_step_6():
     form = ConveyancerAddClientForm(request.form)
     if form.validate_on_submit():
 
-        session['client_full_name'] = form.full_name.data
-        session['client_date_of_birth'] = str(form.date_of_birth.data)
-        session['client_address'] = form.address.data
-        session['client_telephone'] = form.telephone.data
-        session['client_email'] = form.email.data
+        populate_client_details(session, form)
 
-        client_lrid = get_client_lrid(_create_user(form))
+        client_lrid = get_client_lrid(create_user(form))
 
         if client_lrid:
             session['client_lrid'] = client_lrid
@@ -229,68 +206,25 @@ def client_relationship_flow_step_6():
             return render_template('conveyancer-add-client.html', form=form,
                                    action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
 
-        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(), address=property_full_address(),
+        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(session), address=property_full_address(session),
                                client_name=session['client_full_name'], client_address=session['client_address'])
     else:
         return render_template('conveyancer-add-client.html', form=form,
                                action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
-
-
-def conveyancer_dict():
-    client = [{
-                  "lrid": session['client_lrid']
-              }]
-
-    data = {
-        "conveyancer_lrid": session['lrid'],
-        "title_number": session['title_no'],
-        "clients": client,
-        "task": session['buying_or_selling']
-    }
-
-    return data
-
-
-def property_full_address():
-    address = {
-        "property_full_address": session['property_full_address'],
-    }
-    return address
-
-
-def _create_user(form):
-    client_data = {'name': form.full_name.data,
-                   'date_of_birth': form.date_of_birth.data,
-                   'current_address': form.address.data,
-                   'gender': form.gender.data}
-    return User(**client_data)
-
 
 @app.route('/relationship/conveyancer/token')
 @login_required
 def conveyancer_token():
     headers = {'content-type': 'application/json'}
 
-    data = json.dumps(conveyancer_dict())
+    data = json.dumps(conveyancer_dict(session))
     relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
 
     app.logger.debug("Sending data %s to introduction at %s" % (data, relationship_url))
     response = requests.post(relationship_url, data=data, headers=headers)
     token = response.json()['token']
-    clear_captured_client_relationship_session_variables()
+    clear_captured_client_relationship_session_variables(session)
     return render_template('conveyancer-token.html', token=token)
-
-
-def clear_captured_client_relationship_session_variables():
-    session.pop('client_full_name', None)
-    session.pop('client_address', None)
-    session.pop('client_date_of_birth', None)
-    session.pop('client_telephone', None)
-    session.pop('client_lrid', None)
-    session.pop('title_no', None)
-    session.pop('buying_or_selling', None)
-    session.pop('property_full_address', None)
-
 
 @app.route('/property/<title_number>/changes')
 @login_required
