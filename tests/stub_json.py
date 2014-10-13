@@ -4,6 +4,8 @@ title_no_charge = {
     "class_of_title":"Absolute",
     "tenure":"Leasehold",
     "edition_date":"10-31-2005",
+    "last_application":"10-31-2005T13:23:21.1234+01:00",
+
 
     "extent": {
         "type": "Feature",
@@ -110,6 +112,7 @@ title_no_easement = {
     "class_of_title":"Absolute",
     "tenure":"Leasehold",
     "edition_date":"10-31-2005",
+    "last_application":"10-31-2005T13:23:21.1234+01:00",
 
     "extent": {
         "type": "Feature",

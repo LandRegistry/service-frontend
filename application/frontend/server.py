@@ -1,5 +1,3 @@
-from datetime import datetime
-import dateutil.parser
 import json
 
 import requests
@@ -13,6 +11,7 @@ from flask import (
     session,
     current_app
 )
+
 from flask.ext.login import (
     login_required,
     current_user
@@ -40,44 +39,6 @@ from utils import (
     get_or_log_error,
     build_address
 )
-
-from pytz import timezone
-
-
-@app.template_filter()
-def format_date_YMD(value):
-    new_date = datetime.strptime(value, '%Y-%m-%d')
-    return new_date.strftime('%d %B %Y')
-
-
-@app.template_filter()
-def format_date_DMY(value):
-    new_date = datetime.strptime(value, '%d-%m-%Y')
-    return new_date.strftime('%d %B %Y')
-
-def _tz(dt):
-    utc = timezone('UTC').localize(dt)
-    bst = timezone('Europe/London').localize(dt)
-    return bst + (utc - bst)
-
-@app.template_filter()
-def format_date_time_DMYHM(value):
-    new_datetime = datetime.strptime(value, '%d-%m-%Y %H:%M:%S')
-    return _tz(new_datetime).strftime('%d-%m-%Y %H:%M')
-
-@app.template_filter()
-def currency(value):
-    """Format a comma separated  currency to 2 decimal places."""
-    return "{:,.2f}".format(float(value))
-
-@app.template_filter()
-def format_date_time_iso_8601(value):
-    norm = dateutil.parser.parse(value)
-    return datetime.strftime(norm, '%d-%m-%Y %H:%M')
-
-def unix_timestamp_to_DMYHMS(value):
-    return datetime.fromtimestamp(int(value)).strftime('%d %B %Y %H:%M:%S')
-
 
 @app.route('/')
 @login_required
@@ -185,11 +146,11 @@ def relationship_client():
 
 @app.route('/relationship/client/accept', methods=['POST'])
 def client_get_relationship_details():
-    url = current_app.config['INTRODUCTION_URL'] + '/details/' + request.form['token']
+    url = current_app.config['INTRODUCTION_URL'] + '/details/' + request.form['token'].strip()
     app.logger.debug("INTRO URL: %s" % url)
     response = get_or_log_error(url)
     app.logger.debug("INTRO response json: %s " % response.json())
-    return render_template('client-confirm.html', details=response.json(), token=request.form['token'])
+    return render_template('client-confirm.html', details=response.json(), token=request.form['token'].strip())
 
 
 @app.route('/relationship/client/confirm', methods=['POST'])
@@ -350,7 +311,7 @@ def changes(title_number):
             #version information put in a list to pass to the template.
             for version in historian_list_response.json()['versions']:
                 historian_version_response = requests.get(historian_version_url + version['version_id'])
-                historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['edition_date']
+                historical_changes_list[version['version_id']] = historian_version_response.json()['contents']['last_application']
 
         for case in cases:
             if case['status'] != 'completed':
@@ -371,7 +332,7 @@ def change_version(title_number, version):
     historian_version_url = app.config['HISTORIAN_URL'] + '/titles/' + title_number + '?version='
     app.logger.debug('requesting historical version from ' + historian_version_url)
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
-    converted_unix_timestamp = historian_version_response['edition_date']
+    converted_unix_timestamp = historian_version_response['last_application']
     owner = is_owner(current_user, title_number)
     address = build_address(historian_version_response)
 

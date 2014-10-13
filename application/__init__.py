@@ -11,10 +11,14 @@ from raven.contrib.flask import Sentry
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
 from flask.ext.login import LoginManager
+from application.frontend.template_filters import datetimeformat, dateformat, currency
 from health import Health
 
 app = Flask('application.frontend')
 app.config.from_object(os.environ.get('SETTINGS'))
+app.jinja_env.filters['datetimeformat'] = datetimeformat
+app.jinja_env.filters['dateformat'] = dateformat
+app.jinja_env.filters['currency'] = currency
 
 login_manager = LoginManager()
 login_manager.init_app(app)

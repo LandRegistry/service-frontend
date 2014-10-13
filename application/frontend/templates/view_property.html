@@ -31,11 +31,11 @@
 
                     {% if historical_view %}
                         <p>
-                            Showing this register at <b>{{title.edition_date}}</b>
+                            Showing this register at <b>{{ title.last_application | datetimeformat}}</b>
                         </p>
                     {% else %}
                         <p>
-                            This register was last changed on <b>{{title.edition_date}}</b>
+                            This register was last changed on <b>{{ title.last_application | datetimeformat}}</b>
                         </p>
                     {% endif %}
 
@@ -132,7 +132,7 @@
                         {% if title.price_paid %}
                             <dt>Price paid</dt>
                              {% if title.price_paid.fields.amount %}
-                                <dd>{{ title.price_paid.fields.amount[0] }} on {{ title.price_paid.fields.date[0] }}</dd>
+                                <dd>{{ title.price_paid.fields.amount[0] }} on {{ title.price_paid.fields.date[0] | dateformat }}</dd>
                                  {% else %}
                                  <dd>{{ title.price_paid.full_text }}</dd>
                             {% endif %}
@@ -300,53 +300,6 @@
 
                         </div>
                     </div><!-- / right col content -->
-
-                <!--{% if title.property_description.fields['tenure'] == 'Leasehold' %}-->
-                    <!--<h2 class="heading-large">Lease Details</h2>-->
-                    <!--<dd>Short particulars of the lease(s) (or under-lease(s)) under which the land is held:</dd>   <br/>-->
-                    <!--<div class="charges">-->
-                        <!--<dl class="definition-tabular">-->
-                        <!--{% for lease in title.leases %}-->
-                            <!--<dt>Lease Date</dt>-->
-                            <!--<dd id="leaseDate">{{ lease.lease_date | format_date_YMD }}</dd>-->
-                            <!--<dt>Term</dt>-->
-                            <!--<dd id="leaseTerm">{{ lease.lease_term }} years from {{ lease.lease_from | format_date_YMD }}</dd>-->
-
-                            <!--<dt>Parties</dt>-->
-                            <!--<dd id="parties">1. {{ lease.lessor_name }}-->
-                                <!--{% if lease.lessee_name %}-->
-                                    <!--<br/>-->
-                                    <!--2. {{ lease.lessee_name }}-->
-                                <!--{% endif %}-->
-                            <!--</dd>-->
-                        <!--</dl>-->
-                        <!--{% if lease.lease_easements == True or lease.alienation_clause == True or lease.title_registered == True %}-->
-                        <!--<h4>Clauses</h4>-->
-                        <!--{% endif %}-->
-
-                        <!--{% if lease.lease_easements == True %}-->
-                            <!--<p id="easementClause">Unless otherwise mentioned the title includes any legal easements granted-->
-                                <!--by the registered lease(s) but is subject to any rights that it reserves,-->
-                                <!--so far as those easements and rights exist and benefit or-->
-                                <!--affect the registered land.-->
-                            <!--</p><br/>-->
-                        <!--{% endif %}-->
-
-                        <!--{% if lease.alienation_clause == True %}-->
-                            <!--<p id="alienationClause">There are excepted from the effect of registration all estates. rights,-->
-                                <!--interests, powers and remedies arising upon, or by reason of, any-->
-                                <!--dealing made in breach of the prohibition or restriction against-->
-                                <!--dealings therewith inter vivos contained in the Lease.-->
-                            <!--</p><br/>-->
-                        <!--{% endif %}-->
-
-                        <!--{% if lease.title_registered == True %}-->
-                            <!--<p id="titleRegisteredClause">The landlord's title is registered.</p><br/>-->
-                        <!--{% endif %}-->
-                    <!--{% endfor %}-->
-
-                    <!--</div>-->
-                <!--{% endif %}-->
 
                 {% if is_owner and not historical_view %}
                     <a href="{{ title.title_number }}/changes">View pending and historical changes to this title</a>

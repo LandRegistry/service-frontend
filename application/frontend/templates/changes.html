@@ -21,7 +21,7 @@
                             <ol class="register-changes-pending">
                                 <li>
                                     <h3 class="heading-small">{{case.application_name}}</h3>
-                                        <span class="alert-flag">Submitted on: {{case.submitted_at | format_date_time_iso_8601}} </br>
+                                        <span class="alert-flag">Submitted on: {{case.submitted_at | datetimeformat}} </br>
                                             Submitted by: {{case.submitted_by}}
                                         </span>
                                 </li>
@@ -40,8 +40,8 @@
                         <ol class="register-changes-previous">
                         {% for version in order_by_latest_version_first %}
                               <li>
-                                  <a href="changes/{{ version }}">Version {{ version }}</a>
-                                  <p>{{ historical_changes[version] }}</p>
+                                  <a href="changes/{{ version }}">Version {{ version }} </a>  &nbsp; &nbsp;{{ historical_changes[version] | datetimeformat }}
+
                               </li>
                         {% endfor %}
                         </ol>
