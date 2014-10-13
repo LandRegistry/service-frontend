@@ -67,25 +67,3 @@ class ConfirmForm(ChangeForm):
     marriage_certificate_number = HiddenField('Marriage certificate number')
 
 
-class ConveyancerAddClientForm(Form):
-    full_name = StringField('Full name', validators=[DataRequired()])
-    date_of_birth = DateField('Date of birth', format='%d-%m-%Y',
-                              validators=[DataRequired(), ValidateDateNotInFuture()],
-                              description="For example, 20-08-2011")
-    address = TextAreaField('Address', validators=[DataRequired()])
-    telephone = StringField('Telephone', validators=[DataRequired()])
-    email = StringField('Email address', validators=[DataRequired(), Email()])
-
-    # this is temporary for matching
-    gender = SelectField('Gender', choices=[('', 'Select gender'),('F', 'Female'), ('M', 'Male')], validators=[DataRequired()])
-
-
-
-class SelectTaskForm(Form):
-    buying_or_selling_property = RadioField(
-        'Is your client buying or selling this property?',
-        choices=[
-            ('buying', 'Buying this property'),
-            ('selling', 'Selling this property')
-        ],
-        validators=[DataRequired()])
