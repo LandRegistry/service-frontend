@@ -344,5 +344,3 @@ def change_version(title_number, version):
         is_owner=owner,
         apiKey=app.config['OS_API_KEY'],
         change_date=converted_unix_timestamp)
-
-

@@ -25,6 +25,9 @@ def is_within_view_limit(user):
         db.session.commit()
         return True
     else:
+        user.blocked = True
+        db.session.add(user)
+        db.session.commit()
         session.pop("lrid", None)
         session.pop("roles", None)
         logout_user()

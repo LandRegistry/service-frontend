@@ -15,7 +15,7 @@ class Config(object):
     REDIS_URL = os.environ['REDIS_URL']
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=int(os.environ['PERMANENT_SESSION_LIFETIME']))
     WTF_CSRF_ENABLED = True
-    VIEW_COUNT = os.environ['VIEW_COUNT']
+    VIEW_COUNT = int(os.environ['VIEW_COUNT'])
 
     # optional and only needed on heroku so get
     # safely
