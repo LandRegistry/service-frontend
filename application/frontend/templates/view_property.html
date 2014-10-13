@@ -134,7 +134,7 @@
                              {% if title.price_paid.fields.amount %}
                                 <dd>{{ title.price_paid.fields.amount[0] }} on {{ title.price_paid.fields.date[0] | dateformat }}</dd>
                                  {% else %}
-                                 <dd>{{ title.price_paid.full_text }}</dd>
+                                 <dd>{{ title.price_paid.full_text.decode('unicode-escape') }}</dd>
                             {% endif %}
                         {% endif %}
                     </dl>
@@ -178,7 +178,7 @@
 
                                 <h2 class="heading-medium collapse-top">Property details</h2>
 
-                                <p>{{ title.property_description.full_text }}</p>
+                                <p>{{ title.property_description.full_text.decode('unicode-escape') }}</p>
 
                                 <div class="group">
                                     <h3 class="heading-medium">Owner(s)</h3>
@@ -211,7 +211,7 @@
 
                                     {% for restriction in title.restrictions %}
                                         <div class="note">
-                                            <p>{{ restriction.full_text }}</p>
+                                            <p>{{ restriction.full_text.decode('unicode-escape') }}</p>
                                         </div>
                                     {% endfor %}
 
@@ -239,7 +239,7 @@
 
                                     {% for covenant in title.restrictive_covenants %}
                                         <div class="note">
-                                            <p>{{ covenant.full_text }}</p>
+                                            <p>{{ covenant.full_text.decode('unicode-escape') }}</p>
                                         </div>
                                     {% endfor %}
 
@@ -267,7 +267,7 @@
 
                                     {% for easement in title.easements %}
                                         <div class="note">
-                                            <p>{{ easement.full_text }}</p>
+                                            <p>{{ easement.full_text.decode('unicode-escape') }}</p>
                                         </div>
                                     {% endfor %}
 
@@ -290,7 +290,7 @@
 
                                     {% for provision in title.provisions %}
                                         <div class="note">
-                                            <p>{{ provision.full_text }}</p>
+                                            <p>{{ provision.full_text.decode('unicode-escape') }}</p>
                                         </div>
                                     {% endfor %}
 
