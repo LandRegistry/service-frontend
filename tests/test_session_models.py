@@ -1,7 +1,7 @@
 import unittest
 from application.frontend.server import app
-from application.frontend import session_models
-from application.frontend.forms import ConveyancerAddClientForm
+from application.relationship import session_models
+from application.relationship.forms import ConveyancerAddClientForm
 from application.auth import User
 
 

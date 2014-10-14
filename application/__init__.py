@@ -63,6 +63,8 @@ app.register_blueprint(auth)
 login_manager.login_view = 'auth.login'
 login_manager.login_message = ''
 
+from .relationship.views import relationship
+app.register_blueprint(relationship)
 
 def health(self):
     try:

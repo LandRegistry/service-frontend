@@ -1,6 +1,7 @@
 import json
 
 import requests
+
 from flask import (
     abort,
     render_template,
@@ -16,19 +17,12 @@ from flask.ext.login import (
     login_required,
     current_user
 )
-from application.frontend.session_models import (
-    conveyancer_dict,
-    populate_client_details,
-    property_full_address,
-    create_user,
-    clear_captured_client_relationship_session_variables
-)
+
 from forms import (
     ChangeForm,
-    ConfirmForm,
-    SelectTaskForm,
-    ConveyancerAddClientForm
+    ConfirmForm
 )
+
 from application.services import (
     post_to_cases,
     is_matched,
@@ -38,9 +32,11 @@ from application.services import (
     is_allowed_to_see_title,
     view_count_limited
 )
+
 from application import (
     app
 )
+
 from utils import (
     get_or_log_error,
     build_address
@@ -119,111 +115,6 @@ def _get_title(title_number):
     app.logger.debug("Requesting title url : %s" % title_url)
     response = get_or_log_error(title_url)
     return response.json()
-
-@app.route('/relationship/client')
-def relationship_client():
-    return render_template('client-enter-token.html')
-
-
-@app.route('/relationship/client/accept', methods=['POST'])
-def client_get_relationship_details():
-    url = current_app.config['INTRODUCTION_URL'] + '/details/' + request.form['token'].strip()
-    app.logger.debug("INTRO URL: %s" % url)
-    response = get_or_log_error(url)
-    app.logger.debug("INTRO response json: %s " % response.json())
-    return render_template('client-confirm.html', details=response.json(), token=request.form['token'].strip())
-
-
-@app.route('/relationship/client/confirm', methods=['POST'])
-def client_confirm_relationship():
-    request_json = json.dumps({'token': request.form['token'], "client_lrid": session['lrid']})
-    url = current_app.config['INTRODUCTION_URL'] + '/confirm'
-
-    response = requests.post(url, data=request_json, headers={'Content-Type': 'application/json'})
-
-    return render_template('client-confirmed.html', conveyancer_name=response.json()['conveyancer_name'])
-
-
-@app.route('/relationship/conveyancer')
-def conveyancer_start():
-    return render_template('conveyancer-start.html')
-
-
-@app.route('/relationship/conveyancer/search')
-@login_required
-def client_relationship_flow_step_1_show_search():
-    return render_template('conveyancer-search.html')
-
-
-@app.route('/relationship/conveyancer/property', methods=['POST'])
-@login_required
-def client_relationship_flow_step_2_render_results_in_template():
-    query = request.form['search-text']
-    search_url = "%s/auth/titles/%s" % ( app.config['AUTHENTICATED_SEARCH_API'], query)
-    app.logger.debug("URL requested %s" % search_url)
-    response = get_or_log_error(search_url)
-    title = response.json()
-    app.logger.debug("RESULT = %s" % title)
-    address = build_address(title)
-
-    return render_template('conveyancer-select-property.html',
-                           title=title,
-                           address=address,
-                           apiKey=app.config['OS_API_KEY'])
-
-
-@app.route('/relationship/conveyancer/task', methods=['POST'])
-@login_required
-def client_relationship_flow_step_3_store_selected_title_and_show_task_choices():
-    session['title_no'] = request.form['title_no']
-    session['property_full_address'] = request.form['property_full_address']
-    return render_template('conveyancer-select-task.html', form=(SelectTaskForm(request.form)))
-
-
-@app.route('/relationship/conveyancer/client', methods=['POST'])
-@login_required
-def client_relationship_flow_step_5a_store_number_of_clients_and_show_the_add_client_form():
-    session['buying_or_selling'] = request.form['buying_or_selling_property']
-    client_form = ConveyancerAddClientForm()
-    return render_template('conveyancer-add-client.html', action_path='/relationship/conveyancer/confirm',
-                           form=client_form)
-
-@app.route('/relationship/conveyancer/confirm', methods=['POST'])
-@login_required
-def client_relationship_flow_step_6():
-    form = ConveyancerAddClientForm(request.form)
-    if form.validate_on_submit():
-
-        populate_client_details(session, form)
-
-        client_lrid = get_client_lrid(create_user(form))
-
-        if client_lrid:
-            session['client_lrid'] = client_lrid
-        else:
-            flash("The client is not in our system")
-            return render_template('conveyancer-add-client.html', form=form,
-                                   action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
-
-        return render_template('conveyancer-confirm.html', dict=conveyancer_dict(session), address=property_full_address(session),
-                               client_name=session['client_full_name'], client_address=session['client_address'])
-    else:
-        return render_template('conveyancer-add-client.html', form=form,
-                               action_path='/relationship/conveyancer/confirm', add_client_heading='Add client')
-
-@app.route('/relationship/conveyancer/token')
-@login_required
-def conveyancer_token():
-    headers = {'content-type': 'application/json'}
-
-    data = json.dumps(conveyancer_dict(session))
-    relationship_url = app.config['INTRODUCTION_URL'] + '/relationship'
-
-    app.logger.debug("Sending data %s to introduction at %s" % (data, relationship_url))
-    response = requests.post(relationship_url, data=data, headers=headers)
-    token = response.json()['token']
-    clear_captured_client_relationship_session_variables(session)
-    return render_template('conveyancer-token.html', token=token)
 
 @app.route('/property/<title_number>/changes')
 @login_required
