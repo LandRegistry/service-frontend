@@ -4,6 +4,8 @@ title_no_charge = {
     "class_of_title":"Absolute",
     "tenure":"Leasehold",
     "edition_date":"10-31-2005",
+    "last_application":"10-31-2005T13:23:21.1234+01:00",
+
 
     "extent": {
         "type": "Feature",
@@ -30,8 +32,8 @@ title_no_charge = {
     "proprietorship" :   {
         "template" : "PROPRIETOR(S):  *RP*",
         "full_text": "PROPRIETOR(S): Michael Jones of 8 Miller Way, Plymouth, Devon, PL6 8UQ",
-        "fields" : {"proprietors":[{"name" : {"title" : "Mr", "full_name" : "Bob Test", "decoration" : ""}, "address" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]},
-                                   {"name" : {"title" : "Mrs", "full_name" : "Betty Tanker", "decoration" : ""}, "address" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]}]},
+        "fields" : {"proprietors":[{"name" : {"title" : "Mr", "full_name" : "Bob Test", "decoration" : ""}, "addresses" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]},
+                                   {"name" : {"title" : "Mrs", "full_name" : "Betty Tanker", "decoration" : ""}, "addresses" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]}]},
         "deeds" : [],
         "notes" : []
     },
@@ -39,7 +41,7 @@ title_no_charge = {
     "property_description" : {
         "template" : "The Freehold land shown edged with red on the plan of the above Title filed at the Registry and being *AD*",
         "full_text" : "The Freehold land shown edged with red on the plan of the above Title filed at the Registry and being 8 Miller Way, Plymouth, Devon, PL6 8UQ",
-        "fields" : {"address" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]},
+        "fields" : {"addresses" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]},
         "deeds" : [],
         "notes" : []
     },
@@ -110,6 +112,7 @@ title_no_easement = {
     "class_of_title":"Absolute",
     "tenure":"Leasehold",
     "edition_date":"10-31-2005",
+    "last_application":"10-31-2005T13:23:21.1234+01:00",
 
     "extent": {
         "type": "Feature",
@@ -136,26 +139,8 @@ title_no_easement = {
     "proprietorship" :   {
         "template" : "PROPRIETOR(S):  *RP*",
         "full_text": "PROPRIETOR(S): Michael Jones of 8 Miller Way, Plymouth, Devon, PL6 8UQ",
-        "fields" : {
-          "proprietors":[
-            {
-              "name" : {
-                "title" : "Mr", "full_name" : "Bob Test", "decoration" : ""
-              },
-              "address" : [
-                {"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}
-              ]
-            },
-            {
-              "name" : {
-                "title" : "Mrs", "full_name" : "Betty Tanker", "decoration" : ""
-              },
-              "address" : [
-                {"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}
-              ]
-            }
-          ]
-        },
+        "fields" : {"proprietors":[{"name" : {"title" : "Mr", "full_name" : "Bob Test", "decoration" : ""}, "addresses" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]},
+                                   {"name" : {"title" : "Mrs", "full_name" : "Betty Tanker", "decoration" : ""}, "addresses" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]}]},
         "deeds" : [],
         "notes" : []
     },
@@ -163,7 +148,7 @@ title_no_easement = {
     "property_description" : {
         "template" : "The Freehold land shown edged with red on the plan of the above Title filed at the Registry and being *AD*",
         "full_text" : "The Freehold land shown edged with red on the plan of the above Title filed at the Registry and being 8 Miller Way, Plymouth, Devon, PL6 8UQ",
-        "fields" : {"address" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]},
+        "fields" : {"addresses" : [{"full_address": "8 Miller Way, Plymouth, Devon, PL6 8UQ", "house_no" : "8", "street_name" : "Miller Way", "town" : "Plymouth", "postal_county" : "Devon", "region_name" : "", "country" : "", "postcode":""}]},
         "deeds" : [],
         "notes" : []
     },

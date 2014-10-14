@@ -32,8 +32,9 @@ class ViewFullTitleTestCase(unittest.TestCase):
         self.client = app.test_client()
         self.lrid = uuid.uuid4()
         self.roles = ['CITIZEN']
+        app.config['VIEW_COUNT_ENABLED'] = True
 
-    @mock.patch('application.frontend.server.is_within_view_limit', return_value=True)
+    @mock.patch('application.services.users.is_within_view_limit', return_value=True)
     @mock.patch('application.frontend.server.get_lrid_and_roles')
     @mock.patch('requests.get')
     def test_get_property_calls_search_api(self, mock_get, mock_user_roles, mock_check_limit):
@@ -47,7 +48,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         rv = self.client.get('/pagedoesnotexist')
         assert rv.status == '404 NOT FOUND'
 
-    @mock.patch('application.frontend.server.is_within_view_limit', return_value=True)
+    @mock.patch('application.services.users.is_within_view_limit', return_value=True)
     @mock.patch('application.frontend.server.get_lrid_and_roles')
     @mock.patch('requests.get')
     @mock.patch('requests.Response')
@@ -59,7 +60,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         response = self.client.get('/property/%s' % TITLE_NUMBER)
         assert response.status_code == 500
 
-    @mock.patch('application.frontend.server.is_within_view_limit', return_value=True)
+    @mock.patch('application.services.users.is_within_view_limit', return_value=True)
     @mock.patch('application.frontend.server.get_lrid_and_roles')
     @mock.patch('requests.get', side_effect=requests.exceptions.ConnectionError)
     def test_requests_connection_error_returns_500_to_client(self,mock_get, mock_user_roles, mock_check_limit):
@@ -67,7 +68,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         response = self.client.get('/property/%s' % TITLE_NUMBER)
         assert response.status_code == 500
 
-    @mock.patch('application.frontend.server.is_within_view_limit', return_value=True)
+    @mock.patch('application.services.users.is_within_view_limit', return_value=True)
     @mock.patch('application.frontend.server.get_lrid_and_roles')
     @responses.activate
     def test_multiple_proprietors(self, mock_user_roles, mock_check_limit):
@@ -94,7 +95,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
     # #     assert 'Charges Register' in rv.data
     # #     assert 'A Transfer of the land in this title dated 01.06.1996 made between Mr Michael Jones and Mr Jeff Smith contains the following provision:-The land has the benefit of a right of way along the passageway to the rear of the property, and also a right of way on foot only on to the open ground on the north west boundary of the land in this title' in rv.data
 
-    @mock.patch('application.frontend.server.is_within_view_limit', return_value=True)
+    @mock.patch('application.services.users.is_within_view_limit', return_value=True)
     @mock.patch('application.frontend.server.get_lrid_and_roles')
     @responses.activate
     def test_no_charges_header(self, mock_user_roles, mock_check_limit):
@@ -106,7 +107,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         assert rv.status_code == 200
         assert 'Charges Register' not in rv.data
 
-    @mock.patch('application.frontend.server.is_within_view_limit', return_value=True)
+    @mock.patch('application.services.users.is_within_view_limit', return_value=True)
     @mock.patch('application.frontend.server.get_lrid_and_roles')
     @responses.activate
     def test_easements_appear(self, mock_user_roles, mock_check_limit):
@@ -118,7 +119,7 @@ class ViewFullTitleTestCase(unittest.TestCase):
         assert rv.status_code == 200
         assert 'Easements' in rv.data
 
-    @mock.patch('application.frontend.server.is_within_view_limit', return_value=True)
+    @mock.patch('application.services.users.is_within_view_limit', return_value=True)
     @mock.patch('application.frontend.server.get_lrid_and_roles')
     @responses.activate
     def test_no_easements_header(self, mock_user_roles, mock_check_limit):

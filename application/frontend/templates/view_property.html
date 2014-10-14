@@ -31,11 +31,11 @@
 
                     {% if historical_view %}
                         <p>
-                            Showing this register at <b>{{title.edition_date}}</b>
+                            Showing this register at <b>{{ title.last_application | datetimeformat}}</b>
                         </p>
                     {% else %}
                         <p>
-                            This register was last changed on <b>{{title.edition_date}}</b>
+                            This register was last changed on <b>{{ title.last_application | datetimeformat}}</b>
                         </p>
                     {% endif %}
 
@@ -121,7 +121,11 @@
 
                         {% if title.price_paid %}
                             <dt>Price paid</dt>
-                            <dd>{{ title.price_paid.fields.amount[0] }} on {{ title.price_paid.fields.date[0] }}</dd>
+                             {% if title.price_paid.fields.amount %}
+                                <dd>{{ title.price_paid.fields.amount[0] }} on {{ title.price_paid.fields.date[0] | dateformat }}</dd>
+                                 {% else %}
+                                 <dd>{{ title.price_paid.full_text.decode('unicode-escape') }}</dd>
+                            {% endif %}
                         {% endif %}
                     </dl>
 
@@ -151,10 +155,6 @@
                                         {% if title.bankruptcy %}
                                             <li><a href="#property-bankruptcy">Bankruptcy ({{ title.bankruptcy|count }})</a></li>
                                         {% endif %}
-                                        <!--
-                                        <li><a href="#maps-plans">Maps and plans</a></li>
-                                        <li><a href="#related-documents">Related documents</a></li>
-                                        -->
                                     </ul>
                                 </nav>
                         </section>
@@ -167,7 +167,7 @@
 
                                 <h2 class="heading-medium collapse-top">Property details</h2>
 
-                                <p>{{ title.property_description.full_text }}</p>
+                                <p>{{ title.property_description.full_text.decode('unicode-escape') }}</p>
 
                                 <div class="group">
                                     <h3 class="heading-medium">Owner(s)</h3>
@@ -230,7 +230,7 @@
                                     </details>
 
                                     {% for restriction in title.restrictions %}
-                                        <p>{{ restriction.full_text }}</p>
+                                        <p>{{ restriction.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -256,7 +256,7 @@
                                     </details>
 
                                     {% for covenant in title.restrictive_covenants %}
-                                        <p>{{ covenant.full_text }}</p>
+                                        <p>{{ covenant.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -282,7 +282,7 @@
                                     </details>
 
                                     {% for easement in title.easements %}
-                                        <p>{{ easement.full_text }}</p>
+                                        <p>{{ easement.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -303,7 +303,7 @@
                                     </details>
 
                                     {% for provision in title.provisions %}
-                                        <p>{{ provision.full_text }}</p>
+                                        <p>{{ provision.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -324,7 +324,7 @@
                                     </details>
 
                                     {% for bankrupt in title.bankruptcy %}
-                                        <p>{{ bankrupt.full_text }}</p>
+                                        <p>{{ bankrupt.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
 
                                 </section>
@@ -361,7 +361,6 @@
                         {% endif %}
 
                     </div><!-- / right col content -->
-
                 </div><!-- / grid wrapper -->
 
             </div><!-- end inner-block -->

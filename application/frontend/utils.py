@@ -2,25 +2,8 @@ import requests
 
 from flask import current_app
 from flask import abort
-
-def get_or_log_error(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return response
-    except requests.exceptions.HTTPError as e:
-        current_app.logger.error("HTTP Error %s", e)
-        abort(response.status_code)
-    except requests.exceptions.ConnectionError as e:
-        current_app.logger.error("Error %s", e)
-        abort(500)
-
-
 import requests
 
-from flask import current_app
-from flask import abort
-
 def get_or_log_error(url):
     try:
         response = requests.get(url)
@@ -32,6 +15,18 @@ def get_or_log_error(url):
     except requests.exceptions.ConnectionError as e:
         current_app.logger.error("Error %s", e)
         abort(500)
+
+
+def build_address(title):
+    raw_address = title["property_description"]["fields"]["addresses"][0]
+    return AddressBuilder(house_no=raw_address["house_no"],
+                                            street_name=raw_address["street_name"],
+                                            town=raw_address["town"],
+                                            postcode=raw_address["postcode"],
+                                            postal_county=raw_address["postal_county"],
+                                            region_name=raw_address["region_name"],
+                                            country=raw_address["country"],
+                                            full_address=raw_address["full_address"]).build()
 
 
 class Address(object):
