@@ -9,46 +9,60 @@
         <div class="outer-block">
             <div class="inner-block">
 
+                <div class="expand-top">
+                    <nav role="navigation">
+                        <a href="/property/{{ title_number }}">Back to title</a>
+                    </nav>
+                </div>
+
                 <h1>Changes to title {{title_number}}</h1>
 
                 <h2>Pending changes</h2>
 
-                <div class="text" id="pending">
-                    <p class="lede">Upcoming changes to this title register, in order of priority.</p>
-
-                    {% if pending %}
-                        {% for case in pending %}
-                            <ol class="register-changes-pending">
+                {% if pending %}
+                    <div class="text" id="pending">
+                        <p class="lede">Upcoming changes to this title register, in order of priority.</p>
+                        <ol class="register-changes-pending">
+                            {% for case in pending %}
                                 <li>
                                     <h3 class="heading-small">{{case.application_name}}</h3>
-                                        <span class="alert-flag">Submitted on: {{case.submitted_at | datetimeformat}} </br>
-                                            Submitted by: {{case.submitted_by}}
-                                        </span>
+                                    <span class="alert-flag">Submitted on {{case.submitted_at | format_date_time_iso_8601}}</span>
+                                    <div class="text footnote">
+                                        <p>Submitted by {{case.submitted_by}}</p>
+                                    </div>
                                 </li>
-                            </ol>
-                        {% endfor %}
-                    {% else %}
-                        <h3>No pending changes</h3>
-                    {% endif %}
-                </div>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                {% else %}
+                    <div class="text">
+                        <p class="lede">There are no pending changes to this title register.</p>
+                    </div>
+                {% endif %}
 
                 <h2>Historical changes</h2>
 
-                <div class="text" id="previous">
-                    <p class="lede">Previous changes to this title register.</p>
-                    {% if historical_changes %}
+                {% if historical_changes %}
+                    <div class="text" id="previous">
+                        <p class="lede">Previous changes to this title register, in chronological order.</p>
                         <ol class="register-changes-previous">
                         {% for version in order_by_latest_version_first %}
-                              <li>
-                                  <a href="changes/{{ version }}">Version {{ version }} </a>  &nbsp; &nbsp;{{ historical_changes[version] | datetimeformat }}
-
-                              </li>
+                            <li>
+                                <time datetime="">{{ historical_changes[version] }}</time>
+                                <h3 class="heading-small">Version {{ version }}</h3>
+                                <p>
+                                  <a href="changes/{{ version }}">View register on {{ historical_changes[version] }}</a>
+                                </p>
+                            </li>
                         {% endfor %}
                         </ol>
-                    {% else %}
-                        <h3>No previous changes</h3>
-                    {% endif %}
-                </div>
+                    </div>
+                {% else %}
+                    <div class="text">
+                        <p class="lede">There have been no changes to this title register.</p>
+                    </div>
+                {% endif %}
+
             </div>
         </div>
 
