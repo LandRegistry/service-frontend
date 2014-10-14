@@ -6,7 +6,7 @@ def dateformat(value, format = '%-d %B %Y'):
     return new_date.strftime(format)
 
 def datetimeformat(value, format = '%-d %B %Y at %H:%M:%S'):
-    norm = dateutil.parser.parse(value)
+    norm = dateutil.parser.parse(value, dayfirst=True)
     return norm.strftime(format)
 
 def currency(value):
