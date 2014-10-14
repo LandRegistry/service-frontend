@@ -82,8 +82,8 @@ def property_by_title(title_number):
 # to edit said resource. Here we go a step further, and limit
 # the form to a section on the resource, e.g. "proprietor".
 @app.route('/property/<title_number>/edit/title.proprietor.<int:proprietor_index>', methods=['GET', 'POST'])
-@view_count_limited
 @login_required
+@view_count_limited
 def property_by_title_edit_proprietor(title_number, proprietor_index):
     if is_owner(current_user, title_number):
         form = ChangeForm(request.form, marriage_country='GB')
@@ -226,8 +226,8 @@ def conveyancer_token():
     return render_template('conveyancer-token.html', token=token)
 
 @app.route('/property/<title_number>/changes')
-@view_count_limited
 @login_required
+@view_count_limited
 def changes(title_number):
     if is_owner(current_user, title_number):
         cases_url = app.config['CASES_URL'] + '/cases/property/' + title_number
@@ -260,8 +260,8 @@ def changes(title_number):
         abort(401)
 
 @app.route('/property/<title_number>/changes/<version>')
-@view_count_limited
 @login_required
+@view_count_limited
 def change_version(title_number, version):
 
     historian_version_url = app.config['HISTORIAN_URL'] + '/titles/' + title_number + '?version='
