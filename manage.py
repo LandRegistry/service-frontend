@@ -79,6 +79,18 @@ def reset_user_view_counts():
     db.session.query(User).update({"view_count": 0})
     db.session.commit()
 
+@manager.option('--email', dest='email')
+def reset_single_user_view_count(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        user.view_count = 0
+
+        db.session.add(user)
+        db.session.commit()
+        print "User %s view count reset" % user.name
+    else:
+        print "User does not exist"
+
 
 if __name__ == '__main__':
     manager.run()
