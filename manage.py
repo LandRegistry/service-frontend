@@ -76,7 +76,7 @@ def unblock_user(email):
 
 @manager.command
 def reset_user_view_counts():
-    db.session.query(User).update({"view_count": app.config['VIEW_COUNT']})
+    db.session.query(User).update({"view_count": 0})
     db.session.commit()
 
 
