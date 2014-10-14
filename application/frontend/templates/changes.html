@@ -48,10 +48,10 @@
                         <ol class="register-changes-previous">
                         {% for version in order_by_latest_version_first %}
                             <li>
-                                <time datetime="">{{ historical_changes[version] }}</time>
+                                <time datetime="">{{ historical_changes[version] | datetimeformat }}</time>
                                 <h3 class="heading-small">Version {{ version }}</h3>
                                 <p>
-                                  <a href="changes/{{ version }}">View register on {{ historical_changes[version] }}</a>
+                                  <a href="changes/{{ version }}">View register on {{ historical_changes[version] | datetimeformat }}</a>
                                 </p>
                             </li>
                         {% endfor %}
