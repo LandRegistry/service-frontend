@@ -54,8 +54,8 @@ def index():
 
 
 @app.route('/property/<title_number>')
-@view_count_limited
 @login_required
+@view_count_limited
 def property_by_title(title_number):
     title_url = "%s/%s/%s" % (
        app.config['AUTHENTICATED_SEARCH_API'],
