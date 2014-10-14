@@ -18,9 +18,7 @@
 
           <div class="form-group">
             <fieldset>
-                {% for subfield in form.buying_or_selling_property %}
-                       <p> {{ subfield }}  {{ subfield.label }}</p>
-                {% endfor %}
+                {{ render_field(form.buying_or_selling_property) }}
             </fieldset>
           </div>
 
