@@ -18,9 +18,7 @@ itsdangerous
 Jinja2
 Mako
 MarkupSafe
-passlib
 psycopg2
-py-bcrypt
 pytz
 raven
 redis
@@ -31,3 +29,4 @@ SQLAlchemy
 Werkzeug
 wsgiref
 WTForms
+-e git+https://github.com/LandRegistry/lr-utils.git#egg=lrutils
