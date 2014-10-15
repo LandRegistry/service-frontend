@@ -33,11 +33,10 @@
           {{ render_field(form.full_name) }}
 
           <!-- Date of birth -->
-          {{ render_field(form.date_of_birth) }}
-          {{ render_field(form.address) }}
-          {{ render_field(form.telephone) }}
-          {{ render_field(form.email) }}
-
+          {{ render_field(form.date_of_birth, class="form-control form-control-1-2") }}
+          {{ render_field(form.address, rows="5") }}
+          {{ render_field(form.telephone, class="form-control form-control-1-2") }}
+          {{ render_field(form.email, class="form-control form-control-1-2") }}
 
           <fieldset>
             <legend>Gender</legend>
