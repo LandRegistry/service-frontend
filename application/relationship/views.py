@@ -38,9 +38,15 @@ from .session_models import (
 
 relationship = Blueprint('relationship', __name__, template_folder='templates' , url_prefix='/relationship')
 
-@relationship.route('/client')
+@relationship.route('/client/start')
 @login_required
-def relationship_client():
+def client_start_page():
+    return render_template('client-start.html')
+
+
+@relationship.route('/client/enter-token')
+@login_required
+def relationship_client_enter_token():
     return render_template('client-enter-token.html')
 
 

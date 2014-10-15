@@ -10,7 +10,7 @@
         {% if field.type == 'RadioField'%}
           {% for value, label, checked in field.iter_choices() %}
             <div class="radio">
-              <label>
+              <label class="block-label">
                 <input type="radio" id="{{value}}" name="{{ field.id }}" value="{{ value }}" {% if checked %}checked="true"{% endif %}>{{ label }}
               </label>
             </div>

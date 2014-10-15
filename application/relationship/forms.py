@@ -15,19 +15,18 @@ class ConveyancerAddClientForm(Form):
                               validators=[DataRequired()],
                               description="For example, 20-08-2011")
     address = TextAreaField('Address', validators=[DataRequired()])
-    telephone = StringField('Telephone', validators=[DataRequired()])
+    telephone = StringField('Mobile phone number', validators=[DataRequired()], description="this may be used to receive security codes")
     email = StringField('Email address', validators=[DataRequired(), Email()])
 
     # this is temporary for matching
-    gender = SelectField('Gender', choices=[('', 'Select gender'),('F', 'Female'), ('M', 'Male')], validators=[DataRequired()])
-
+    gender = RadioField('Gender', choices=[('F', 'Female'), ('M', 'Male')], validators=[DataRequired()])
 
 
 class SelectTaskForm(Form):
     buying_or_selling_property = RadioField(
         'Is your client buying or selling this property?',
         choices=[
-            ('buying', 'Buying this property'),
-            ('selling', 'Selling this property')
+            ('buying', 'Buying'),
+            ('selling', 'Selling')
         ],
         validators=[DataRequired()])
