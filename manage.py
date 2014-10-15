@@ -3,7 +3,6 @@ import os
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate
 from flask.ext.migrate import MigrateCommand
-from werkzeug.security import generate_password_hash
 
 from application.auth.models import *
 from application import app

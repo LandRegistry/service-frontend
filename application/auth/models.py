@@ -5,14 +5,17 @@ from datetime import datetime
 from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.types import Enum
 
-from werkzeug.security import generate_password_hash
-from werkzeug.security import check_password_hash
-
 from sqlalchemy.dialects.postgresql import BOOLEAN
 
 from flask.ext.login import UserMixin
 
-from application import db
+from application import (
+    db,
+    app
+)
+
+from  . utils import PasswordUtils
+password_utils = PasswordUtils(app)
 
 class User(db.Model, UserMixin):
 
@@ -38,10 +41,10 @@ class User(db.Model, UserMixin):
 
     @password.setter
     def password(self, password):
-        self._password = generate_password_hash(password)
+        self._password = password_utils.encrypt_password(password)
 
     def check_password(self , password):
-        return check_password_hash(self._password, password)
+        return password_utils.verify_password(password, self._password)
 
     def to_json_for_match(self):
         return json.dumps({

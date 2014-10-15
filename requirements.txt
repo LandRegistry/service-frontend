@@ -18,7 +18,9 @@ itsdangerous
 Jinja2
 Mako
 MarkupSafe
+passlib
 psycopg2
+py-bcrypt
 pytz
 raven
 redis

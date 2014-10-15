@@ -6,7 +6,6 @@ class Config(object):
     AUTHENTICATED_SEARCH_API = os.environ['AUTHENTICATED_SEARCH_API']
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     CASES_URL = os.environ['CASES_URL']
-    SECRET_KEY = os.environ['SECRET_KEY']
     MATCHING_URL = os.environ['MATCHING_URL']
     OWNERSHIP_URL = os.environ['OWNERSHIP_URL']
     OS_API_KEY = os.environ['OS_API_KEY']
@@ -17,7 +16,9 @@ class Config(object):
     WTF_CSRF_ENABLED = True
     VIEW_COUNT = int(os.environ['VIEW_COUNT'])
     VIEW_COUNT_ENABLED = os.environ['VIEW_COUNT_ENABLED']
-
+    SECRET_KEY = os.environ['SECRET_KEY']
+    SECURITY_PASSWORD_SALT = SECRET_KEY
+    SECURITY_PASSWORD_HASH = os.environ['SECURITY_PASSWORD_HASH']
 
     # optional and only needed on heroku so get
     # safely
