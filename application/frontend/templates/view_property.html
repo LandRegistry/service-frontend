@@ -10,7 +10,7 @@
         <div class="outer-block">
             <div class="inner-block">
 
-                {% if not historical_view %}
+                {% if not is_owner and not historical_view %}
                     <div class="notification edit-mode">
                         <h2 class="heading-medium">Edit mode</h2>
                     </div>
@@ -379,7 +379,7 @@
 </script>
 <script src="{{asset_path}}javascripts/map.js"></script>
 
-{% if not historical_view %}
+{% if is_owner and not historical_view %}
 <script>
     $(document).ready(function() {
         var $editMode = $('.edit-mode');
