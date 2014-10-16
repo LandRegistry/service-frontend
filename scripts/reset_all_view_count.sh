@@ -1,13 +1,14 @@
 #!/bin/bash
+
 source /vagrant/script/dev-env-functions
-source ./environment.sh
+source ../environment.sh
 create_virtual_env "service-frontend"
 
-python manage.py unblock_user --email=$1
+python manage.py reset_user_view_counts
 deactivate
 
 echo
 echo
-echo "User unblocked"
+echo "View Count reset for all users"
 echo
 echo

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source /vagrant/script/dev-env-functions
-source ./environment.sh
+source ../environment.sh
 create_virtual_env "service-frontend"
 
 export SETTINGS=config.DevelopmentConfig
