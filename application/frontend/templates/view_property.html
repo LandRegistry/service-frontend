@@ -140,21 +140,36 @@
                                 <nav>
                                     <ul>
                                         <li><a href="#property-details">Property details</a></li>
-                                        {% if title.restrictions %}
-                                            <li><a href="#property-restrictions">Restrictions ({{ title.restrictions|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.restrictive_covenants %}
-                                            <li><a href="#property-restrictive-covenants">Restrictive covenants ({{ title.restrictive_covenants|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.easements %}
-                                            <li><a href="#property-provisions">Easements ({{ title.easements|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.provisions %}
-                                            <li><a href="#property-provisions">Provisions ({{ title.provisions|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.bankruptcy %}
-                                            <li><a href="#property-bankruptcy">Bankruptcy ({{ title.bankruptcy|count }})</a></li>
-                                        {% endif %}
+                                        <li>
+                                            <a href="#property-restrictions">
+                                                Restrictions
+                                                {% if title.restrictions %} ({{ title.restrictions|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-restrictive-covenants">
+                                                Restrictive covenants
+                                                {% if title.restrictive_covenants %} ({{ title.restrictive_covenants|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-provisions">
+                                                Easements 
+                                                {% if title.easements %}({{ title.easements|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-provisions">
+                                                Provisions
+                                                {% if title.provisions %} ({{ title.provisions|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-bankruptcy">
+                                                Bankruptcy
+                                                {% if title.bankruptcy %} ({{ title.bankruptcy|count }}){% endif %}
+                                            </a>
+                                        </li>
                                     </ul>
                                 </nav>
                         </section>
