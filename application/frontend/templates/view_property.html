@@ -10,7 +10,7 @@
         <div class="outer-block">
             <div class="inner-block">
 
-                {% if not historical_view %}
+                {% if is_owner and not historical_view %}
                     <div class="notification edit-mode">
                         <h2 class="heading-medium">Edit mode</h2>
                     </div>
@@ -92,7 +92,7 @@
                                 {% for proprietor in title.proprietorship.fields.proprietors  %}
                                     <li>
                                         {{ proprietor.name.full_name }}
-                                        {% if not historical_view %}
+                                        {% if is_owner and not historical_view %}
                                             <span class='change edit-mode'>
                                                 (<a href='{{request.path}}/edit/title.proprietor.{{loop.index}}'>change</a>)
                                             </span>
@@ -102,7 +102,7 @@
                                 </ul>
                             {% else %}
                                 {{ title.proprietorship.fields.proprietors[0].name.full_name }}
-                                {% if not historical_view %}
+                                {% if is_owner and not historical_view %}
                                     <span class='change edit-mode'>
                                         (<a href='{{request.path}}/edit/title.proprietor.1'>change</a>)
                                     </span>
@@ -140,21 +140,36 @@
                                 <nav>
                                     <ul>
                                         <li><a href="#property-details">Property details</a></li>
-                                        {% if title.restrictions %}
-                                            <li><a href="#property-restrictions">Restrictions ({{ title.restrictions|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.restrictive_covenants %}
-                                            <li><a href="#property-restrictive-covenants">Restrictive covenants ({{ title.restrictive_covenants|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.easements %}
-                                            <li><a href="#property-provisions">Easements ({{ title.easements|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.provisions %}
-                                            <li><a href="#property-provisions">Provisions ({{ title.provisions|count }})</a></li>
-                                        {% endif %}
-                                        {% if title.bankruptcy %}
-                                            <li><a href="#property-bankruptcy">Bankruptcy ({{ title.bankruptcy|count }})</a></li>
-                                        {% endif %}
+                                        <li>
+                                            <a href="#property-restrictions">
+                                                Restrictions
+                                                {% if title.restrictions %} ({{ title.restrictions|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-restrictive-covenants">
+                                                Restrictive covenants
+                                                {% if title.restrictive_covenants %} ({{ title.restrictive_covenants|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-provisions">
+                                                Easements 
+                                                {% if title.easements %}({{ title.easements|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-provisions">
+                                                Provisions
+                                                {% if title.provisions %} ({{ title.provisions|count }}){% endif %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#property-bankruptcy">
+                                                Bankruptcy notices
+                                                {% if title.bankruptcy %} ({{ title.bankruptcy|count }}){% endif %}
+                                            </a>
+                                        </li>
                                     </ul>
                                 </nav>
                         </section>
@@ -216,120 +231,142 @@
 
                             </section>
 
-                            {% if title.restrictions %}
+                            
 
-                                <section id="property-restrictions" class="text js-faux-details">
+                            <section id="property-restrictions" class="text js-faux-details">
 
-                                    <h2 class="heading-medium">Restrictions <span class="number-flag">{{ title.restrictions|count }}</span></h2>
+                                <h2 class="heading-medium">
+                                    Restrictions
+                                    {% if title.restrictions %} <span class="number-flag">{{ title.restrictions|count }}</span>{% endif %}
+                                </h2>
 
-                                    <details>
-                                        <summary>What are restrictions?</summary>
-                                        <div class="panel-indent">
-                                            <p>A restriction limits the powers of a registered owner to deal with or dispose of the registered land. It may also limit the powers of a chargee to dispose of a charge.</p>
-                                        </div>
-                                    </details>
+                                <details>
+                                    <summary>What are restrictions?</summary>
+                                    <div class="panel-indent">
+                                        <p>A restriction limits the powers of a registered owner to deal with or dispose of the registered land. It may also limit the powers of a chargee to dispose of a charge.</p>
+                                    </div>
+                                </details>
 
+                                {% if title.restrictions %}
                                     {% for restriction in title.restrictions %}
                                         <p>{{ restriction.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
+                                {% else %}
+                                    <p>There are currently no restrictions on this title.</p>
+                                {% endif %}
 
-                                </section>
+                            </section>
 
-                            {% endif %}
+                            
 
-                            {% if title.restrictive_covenants %}
+                            <section id="property-restrictive-covenants" class="text js-faux-details">
 
-                                <section id="property-restrictive-covenants" class="text js-faux-details">
+                                <h2 class="heading-medium">
+                                    Restrictive covenants
+                                    {% if title.restrictive_covenants %} <span class="number-flag">{{ title.restrictive_covenants|count }}</span>{% endif %}
+                                </h2>
 
-                                    <h2 class="heading-medium">Restrictive covenants <span class="number-flag">{{ title.restrictive_covenants|count }}</span></h2>
+                                <details>
+                                    <summary>What is a restrictive covenant?</summary>
+                                    <div class="panel-indent">
+                                        <p>A restrictive covenant is a promise by one person to another (eg a buyer of land and a seller) not to do certain things with the property or land. The restrictions will continue to be in effect for any subsequent buyer.</p>
+                                        <p>Common examples of restrictive covenants include:</p>
+                                        <ul class="list-bullet">
+                                            <li>preventing alterations to an existing property</li>
+                                            <li>agreeing not to run a business from the property</li>
+                                        </ul>
+                                    </div>
+                                </details>
 
-                                    <details>
-                                        <summary>What is a restrictive covenant?</summary>
-                                        <div class="panel-indent">
-                                            <p>A restrictive covenant is a promise by one person to another (eg a buyer of land and a seller) not to do certain things with the property or land. The restrictions will continue to be in effect for any subsequent buyer.</p>
-                                            <p>Common examples of restrictive covenants include:</p>
-                                            <ul class="list-bullet">
-                                                <li>preventing alterations to an existing property</li>
-                                                <li>agreeing not to run a business from the property</li>
-                                            </ul>
-                                        </div>
-                                    </details>
-
+                                {% if title.restrictive_covenants %}
                                     {% for covenant in title.restrictive_covenants %}
                                         <p>{{ covenant.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
+                                {% else %}
+                                    <p>There are currently no restrictive covenants on this title.</p>
+                                {% endif %}
 
-                                </section>
+                            </section>
 
-                            {% endif %}
 
-                            {% if title.easements %}
+                            <section id="property-easements" class="text js-faux-details">
 
-                                <section id="property-easements" class="text js-faux-details">
+                                <h2 class="heading-medium">
+                                    Easements
+                                    {% if title.easements %} <span class="number-flag">{{ title.easements|count }}</span>{% endif %}
+                                </h2>
 
-                                    <h2 class="heading-medium">Easements <span class="number-flag">{{ title.easements|count }}</span></h2>
+                                <details>
+                                    <summary>What are easements?</summary>
+                                    <div class="panel-indent">
+                                        <p>An easement is a right to use someone else's land for a specified purpose. It relates to the land or property itself and isn’t a personal right.</p>
+                                        <p>Common examples of easements:</p>
+                                        <ul class="list-bullet">
+                                            <li>rights of way such as public footpaths</li>
+                                            <li>rights to run service pipes and cables underground</li>
+                                        </ul>
+                                    </div>
+                                </details>
 
-                                    <details>
-                                        <summary>What are easements?</summary>
-                                        <div class="panel-indent">
-                                            <p>An easement is a right to use someone else's land for a specified purpose. It relates to the land or property itself and isn’t a personal right.</p>
-                                            <p>Common examples of easements:</p>
-                                            <ul class="list-bullet">
-                                                <li>rights of way such as public footpaths</li>
-                                                <li>rights to run service pipes and cables underground</li>
-                                            </ul>
-                                        </div>
-                                    </details>
-
+                                {% if title.easements %}
                                     {% for easement in title.easements %}
                                         <p>{{ easement.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
+                                {% else %}
+                                    <p>There are currently no easements on this title.</p>
+                                {% endif %}
 
-                                </section>
+                            </section>
 
-                            {% endif %}
 
-                            {% if title.provisions %}
+                            <section id="property-provisions" class="text js-faux-details">
 
-                                <section id="property-provisions" class="text js-faux-details">
+                                <h2 class="heading-medium">
+                                    Provisions
+                                    {% if title.provisions %} <span class="number-flag">{{ title.provisions|count }}</span>{% endif %}
+                                </h2>
 
-                                    <h2 class="heading-medium">Provisions <span class="number-flag">{{ title.provisions|count }}</span></h2>
+                                <details>
+                                    <summary>What are provisions?</summary>
+                                    <div class="panel-indent">
+                                        <p>A provision is an agreement between parties which usually relates to ownership and maintenance of boundaries and the right to the enjoyment of light and air.</p>
+                                    </div>
+                                </details>
 
-                                    <details>
-                                        <summary>What are provisions?</summary>
-                                        <div class="panel-indent">
-                                            <p>A provision is an agreement between parties which usually relates to ownership and maintenance of boundaries and the right to the enjoyment of light and air.</p>
-                                        </div>
-                                    </details>
-
+                                {% if title.provisions %}
                                     {% for provision in title.provisions %}
                                         <p>{{ provision.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
+                                {% else %}
+                                    <p>There are currently no provisions on this title.</p>
+                                {% endif %}
 
-                                </section>
+                            </section>
 
-                            {% endif %}
 
-                            {% if title.bankruptcy %}
+                            <section id="property-bankruptcy" class="text js-faux-details">
 
-                                <section id="property-bankruptcy" class="text js-faux-details">
+                                <h2 class="heading-medium">
+                                    Bankruptcy notices
+                                    {% if title.bankruptcy %} <span class="number-flag">{{ title.bankruptcy|count }}</span>{% endif %}
+                                </h2>
 
-                                    <h2 class="heading-medium">Bankruptcy <span class="number-flag">{{ title.bankruptcy|count }}</span></h2>
+                                <details>
+                                    <summary>What are bankruptcy notices?</summary>
+                                    <div class="panel-indent">
+                                        <p>Help text</p>
+                                    </div>
+                                </details>
 
-                                    <details>
-                                        <summary>What is bankruptcy?</summary>
-                                        <div class="panel-indent">
-                                            <p>Help text</p>
-                                        </div>
-                                    </details>
-
+                                {% if title.bankruptcy %}
                                     {% for bankrupt in title.bankruptcy %}
                                         <p>{{ bankrupt.full_text.decode('unicode-escape') }}</p>
                                     {% endfor %}
+                                {% else %}
+                                    <p>There are no bankruptcy notices on this title.</p>
+                                {% endif %}
 
-                                </section>
-
-                            {% endif %}
+                            </section>
 
                         </div>
 
@@ -379,7 +416,7 @@
 </script>
 <script src="{{asset_path}}javascripts/map.js"></script>
 
-{% if not historical_view %}
+{% if is_owner and not historical_view %}
 <script>
     $(document).ready(function() {
         var $editMode = $('.edit-mode');
