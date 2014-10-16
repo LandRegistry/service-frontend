@@ -14,7 +14,7 @@ from application import (
     app
 )
 
-from password import PasswordUtils
+from lrutils import PasswordUtils
 password_utils = PasswordUtils(app.config)
 
 class User(db.Model, UserMixin):
