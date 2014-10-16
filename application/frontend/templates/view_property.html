@@ -161,8 +161,8 @@
                                         <div class="grid grid-1-2">
                                             <p>
                                                 {{ proprietor.name.full_name }}<br>
-                                                {% for address in proprietor.addresses %}
-                                                    {{ address.full_address }}
+                                                {% for item in proprietor.addresses %}
+                                                    {{ address.format(item) }}
                                                 {% endfor %}
                                             </p>
                                         </div>
