@@ -14,10 +14,9 @@ from flask.ext.login import (
     current_app
 )
 
-from application.frontend.utils import (
-    get_or_log_error,
-    build_address
-)
+from application.frontend.utils import get_or_log_error
+
+from lrutils import build_address
 
 from forms import (
     SelectTaskForm,
@@ -92,7 +91,7 @@ def client_relationship_flow_step_2_render_results_in_template():
     response = get_or_log_error(search_url)
     title = response.json()
     current_app.logger.debug("RESULT = %s" % title)
-    address = build_address(title)
+    address = build_address(title["property_description"]["fields"]["addresses"][0])
 
     return render_template('conveyancer-select-property.html',
                            title=title,
