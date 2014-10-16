@@ -42,7 +42,9 @@
 
                     <div class="lede">
 
-                        {{ address.format(title["property_description"]["fields"]["addresses"][0]) }}
+                        <div class="grid grid-1-3">
+                            {{ address.format(title["property_description"]["fields"]["addresses"][0]) }}
+                        </div>
 
                         <figure class="grid grid-1-3">
                             {% if title.extent is defined %}
