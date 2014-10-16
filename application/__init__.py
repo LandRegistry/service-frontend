@@ -108,3 +108,10 @@ def asset_path_context_processor():
         'asset_path': '/static/build/',
         'landregistry_asset_path': '/static/build/'
     }
+
+@app.context_processor
+def address_processor():
+    from lrutils import build_address
+    def process_address_json(address_json):
+        return build_address(address_json)
+    return dict(formatted=process_address_json)

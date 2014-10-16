@@ -37,10 +37,9 @@ from application import (
     app
 )
 
-from utils import (
-    get_or_log_error,
-    build_address
-)
+from .utils import get_or_log_error
+
+from lrutils import build_address
 
 @app.route('/')
 @login_required
@@ -63,7 +62,7 @@ def property_by_title(title_number):
 
     app.logger.debug("Found the following title: %s" % title)
     owner = is_owner(current_user, title_number)
-    address = build_address(title)
+    address = build_address(title["property_description"]["fields"]["addresses"][0])
 
     return render_template(
            'view_property.html',
@@ -160,7 +159,7 @@ def change_version(title_number, version):
     historian_version_response = requests.get(historian_version_url + version).json()['contents']
     converted_unix_timestamp = historian_version_response['last_application']
     owner = is_owner(current_user, title_number)
-    address = build_address(historian_version_response)
+    address = build_address(historian_version_response["property_description"]["fields"]["addresses"][0])
 
     return render_template(
         'view_property.html',
