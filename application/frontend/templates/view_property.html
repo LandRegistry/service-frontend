@@ -94,7 +94,7 @@
                              {% if title.price_paid.fields.amount %}
                                 <dd>{{ title.price_paid.fields.amount[0] }} on {{ title.price_paid.fields.date[0] | dateformat }}</dd>
                                  {% else %}
-                                 <dd>{{ title.price_paid.full_text }}</dd>
+                                 <dd>{{ title.price_paid.full_text  | striptags}}</dd>
                             {% endif %}
                         {% endif %}
                     </dl>
@@ -152,7 +152,7 @@
 
                                 <h2 class="heading-medium collapse-top">Property details</h2>
 
-                                <p>{{ title.property_description.full_text }}</p>
+                                <p>{{ title.property_description.full_text | striptags}}</p>
 
                                 <div class="group">
                                     <h3 class="heading-medium">Owner(s)</h3>
@@ -219,7 +219,7 @@
 
                                 {% if title.restrictions %}
                                     {% for restriction in title.restrictions %}
-                                        <p>{{ restriction.full_text }}</p>
+                                        <p>{{ restriction.full_text  | striptags}}</p>
                                     {% endfor %}
                                 {% else %}
                                     <p>There are currently no restrictions on this title.</p>
@@ -250,7 +250,7 @@
 
                                 {% if title.restrictive_covenants %}
                                     {% for covenant in title.restrictive_covenants %}
-                                        <p>{{ covenant.full_text }}</p>
+                                        <p>{{ covenant.full_text  | striptags}}</p>
                                     {% endfor %}
                                 {% else %}
                                     <p>There are currently no restrictive covenants on this title.</p>
@@ -280,7 +280,7 @@
 
                                 {% if title.easements %}
                                     {% for easement in title.easements %}
-                                        <p>{{ easement.full_text }}</p>
+                                        <p>{{ easement.full_text | striptags}}</p>
                                     {% endfor %}
                                 {% else %}
                                     <p>There are currently no easements on this title.</p>
@@ -305,7 +305,7 @@
 
                                 {% if title.provisions %}
                                     {% for provision in title.provisions %}
-                                        <p>{{ provision.full_text }}</p>
+                                        <p>{{ provision.full_text  | striptags}}</p>
                                     {% endfor %}
                                 {% else %}
                                     <p>There are currently no provisions on this title.</p>
@@ -330,7 +330,7 @@
 
                                 {% if title.bankruptcy %}
                                     {% for bankrupt in title.bankruptcy %}
-                                        <p>{{ bankrupt.full_text }}</p>
+                                        <p>{{ bankrupt.full_text | striptags }}</p>
                                     {% endfor %}
                                 {% else %}
                                     <p>There are no bankruptcy notices on this title.</p>
