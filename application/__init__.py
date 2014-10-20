@@ -55,7 +55,7 @@ if app.config.get('BASIC_AUTH_USERNAME'):
 if 'SENTRY_DSN' in os.environ:
     sentry = Sentry(app, dsn=os.environ['SENTRY_DSN'])
 
-app.logger.info("\nConfiguration\n%s\n" % app.config)
+app.logger.debug("\nConfiguration\n%s\n" % app.config)
 
 # import and register auth blueprint
 from .auth.views import auth
