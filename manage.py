@@ -90,6 +90,11 @@ def reset_single_user_view_count(email):
     else:
         print "User does not exist"
 
+@manager.command
+def unblock_all_users():
+    db.session.query(User).update({"blocked": False})
+    db.session.commit()
+
 
 if __name__ == '__main__':
     manager.run()
