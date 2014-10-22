@@ -27,18 +27,27 @@ py.test
 
 ### Environment variables needed
 
-```
-SETTINGS
-AUTHENTICATED_SEARCH_API
-SECRET_KEY
-```
 
 Local development config:
 
 ```
 export SETTINGS='config.DevelopmentConfig'
-export AUTHENTICATED_SEARCH_API='http://localhost:8003'
-export SECRET_KEY='local-dev-not-secret'
+export DATABASE_URL='postgresql://localhost/service_frontend'
+export AUTHENTICATED_SEARCH_API='http://search-api.landregistry.local'
+export DECISION_URL='http://decision.landregistry.local'
+export MATCHING_URL='http://matching.landregistry.local'
+export OWNERSHIP_URL='http://ownership.landregistry.local'
+export INTRODUCTION_URL='http://introductions.landregistry.local'
+export CASES_URL='http://cases.landregistry.local'
+export HISTORIAN_URL='http://historian.landregistry.local'
+export OS_API_KEY='no-key'
+export REDIS_URL='redis://user:@localhost:6379'
+export PERMANENT_SESSION_LIFETIME=60 # minutes picked by random inspiration
+export VIEW_COUNT=50
+export VIEW_COUNT_ENABLED=True
+export SECRET_KEY='localdev-not-secret'
+export SECURITY_PASSWORD_HASH='bcrypt'
+
 ```
 
 #### Create/Update database
@@ -77,13 +86,29 @@ First activate the virualenv for this project
 
 Locally:
 ```
-python manage.py create_user --email=auser@gmail.com --password=apassword
-
+./create-user-for-integration-tests.sh
 ```
 
 On Heroku :
 ```
-heroku run python manage.py create_user --email=auser@gmail.com --password=apassword --app lr-service-frontend
+heroku run python manage.py create_user --email='citizen@example.org' --password='dummypassword' --name='Walter White' --dob='1959-09-07' --gender='M' --current_address='1 High St, London, N1 4LT' --previous_address='2 High St, London, SW2 1LT' --app lr-service-frontend
 ```
 
 ** This app runs on PORT 8007
+
+
+### Strange things you may find in this application
+
+User accounts and login
+
+This application has a notion of users in a form that would not need to exist if/when integration with GOV.UK Verify happens.
+
+In this application a user logs in with a user name and password. That is used to lookup in the applications local database a set of personal data (name, date of birth, gender, current address and previous address). This personal data set is used to lookup a "matching" record in the matching service.
+
+If we were to use GOV.UK Verify the login form and user name + password check happens in an external service (GOV.UK Verify) which then returns the personal data set to use for matching. Make sense?
+
+We took a shortcut here by being handwavy about where the personal data comes from. Since we did not do GOV.UK Verify integration and we did not want to build a stub GOV.UK Verify in the alpha, it really did not matter that we just held our fake set of personal data in the application db proper.
+
+When GOV.UK Verify integration comes about the user object as is would mutate into some sort of login record table. The login view method would still make a call out to matching but the input to that call would be something that came from GOV.UK Verify.
+
+
