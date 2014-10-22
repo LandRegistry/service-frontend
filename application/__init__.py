@@ -11,7 +11,7 @@ from raven.contrib.flask import Sentry
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
 from flask.ext.login import LoginManager
-from application.frontend.template_filters import datetimeformat, dateformat, currency
+from lrutils import dateformat, datetimeformat, currency
 from health import Health
 
 app = Flask('application.frontend')
