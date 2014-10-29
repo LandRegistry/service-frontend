@@ -142,12 +142,12 @@ The reason for this is that pip and setup.py dependency_links do not seem to pla
 
 I will create a pull request with the maintainers of that package so that the package can be uploaded to pypi and this part of the script can be removed.
 
-The result of running ./build.sh is debian package will be created in packaging called matching. The package has a basic upstart config, empty pre and post install and remove scripts. For the moment the installer is set to install to /opt/alpha/matching. Change as required. Also post install does not set ownership or permissions on the installed package.
+The result of running ./build.sh is debian package will be created in packaging called service-frontend. The package has a basic upstart config, empty pre and post install and remove scripts. For the moment the installer is set to install to /opt/alpha/service-frontend. Change as required. Also post install does not set ownership or permissions on the installed package.
 
 **Before installing in a production box you should:**
 
-* Set the environment variables as listed in environnment.sh **(put the file into the package install dir)**
-* Create a no login user account that the matching service be owned and run as (at the moment in a dev vagrant it runs as root)
+* Set the environment variables as listed in environnment.sh **(put the file into the package install dir - have config management tool do this)**
+* Create a no login user account that the matching service can be owned by and run as (at the moment in a dev vagrant it runs as root)
 
 ##### To install the debian package
 
