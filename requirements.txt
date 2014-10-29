@@ -1,6 +1,3 @@
--e git+https://github.com/LandRegistry/audit-plugin.git@fe86a16fbf8039d42c76c0720d66ad1f4fe3cf60#egg=lraudit-master
--e git+https://github.com/LandRegistry/datatypes#egg=datatypes
--e git+https://github.com/Runscope/healthcheck.git@9d661a916f3ab630ae21e014758aa2f21fd40097#egg=healthcheck-master
 alembic==0.6.7
 blinker==1.3
 eventlet==0.15.2
@@ -29,4 +26,7 @@ SQLAlchemy==0.9.8
 Werkzeug==0.9.6
 wsgiref==0.1.2
 WTForms==2.0.1
--e git+https://github.com/LandRegistry/lr-utils.git#egg=lrutils
+lrdatatypes==0.1.1
+lrutils==0.1.1
+lraudit==0.1.1
+#healthcheck==0.2

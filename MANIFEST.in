@@ -1,0 +1,4 @@
+include requirements.txt
+recursive-include application/frontend/templates *
+recursive-include application/frontend/static *
+recursive-include data/ *
