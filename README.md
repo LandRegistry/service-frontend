@@ -47,7 +47,19 @@ export VIEW_COUNT=50
 export VIEW_COUNT_ENABLED=True
 export SECRET_KEY='localdev-not-secret'
 export SECURITY_PASSWORD_HASH='bcrypt'
+```
 
+Note in local dev port is assigned by dev env scripts
+
+For production
+```
+PORT=[SOME NUMBER]
+SETTINGS='config.Config'
+DATABASE_URL='postgresql://user:password@db_host:port:db_name'
+.
+.
+.
+[as above with real values]
 ```
 
 #### Create/Update database
@@ -110,5 +122,61 @@ If we were to use GOV.UK Verify the login form and user name + password check ha
 We took a shortcut here by being handwavy about where the personal data comes from. Since we did not do GOV.UK Verify integration and we did not want to build a stub GOV.UK Verify in the alpha, it really did not matter that we just held our fake set of personal data in the application db proper.
 
 When GOV.UK Verify integration comes about the user object as is would mutate into some sort of login record table. The login view method would still make a call out to matching but the input to that call would be something that came from GOV.UK Verify.
+
+
+##### Create Debian package
+
+```
+cd packaging
+./build.sh
+```
+
+This will create a virtualenv, install matching into that env. Then it will set virtualenv paths to match the eventual installation directory of the debian package that is the output of build.sh.
+
+**Note**
+The packaging of a virtualenv using fpm may soon be much easier depending on [outcome of this](https://github.com/jordansissel/fpm/issues/697)
+
+An oddity of build.sh is that it needs to download a package that is listed in requirements, build it locally and install to the matching virtualenv as well.
+
+The reason for this is that pip and setup.py dependency_links do not seem to play well. The package in question is [healthcheck](https://github.com/runscope/healthcheck).
+
+I will create a pull request with the maintainers of that package so that the package can be uploaded to pypi and this part of the script can be removed.
+
+The result of running ./build.sh is debian package will be created in packaging called matching. The package has a basic upstart config, empty pre and post install and remove scripts. For the moment the installer is set to install to /opt/alpha/matching. Change as required. Also post install does not set ownership or permissions on the installed package.
+
+**Before installing in a production box you should:**
+
+* Set the environment variables as listed in environnment.sh **(put the file into the package install dir)**
+* Create a no login user account that the matching service be owned and run as (at the moment in a dev vagrant it runs as root)
+
+##### To install the debian package
+
+```
+sudo dpkg -i service-frontend_0.1_all.deb
+```
+
+Then run
+
+```
+sudo start service-frontend
+```
+
+Note that this assumes you have set all the correct environment variables.
+
+To uninstall
+
+```
+sudo dpkg -r service-frontend
+```
+
+##### Database migrations
+
+At the moment the migration version files and manage.py are included in packages and live in installation directory. I would for the moment run these after the install (and under control of configuration management tool) before running the service.
+
+```
+cd /opt/alpha/service-frontend
+python manage.py db upgrade
+```
+
 
 
