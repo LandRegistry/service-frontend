@@ -5,3 +5,7 @@ dev
 htmlcov
 .coverage
 .sass-cache
+build
+dist
+*.deb
+*.egg-info
