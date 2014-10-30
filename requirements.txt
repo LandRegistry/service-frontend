@@ -29,5 +29,4 @@ WTForms==2.0.1
 lrdatatypes==0.1.1
 lrutils==0.1.1
 lraudit==0.1.1
-#healthcheck==0.2
--e git+https://github.com/Runscope/healthcheck.git@9d661a916f3ab630ae21e014758aa2f21fd40097#egg=healthcheck-master
+healthcheck==0.2
