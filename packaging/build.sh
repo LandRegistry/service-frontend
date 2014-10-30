@@ -46,6 +46,7 @@ fpm \
     --description 'LR Service frontend application' \
     --license 'MIT' \
     --prefix / \
+    ../../application/frontend/static=/var/www/service-frontend/ \
     .
 
 cd -
