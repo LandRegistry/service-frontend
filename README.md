@@ -131,23 +131,17 @@ cd packaging
 ./build.sh
 ```
 
-This will create a virtualenv, install matching into that env. Then it will set virtualenv paths to match the eventual installation directory of the debian package that is the output of build.sh.
+This will create a virtualenv, install service-frontend into that env. Then it will set virtualenv paths to match the eventual installation directory of the debian package that is the output of build.sh.
 
 **Note**
 The packaging of a virtualenv using fpm may soon be much easier depending on [outcome of this](https://github.com/jordansissel/fpm/issues/697)
-
-An oddity of build.sh is that it needs to download a package that is listed in requirements, build it locally and install to the matching virtualenv as well.
-
-The reason for this is that pip and setup.py dependency_links do not seem to play well. The package in question is [healthcheck](https://github.com/runscope/healthcheck).
-
-I will create a pull request with the maintainers of that package so that the package can be uploaded to pypi and this part of the script can be removed.
 
 The result of running ./build.sh is debian package will be created in packaging called service-frontend. The package has a basic upstart config, empty pre and post install and remove scripts. For the moment the installer is set to install to /opt/alpha/service-frontend. Change as required. Also post install does not set ownership or permissions on the installed package.
 
 **Before installing in a production box you should:**
 
 * Set the environment variables as listed in environnment.sh **(put the file into the package install dir - have config management tool do this)**
-* Create a no login user account that the matching service can be owned by and run as (at the moment in a dev vagrant it runs as root)
+* Create a no login user account that the service-frontend service can be owned by and run as (at the moment in a dev vagrant it runs as root)
 
 ##### To install the debian package
 
