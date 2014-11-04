@@ -5,13 +5,13 @@ import urlparse
 
 from flask import Flask
 from flask import render_template
-from audit import Audit
 from raven.contrib.flask import Sentry
 
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.basicauth import BasicAuth
 from flask.ext.login import LoginManager
 from lrutils import dateformat, datetimeformat, currency
+from lrutils.audit import Audit
 from health import Health
 
 app = Flask('application.frontend')
