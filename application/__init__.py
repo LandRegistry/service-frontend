@@ -12,6 +12,7 @@ from flask.ext.basicauth import BasicAuth
 from flask.ext.login import LoginManager
 from lrutils import dateformat, datetimeformat, currency
 from lrutils.audit import Audit
+from lrutils.errorhandler.errorhandler_utils import ErrorHandler, eh_after_request
 from health import Health
 
 app = Flask('application.frontend')
@@ -45,7 +46,11 @@ store = RedisStore(redis_server)
 kv_store = KVSessionExtension(store, app)
 
 Health(app, checks=[db.health])
+
+# Audit, error handling and after_request headers all handled by lrutils
 Audit(app)
+ErrorHandler(app)
+app.after_request(eh_after_request)
 
 if not app.debug:
     app.logger.addHandler(logging.StreamHandler())
@@ -77,34 +82,6 @@ def health(self):
             return True, 'DB'
     except:
         return False, 'DB'
-
-
-@app.errorhandler(401)
-def permission(err):
-    return render_template('401.html'), 401
-
-
-@app.errorhandler(404)
-def page_not_found(err):
-    return render_template('404.html'), 404
-
-
-@app.errorhandler(500)
-def error(err):
-    return render_template('500.html'), 500
-
-
-@app.after_request
-def after_request(response):
-    # can we get some guidance on this?
-    response.headers.add(
-        'Content-Security-Policy',
-        "default-src 'self' 'unsafe-inline' data: ; img-src *")
-    response.headers.add('X-Frame-Options', 'deny')
-    response.headers.add('X-Content-Type-Options', 'nosniff')
-    response.headers.add('X-XSS-Protection', '1; mode=block')
-    return response
-
 
 @app.context_processor
 def asset_path_context_processor():
