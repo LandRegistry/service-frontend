@@ -1,0 +1,22 @@
+{
+  "name": "service-frontend",
+  "type": "front-end",
+  "github": "https://github.com/LandRegistry/service-frontend",
+  "heroku": "lr-service-frontend",
+  "url": "http://lr-service-frontend.herokuapp.com",
+  "port": 8007,
+  "database": "true",
+  "tech": [
+    "python",
+    "flask"
+  ],
+  "dependencies": [
+    "search-api",
+    "postgres",
+    "decision",
+    "cases",
+    "introductions",
+    "ownership",
+    "matching"
+  ]
+}
