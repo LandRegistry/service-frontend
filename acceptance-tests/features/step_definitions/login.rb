@@ -117,7 +117,7 @@ Given(/^I am still authenticated as a caseworker$/) do
 end
 
 Then(/^I get an unauthorised message$/) do
-  assert_match('Unauthorised', page.body, 'Expected to have an Unauthorized message')
+  assert_match('401: Unauthorized', page.body, 'Expected to have an Unauthorized message')
 end
 
 Given(/^I am a citizen$/) do

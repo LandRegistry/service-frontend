@@ -63,7 +63,7 @@ When(/^I enter an invalid relationship token code$/) do
 end
 
 Then(/^message informing relationship token code is invalid is displayed$/) do
-  assert_match(/Page not found/i, page.body, 'Expected to get invalid error message')
+  assert_match(/404: Not Found/i, page.body, 'Expected to get invalid error message')
 end
 
 When(/^I confirm the relationship$/) do
